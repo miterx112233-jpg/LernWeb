@@ -10,7 +10,8 @@ import { useProgress } from '@/context/ProgressContext';
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
-  const { theme, toggleTheme } = useProgress();
+  const { user, getStats, theme, toggleTheme } = useProgress();
+  const totalStats = getStats();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState('');
@@ -172,6 +173,26 @@ export default function Navbar() {
               </span>
             </button>
 
+            <Link
+              href="/login"
+              className={`nav__user-btn ${user ? 'is-logged-in' : ''}`}
+              title={user ? `บัญชี: ${user.email}` : 'เข้าสู่ระบบเพื่อบันทึกความก้าวหน้ารายบุคคล'}
+            >
+              {user ? (
+                <>
+                  <span className="nav__user-avatar">
+                    {user.displayName.charAt(0).toUpperCase()}
+                  </span>
+                  <span className="nav__user-name">{user.displayName}</span>
+                  <span className="nav__user-stat">
+                    {totalStats.done}/{totalStats.total}
+                  </span>
+                </>
+              ) : (
+                <span>เข้าสู่ระบบ</span>
+              )}
+            </Link>
+
             <button
               type="button"
               className="icon-btn nav__burger"
@@ -197,6 +218,9 @@ export default function Navbar() {
         ))}
         <Link href="/articles">บทความและเกร็ดความรู้</Link>
         <Link href="/progress">ความก้าวหน้าการเรียน</Link>
+        <Link href="/login">
+          {user ? `บัญชีของฉัน (${user.displayName})` : 'เข้าสู่ระบบ / สมัครสมาชิก'}
+        </Link>
       </div>
 
       {/* หน้าต่างค้นหาด่วน (ค้นได้ทั้งบทเรียนและบทความ) */}
