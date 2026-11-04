@@ -120,12 +120,12 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
 
   return (
     <div className="container lesson">
-      {/* ลิงก์ย้อนกลับด้านบนสุด เหมือนภาพ 9Expert */}
-      <Link className="breadcrumb" href="/articles">
+      {/* ลิงก์ย้อนกลับด้านบนสุด */}
+      <Link className="breadcrumb" href="/roadmap">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
           <path d="m15 18-6-6 6-6" />
         </svg>
-        กลับไปยังบทความทั้งหมด
+        กลับไปยังแผนผังการเรียน (Roadmap)
       </Link>
 
       {/* โครงสร้าง 2 คอลัมน์: เนื้อหาหลักซ้าย + สารบัญเกาะติดหน้าจอด้านขวา */}

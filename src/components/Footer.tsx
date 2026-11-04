@@ -38,8 +38,7 @@ export default function Footer() {
             <ul>
               <li><Link href="/roadmap">แผนผังการเรียน (Roadmap)</Link></li>
               <li><Link href="/articles">บทความทั้งหมด</Link></li>
-              <li><Link href="/toolkit">เครื่องมือและเทมเพลต SE</Link></li>
-              <li><Link href="/toolkit#progress">เช็คความก้าวหน้า</Link></li>
+              <li><Link href="/progress">เช็คความก้าวหน้า</Link></li>
             </ul>
           </div>
           <div>

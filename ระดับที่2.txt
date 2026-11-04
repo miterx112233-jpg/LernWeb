@@ -1,0 +1,38 @@
+บทที่ 05: Frontend สมัยใหม่ (HTML/CSS/JS & State ใน React/Next.js)
+EP 31. เรียนรู้ React ใน 180 วินาที !! - สาระเดฟ ใน 3 นาที – ดูคลิป
+http://www.youtube.com/watch?v=gNg_pKbH0os 
+พามาลองใช้ React ฉบับผู้เริ่มต้นสร้างหน้าเว็บไซต์ (ใช้ Vite สร้างโปรเจกต์) – ดูคลิป
+http://www.youtube.com/watch?v=wOkeNFRlS-g 
+เลือกอะไรดี ? React กับ Next.js ตัวไหนเหมาะกับเราที่สุด – ดูคลิป
+http://www.youtube.com/watch?v=-ZX2LnFXgPs 
+มาเรียนเขียนเว็บด้วย HTML 5 !! ฉบับที่เร็วที่สุด ! – ดูคลิป
+http://www.youtube.com/watch?v=-jzu5YH6OMQ 
+
+บทที่ 06: Backend และการออกแบบ API (RESTful API & Authentication)
+API แบบครบ จบ ในคลิปเดียว!!! – ดูคลิป
+http://www.youtube.com/watch?v=GqzpqlA3kds 
+สร้างแอปง่าย ๆ แค่รู้จักให้ "อภัย" - API 101 คืออิหยังวะ ? – ดูคลิป
+http://www.youtube.com/watch?v=zEuBMWLiI0U 
+มาลองดูหลักการทำงานของ API แบบง่าย ๆ กัน – ดูคลิป
+http://www.youtube.com/watch?v=GROy9XvvXpk 
+สร้าง API อยากให้คนอื่นใช้ ต้องทำยังไง 🫤 (Swagger / Backend) – ดูคลิป
+http://www.youtube.com/watch?v=f0mQvHevxfw 
+
+บทที่ 07: ฐานข้อมูล SQL / NoSQL และช่องโหว่ SQL Injection
+EP 24. รู้จัก NoSQL ฉบับเร็วจนไฟลุก - สาระเดฟ ใน 3 นาที – ดูคลิป
+http://www.youtube.com/watch?v=kTQLhbSk-_w 
+EP 3. SQL Injection สุดอันตรายของสายทำเว็บ - สาระเดฟใน 3 นาที – ดูคลิป
+http://www.youtube.com/watch?v=Op53ZTK4djY 
+(คลิปเสริมเข้าใจง่ายจาก MilerDev) SQL และ NoSQL แตกต่างกันยังไง? เหมาะกับลักษณะงานแบบไหน? – ดูคลิป
+http://www.youtube.com/watch?v=3DF30NI_ZVI 
+
+บทที่ 08: Clean Code และการเขียน Test (Unit Test / Software Testing)
+สรุปครบจบ พื้นฐานที่ต้องรู้ของการทำ Software Testing ในคลิปเดียว – ดูคลิป
+http://www.youtube.com/watch?v=tyIGCoBFwdA 
+สอนเขียน Unit Testing และ Integration Testing ด้วย Python – ดูคลิป
+http://www.youtube.com/watch?v=bb5_6xz9Abc 
+ทำไม Unit Test ถึงเขียนยาก ? – ดูคลิป
+http://www.youtube.com/watch?v=zeJKmHtX9HU 
+Hexagonal Architecture ดียังไง ? ทำไมเดฟต้องรู้ 🤔 (การจัดโครงสร้างโค้ดให้สะอาดและดูแลง่าย) – ดูคลิป
+http://www.youtube.com/watch?v=0BgpB9wGw4s 
+

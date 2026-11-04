@@ -3,17 +3,14 @@
 import React from 'react';
 import Link from 'next/link';
 import { LESSONS, LEVELS } from '@/data/lessons';
+import { ARTICLES } from '@/data/articles';
 import { useProgress } from '@/context/ProgressContext';
-import { LessonCard } from '@/components/LessonBanner';
+import { ArticleBanner } from '@/components/ArticleViewer';
 
 export default function HomePage() {
   const { isDone, getStats } = useProgress();
 
   const nextLesson = LESSONS.find(l => !isDone(l.id)) || LESSONS[0];
-  const featuredIds = ['llm', 'how-computers-web-work', 'clean-code-testing'];
-  const featuredLessons = featuredIds
-    .map(id => LESSONS.find(l => l.id === id))
-    .filter((l): l is NonNullable<typeof l> => Boolean(l));
 
   return (
     <>
@@ -237,21 +234,31 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 5. บทความแนะนำสไตล์ 9Expert */}
+      {/* 5. บทความแนะนำสไตล์ 9Expert (แยกจากบทเรียนใน Roadmap) */}
       <section className="section">
         <div className="container">
           <div className="section-head">
             <div>
-              <h2 className="section-title">บทความแนะนำ</h2>
-              <p className="section-sub">เลือกอ่านบทเรียนสำคัญพร้อมแบนเนอร์และสารบัญสรุปเนื้อหา</p>
+              <h2 className="section-title">บทความล่าสุด</h2>
+              <p className="section-sub">เกร็ดความรู้ กรณีศึกษา และแนวคิดการทำงานในสาย Software Engineer</p>
             </div>
             <Link className="link" href="/articles">
-              ดูทั้งหมด →
+              ดูบทความทั้งหมด →
             </Link>
           </div>
           <div className="cards">
-            {featuredLessons.map(lesson => (
-              <LessonCard key={lesson.id} lesson={lesson} isDone={isDone(lesson.id)} />
+            {ARTICLES.map(article => (
+              <Link key={article.slug} className="card" href={`/articles/${article.slug}`}>
+                <ArticleBanner article={article} small />
+                <div className="card__meta">
+                  <span className="tag tag--intermediate">{article.category}</span>
+                  <span>
+                    {article.publishedAt} · อ่าน {article.minutes} นาที
+                  </span>
+                </div>
+                <h3 className="card__title">{article.title}</h3>
+                <p className="card__summary">{article.summary}</p>
+              </Link>
             ))}
           </div>
         </div>

@@ -1,0 +1,32 @@
+บทที่ 09: LLM คืออะไร ทำงานอย่างไร (Large Language Model & Generative AI)
+รู้จัก Ollama ฉบับรวบรัดใน 3 นาที (การรันโมเดล LLM บนเครื่องตัวเอง) – ดูคลิป
+http://www.youtube.com/watch?v=ZjprauCXE6c
+(คลิปเสริมสรุปภาพรวมจาก MilerDev) Dev ยุค AI ต้องรู้ LLM, RAG, Agent, Fine tuning คืออะไร? ดูจบบรรลุ! – ดูคลิป
+http://www.youtube.com/watch?v=HJscCkvy5W0
+
+บทที่ 10: RAG และ Vector Database (Retrieval-Augmented Generation)
+‘RAG’ เทคนิคที่ทำให้ AI เก่งขึ้น! | dev 101 – ดูคลิป
+http://www.youtube.com/watch?v=hJVlTpVYnf8
+สร้างแชทถามตอบข้อมูลสินค้าแบบง่าย ๆ ด้วย LangChain – ดูคลิป
+http://www.youtube.com/watch?v=_T3hEr60xtc
+
+บทที่ 11: AI Agents และ Tool Calling (Function Calling / MCP)
+‘Agentic AI’ มาแรงกว่าที่คิด ! และอาจจะแรงยันปีหน้า | borntoDev – ดูคลิป
+http://www.youtube.com/watch?v=4SL84LmJQD0
+Ask Prame : AI Agent ทำงานแทนเราได้ยังไง? – ดูคลิป
+http://www.youtube.com/watch?v=lCyj4D8zsNU
+Ask Prame : พื้นฐานที่ต้องมี ก่อนเรียน MCP – ดูคลิป
+http://www.youtube.com/watch?v=vEKvWj1rKC4
+สาย AI ห้ามพลาด กับ 4 Use Cases จับคู่ MCP กับ Claude – ดูคลิป
+http://www.youtube.com/watch?v=m4T6hPfU0Uk
+ทำไงให้ “AI” ที่ใช้อยู่เก่งขึ้น ! ได้ตามที่ต้องแบบล้านเปอร์เซนต์ (#mcp) – ดูคลิป
+http://www.youtube.com/watch?v=EKtvfPWAydI
+
+บทที่ 12: System Design และ Security (Cache, Server, Cyber Security)
+ปูพื้นฐาน Cyber Security 101 จัดเต็ม ครบ จบ ในคลิปเดียว! – ดูคลิป
+http://www.youtube.com/watch?v=spvP2EDWMVg
+ทำไมเวลาเข้าถึงข้อมูลแบบไวๆ ต้องใช้งาน Cache – ดูคลิป
+http://www.youtube.com/watch?v=aozgSX7IK30
+(คลิปเสริมเรื่อง Load Balancer จาก ByteMonk) API Gateway vs Load Balancer: What Every Developer Should Know! – ดูคลิป
+http://www.youtube.com/watch?v=_ErhwTPSpws
+

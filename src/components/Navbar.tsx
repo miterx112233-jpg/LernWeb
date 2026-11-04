@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { LESSONS, LEVELS } from '@/data/lessons';
+import { ARTICLES } from '@/data/articles';
 import { useProgress } from '@/context/ProgressContext';
 
 export default function Navbar() {
@@ -43,14 +44,24 @@ export default function Navbar() {
     }
   }, [searchOpen]);
 
-  const filteredLessons = query.trim()
+  const q = query.trim().toLowerCase();
+  const matchedLessons = q
     ? LESSONS.filter(l =>
         [l.title, l.summary, l.keyword, l.subtitle, l.category, l.level, ...l.topics]
           .join(' ')
           .toLowerCase()
-          .includes(query.trim().toLowerCase())
+          .includes(q)
       )
     : LESSONS;
+
+  const matchedArticles = q
+    ? ARTICLES.filter(a =>
+        [a.title, a.summary, a.keyword, a.subtitle, a.category]
+          .join(' ')
+          .toLowerCase()
+          .includes(q)
+      )
+    : ARTICLES;
 
   const isActive = (prefix: string) => {
     if (prefix === '/') return pathname === '/';
@@ -72,28 +83,38 @@ export default function Navbar() {
           </Link>
 
           <nav className="nav__menu" aria-label="เมนูหลัก">
-            {/* หลักสูตร Dropdown */}
+            {/* 1. หน้าแรก */}
             <div className="nav__item">
-              <button
-                type="button"
-                className={`nav__link ${isActive('/lesson') ? 'is-active' : ''}`}
-                aria-haspopup="true"
+              <Link className={`nav__link ${isActive('/') ? 'is-active' : ''}`} href="/">
+                หน้าแรก
+              </Link>
+            </div>
+
+            {/* 2. แผนผังการเรียน (Roadmap + 3 ระดับบทเรียนหลัก) */}
+            <div className="nav__item">
+              <Link
+                className={`nav__link ${isActive('/roadmap') || isActive('/lesson') ? 'is-active' : ''}`}
+                href="/roadmap"
               >
-                หลักสูตร
+                แผนผังการเรียน
                 <svg className="nav__chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.7">
                   <path d="m3 4.5 3 3 3-3" />
                 </svg>
-              </button>
+              </Link>
               <div className="dropdown">
+                <Link href="/roadmap">
+                  <div className="dropdown__title">ดูแผนผังทั้งหมด (12 บทเรียน)</div>
+                  <div className="dropdown__desc">เรียงลำดับจาก Basic ไปจนถึง Advanced</div>
+                </Link>
                 {LEVELS.map(lv => {
                   const lessonsInLevel = LESSONS.filter(l => l.level === lv.id);
                   return (
                     <Link key={lv.id} href={`/roadmap#${lv.id}`}>
                       <div className="dropdown__title">
-                        {lv.name} <span className="muted">· {lv.title}</span>
+                        ระดับที่ {lv.no}: {lv.name}
                       </div>
                       <div className="dropdown__desc">
-                        บทที่ {lessonsInLevel[0]?.no}–{lessonsInLevel[lessonsInLevel.length - 1]?.no} ({lessonsInLevel.length} บทเรียน)
+                        {lv.title} (บทที่ {lessonsInLevel[0]?.no}–{lessonsInLevel[lessonsInLevel.length - 1]?.no})
                       </div>
                     </Link>
                   );
@@ -101,76 +122,17 @@ export default function Navbar() {
               </div>
             </div>
 
-            {/* แผนผัง Roadmap */}
-            <div className="nav__item">
-              <Link className={`nav__link ${isActive('/roadmap') ? 'is-active' : ''}`} href="/roadmap">
-                แผนผังการเรียน
-              </Link>
-            </div>
-
-            {/* ระดับความรู้ Dropdown */}
-            <div className="nav__item">
-              <button type="button" className="nav__link" aria-haspopup="true">
-                ระดับความรู้
-                <svg className="nav__chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.7">
-                  <path d="m3 4.5 3 3 3-3" />
-                </svg>
-              </button>
-              <div className="dropdown">
-                <Link href="/articles?level=basic">
-                  <div className="dropdown__title">ระดับ 1: Basic</div>
-                  <div className="dropdown__desc">ปูพื้นฐานคอมพิวเตอร์ เว็บ โลจิก และ Git</div>
-                </Link>
-                <Link href="/articles?level=intermediate">
-                  <div className="dropdown__title">ระดับ 2: Intermediate</div>
-                  <div className="dropdown__desc">Frontend, Backend API, Database และ Testing</div>
-                </Link>
-                <Link href="/articles?level=advanced">
-                  <div className="dropdown__title">ระดับ 3: Advanced</div>
-                  <div className="dropdown__desc">LLM, RAG, AI Agents และ System Design</div>
-                </Link>
-              </div>
-            </div>
-
-            {/* บทความ */}
+            {/* 3. บทความ (เนื้อหาแยกจากบทเรียนหลัก) */}
             <div className="nav__item">
               <Link className={`nav__link ${isActive('/articles') ? 'is-active' : ''}`} href="/articles">
                 บทความ
               </Link>
             </div>
 
-            {/* เครื่องมือ SE Dropdown */}
+            {/* 4. ความก้าวหน้าการเรียน */}
             <div className="nav__item">
-              <button
-                type="button"
-                className={`nav__link ${isActive('/toolkit') ? 'is-active' : ''}`}
-                aria-haspopup="true"
-              >
-                เครื่องมือ SE
-                <svg className="nav__chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.7">
-                  <path d="m3 4.5 3 3 3-3" />
-                </svg>
-              </button>
-              <div className="dropdown">
-                <Link href="/toolkit#templates">
-                  <div className="dropdown__title">เทมเพลตวางแผนงาน</div>
-                  <div className="dropdown__desc">cntext.md · Design.md · backlog.md</div>
-                </Link>
-                <Link href="/toolkit#checklist">
-                  <div className="dropdown__title">เช็กลิสต์รีวิวโค้ดจาก AI</div>
-                  <div className="dropdown__desc">ตรวจสอบความปลอดภัยและคุณภาพก่อนใช้งาน</div>
-                </Link>
-                <Link href="/toolkit#progress">
-                  <div className="dropdown__title">ความก้าวหน้าการเรียน</div>
-                  <div className="dropdown__desc">ดูสถิติบทเรียนที่เรียนจบแล้ว</div>
-                </Link>
-              </div>
-            </div>
-
-            {/* เกี่ยวกับเรา */}
-            <div className="nav__item">
-              <Link className="nav__link" href="/#about">
-                ทำไมต้องมีพื้นฐาน
+              <Link className={`nav__link ${isActive('/progress') ? 'is-active' : ''}`} href="/progress">
+                ความก้าวหน้า
               </Link>
             </div>
           </nav>
@@ -180,8 +142,8 @@ export default function Navbar() {
               type="button"
               className="icon-btn"
               onClick={() => setSearchOpen(true)}
-              aria-label="ค้นหาบทเรียน (Ctrl+K)"
-              title="ค้นหาบทเรียน (Ctrl+K)"
+              aria-label="ค้นหา (Ctrl+K)"
+              title="ค้นหาบทเรียนและบทความ (Ctrl+K)"
             >
               <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="11" cy="11" r="7" />
@@ -227,67 +189,77 @@ export default function Navbar() {
       {/* เมนูสำหรับหน้าจอมือถือ */}
       <div className={`mobile-menu ${mobileOpen ? 'is-open' : ''}`}>
         <Link href="/">หน้าแรก</Link>
-        <Link href="/roadmap">แผนผังการเรียน (Roadmap)</Link>
+        <Link href="/roadmap">แผนผังการเรียน (Roadmap 12 บท)</Link>
         {LEVELS.map(lv => (
           <Link key={lv.id} className="sub" href={`/roadmap#${lv.id}`}>
-            {lv.name} · {lv.title}
+            ระดับที่ {lv.no}: {lv.name} · {lv.title}
           </Link>
         ))}
-        <Link href="/articles">บทความทั้งหมด</Link>
-        <Link href="/toolkit">เครื่องมือ Software Engineer</Link>
-        <Link className="sub" href="/toolkit#templates">
-          เทมเพลตวางแผนงาน (Spec)
-        </Link>
-        <Link className="sub" href="/toolkit#checklist">
-          เช็กลิสต์รีวิวโค้ดจาก AI
-        </Link>
-        <Link className="sub" href="/toolkit#progress">
-          ความก้าวหน้าการเรียน
-        </Link>
+        <Link href="/articles">บทความและเกร็ดความรู้</Link>
+        <Link href="/progress">ความก้าวหน้าการเรียน</Link>
       </div>
 
-      {/* หน้าต่างค้นหาด่วน */}
+      {/* หน้าต่างค้นหาด่วน (ค้นได้ทั้งบทเรียนและบทความ) */}
       <div
         className={`search-modal ${searchOpen ? 'is-open' : ''}`}
         onClick={e => {
           if (e.target === e.currentTarget) setSearchOpen(false);
         }}
       >
-        <div className="search-box" role="dialog" aria-label="ค้นหาบทเรียน">
+        <div className="search-box" role="dialog" aria-label="ค้นหาบทเรียนและบทความ">
           <input
             ref={searchInputRef}
             className="search-box__input"
-            placeholder="ค้นหาบทเรียน เช่น LLM, HTTP, SQL, Git, Testing..."
+            placeholder="ค้นหาบทเรียนหรือบทความ เช่น LLM, HTTP, SQL, Git..."
             value={query}
             onChange={e => setQuery(e.target.value)}
             onKeyDown={e => {
-              if (e.key === 'Enter' && filteredLessons.length > 0) {
-                router.push(`/lesson/${filteredLessons[0].id}`);
-                setSearchOpen(false);
+              if (e.key === 'Enter') {
+                if (matchedLessons.length > 0) {
+                  router.push(`/lesson/${matchedLessons[0].id}`);
+                  setSearchOpen(false);
+                } else if (matchedArticles.length > 0) {
+                  router.push(`/articles/${matchedArticles[0].slug}`);
+                  setSearchOpen(false);
+                }
               }
             }}
           />
           <div className="search-results">
-            {filteredLessons.length > 0 ? (
-              filteredLessons.map(l => {
-                const lv = LEVELS.find(item => item.id === l.level);
-                return (
+            {matchedLessons.length === 0 && matchedArticles.length === 0 ? (
+              <div className="search-empty">ไม่พบเนื้อหาที่ตรงกับคำค้น</div>
+            ) : (
+              <>
+                {matchedLessons.map(l => {
+                  const lv = LEVELS.find(item => item.id === l.level);
+                  return (
+                    <Link
+                      key={`lesson-${l.id}`}
+                      href={`/lesson/${l.id}`}
+                      onClick={() => setSearchOpen(false)}
+                    >
+                      <div className="title">
+                        [บทเรียน {String(l.no).padStart(2, '0')}] {l.title}
+                      </div>
+                      <div className="meta">
+                        Roadmap ระดับ {lv?.name} · {l.category} · อ่าน {l.minutes} นาที
+                      </div>
+                    </Link>
+                  );
+                })}
+                {matchedArticles.map(a => (
                   <Link
-                    key={l.id}
-                    href={`/lesson/${l.id}`}
+                    key={`article-${a.slug}`}
+                    href={`/articles/${a.slug}`}
                     onClick={() => setSearchOpen(false)}
                   >
-                    <div className="title">
-                      {String(l.no).padStart(2, '0')} · {l.title}
-                    </div>
+                    <div className="title">[บทความ] {a.title}</div>
                     <div className="meta">
-                      {lv?.name} · {l.category} · อ่าน {l.minutes} นาที
+                      หมวด {a.category} · อ่าน {a.minutes} นาที
                     </div>
                   </Link>
-                );
-              })
-            ) : (
-              <div className="search-empty">ไม่พบบทเรียนที่ตรงกับคำค้น</div>
+                ))}
+              </>
             )}
           </div>
         </div>
@@ -295,4 +267,3 @@ export default function Navbar() {
     </>
   );
 }
-

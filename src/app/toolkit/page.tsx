@@ -1,10 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
 import {
-  LESSONS,
-  LEVELS,
   REVIEW_CHECKLIST,
   SPEC_TEMPLATES
 } from '@/data/lessons';
@@ -13,7 +10,7 @@ import { useProgress } from '@/context/ProgressContext';
 const KEY_CHECKLIST = 'lernweb:checklist';
 
 export default function ToolkitPage() {
-  const { isDone, toggleDone, resetProgress, getStats, showToast } = useProgress();
+  const { showToast } = useProgress();
   const [activeTab, setActiveTab] = useState<'context' | 'design' | 'backlog'>('context');
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
 
@@ -58,7 +55,6 @@ export default function ToolkitPage() {
     }
   };
 
-  const totalStats = getStats();
   const totalCheckItems = REVIEW_CHECKLIST.reduce((acc, g) => acc + g.items.length, 0);
 
   return (
@@ -67,7 +63,7 @@ export default function ToolkitPage() {
         <div className="container">
           <h1>เครื่องมือและเทมเพลตสำหรับ Software Engineer</h1>
           <p>
-            รวบรวมเทมเพลตการวางแผนงานก่อนสั่ง AI เขียนโค้ด เช็กลิสต์ตรวจสอบคุณภาพโค้ดก่อนนำขึ้นระบบจริง และสรุปความก้าวหน้าการเรียนของคุณ
+            รวบรวมเทมเพลตการวางแผนงานก่อนสั่ง AI เขียนโค้ด และเช็กลิสต์ตรวจสอบคุณภาพโค้ดก่อนนำขึ้นระบบจริง
           </p>
         </div>
       </section>
@@ -135,99 +131,6 @@ export default function ToolkitPage() {
           </div>
         </div>
       </section>
-
-      {/* 3. Personal Learning Progress */}
-      <section className="tool-section" id="progress">
-        <div className="container">
-          <h2>3. ความก้าวหน้าการเรียนของฉัน</h2>
-          <p>
-            ข้อมูลบันทึกไว้ในเบราว์เซอร์ของคุณโดยอัตโนมัติ สามารถกดเปลี่ยนสถานะแต่ละบทเรียนได้จากตารางด้านล่าง
-          </p>
-
-          <div className="stats">
-            <div className="stat">
-              <div className="stat__label">รวมทั้งหมด</div>
-              <div className="stat__value">
-                {totalStats.done}/{totalStats.total}
-              </div>
-              <div className="progress">
-                <div className="progress__bar" style={{ width: `${totalStats.pct}%` }} />
-              </div>
-            </div>
-
-            {LEVELS.map(lv => {
-              const s = getStats(lv.id);
-              return (
-                <div key={lv.id} className="stat">
-                  <div className={`stat__label c-${lv.id}`}>{lv.name}</div>
-                  <div className="stat__value">
-                    {s.done}/{s.total}
-                  </div>
-                  <div className="progress">
-                    <div className="progress__bar" style={{ width: `${s.pct}%` }} />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="table-wrap" style={{ marginTop: 24 }}>
-            <table className="table">
-              <thead>
-                <tr>
-                  <th style={{ width: 70 }}>บทที่</th>
-                  <th>หัวข้อบทเรียน</th>
-                  <th style={{ width: 140 }}>ระดับ</th>
-                  <th style={{ width: 160 }}>สถานะ</th>
-                </tr>
-              </thead>
-              <tbody>
-                {LESSONS.map(lesson => {
-                  const done = isDone(lesson.id);
-                  const lv = LEVELS.find(x => x.id === lesson.level);
-                  return (
-                    <tr key={lesson.id}>
-                      <td>{String(lesson.no).padStart(2, '0')}</td>
-                      <td>
-                        <Link className="link" href={`/lesson/${lesson.id}`}>
-                          {lesson.title}
-                        </Link>
-                      </td>
-                      <td>
-                        <span className={`tag tag--${lesson.level}`}>{lv?.name}</span>
-                      </td>
-                      <td>
-                        <button
-                          type="button"
-                          className={`status ${done ? 'is-done' : ''}`}
-                          style={{ background: 'none', border: 0, padding: 0 }}
-                          onClick={() => toggleDone(lesson.id)}
-                        >
-                          {done ? '✓ เรียนจบแล้ว' : '○ ยังไม่ได้เรียน'}
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-
-          <div className="check-actions">
-            <button
-              type="button"
-              className="btn btn--outline"
-              onClick={() => {
-                resetProgress();
-                showToast('รีเซ็ตความก้าวหน้าการเรียนแล้ว');
-              }}
-            >
-              รีเซ็ตความก้าวหน้าการเรียน
-            </button>
-          </div>
-        </div>
-      </section>
     </>
   );
 }
-
