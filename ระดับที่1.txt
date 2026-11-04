@@ -1,0 +1,41 @@
+บทที่ 01: คอมพิวเตอร์และเว็บทำงานอย่างไร (DNS, IP, HTTP, Web Browser, Server) 
+มาหาคำตอบว่า จริงๆ แล้ว Web Browser แสดงผลเว็บเราได้ยังไง? – ดูคลิป
+http://www.youtube.com/watch?v=XygSfbIO4no 
+Ep.9 มาทำความรู้จัก HTTP Request แบบไว ๆ ! - สาระเดฟใน 3 นาที Season 2 – ดูคลิป
+http://www.youtube.com/watch?v=xbGMS3LSr88 
+Ep.12 404 500 200 คืออะไร สำคัญยังไงกับคนทำเว็บ - สาระเดฟใน 3 นาที Season 2 – ดูคลิป
+http://www.youtube.com/watch?v=tLwzLs0vBJI 
+อยากสร้างระบบของตัวเอง เลือก Server แบบไหนให้เหมาะกับเราดีนะ !? – ดูคลิป
+http://www.youtube.com/watch?v=gXnGpJ4ACTQ 
+
+บทที่ 02: Logic และ Data Structures (Algorithm, Array, Big-O Notation) 
+ทำไมต้องเข้าใจ Algorithm #1 | dev 101 – ดูคลิป
+http://www.youtube.com/watch?v=mntUEoQZ2FY 
+Basic Data Structure ที่ควรรู้ก่อนเขียนโปรแกรม – ดูคลิป
+http://www.youtube.com/watch?v=t9Vixss6Un4 
+Basic Big O เรื่องที่ทำให้เด็กมหาลัยหลายๆคนปวดหัว !!! – ดูคลิป
+http://www.youtube.com/watch?v=lWHbg1SrUqc 
+EP 2. Big O คืออะไร ? - สาระเดฟใน 3 นาที – ดูคลิป
+http://www.youtube.com/watch?v=Bd85jc6rVFg 
+
+บทที่ 03: Git และการทำงานเป็นทีม (commit, branch, pull request) 
+EP.29 What’s New - สอนใช้งาน Git คลิปเดียวจบ รู้เรื่อง ใช้งานเป็น ! (ความยาว ~17 นาที ตรงกับโจทย์ในตาราง) – ดูคลิป
+http://www.youtube.com/watch?v=5TlGWHU_SQc 
+เรียนฟรี!! GitHub For Developer 2 ชั่วโมงเต็ม ตั้งแต่เริ่มต้นจนถึงระดับมือโปร – ดูคลิป
+http://www.youtube.com/watch?v=fOlDcMStMXE 
+Git กับ GitHub คืออะไร และต่างกันยังไงนะ ? #Shorts – ดูคลิป
+http://www.youtube.com/watch?v=qGbdmJGild8 
+🔥 Git CLI vs GitHub Desktop – ดูคลิป
+http://www.youtube.com/watch?v=oxoIr7TyGMs 
+
+บทที่ 04: ใช้ AI ช่วยเขียนโค้ดอย่างถูกวิธี (Prompt / การตรวจแก้โค้ดจาก AI) 
+อย่าเพิ่งใช้ AI ช่วยเขียนโค้ด ถ้ายังไม่รู้ 5 เรื่องนี้ ! 👨🏻‍💻 – ดูคลิป
+http://www.youtube.com/watch?v=tz5MDEtNJww 
+6 เรื่องที่ต้องรู้ ! ก่อนใช้ AI เขียนโค้ด 🧑🏻‍💻 | borntodev – ดูคลิป
+http://www.youtube.com/watch?v=z6_6JwAwOzI 
+เทคนิค Prompt ใช้ AI รีวิวโค้ดแบบไม่หลอน 👻 – ดูคลิป
+http://www.youtube.com/watch?v=YXqB5YrpNO0 
+รีวิว ‘Claude Code’ AI เขียนโค้ดที่ใครๆ ก็ใช้กัน?! | Dev รีวิววว ! SS2 – ดูคลิป
+http://www.youtube.com/watch?v=YXqB5YrpNO0 
+
+
