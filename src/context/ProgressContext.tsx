@@ -20,9 +20,11 @@ interface ProgressContextType {
   user: AppUser | null;
   isSyncing: boolean;
   completed: string[];
+  lastLessonId: string | null;
   theme: 'light' | 'dark';
   isDone: (id: string) => boolean;
   toggleDone: (id: string) => boolean;
+  recordLastLesson: (id: string) => void;
   resetProgress: () => void;
   getStats: (level?: LevelId) => ProgressStats;
   toggleTheme: () => void;
@@ -35,12 +37,14 @@ interface ProgressContextType {
 const ProgressContext = createContext<ProgressContextType | undefined>(undefined);
 
 const KEY_GUEST_DONE = 'lernweb:completed';
+const KEY_GUEST_LAST = 'lernweb:last_lesson';
 const KEY_THEME = 'lernweb:theme';
 
 export function ProgressProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AppUser | null>(null);
   const [isSyncing, setIsSyncing] = useState(false);
   const [completed, setCompleted] = useState<string[]>([]);
+  const [lastLessonId, setLastLessonId] = useState<string | null>(null);
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
@@ -54,14 +58,21 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
       if (sessionUser) {
         setUser(sessionUser);
         setIsSyncing(true);
+        const cachedLast = localStorage.getItem(`lernweb:last:${sessionUser.id}`);
+        if (cachedLast) setLastLessonId(cachedLast);
         fetchUserProgress(sessionUser)
           .then(res => {
             setCompleted(res.completedLessons);
+            if (res.lastLessonId) {
+              setLastLessonId(res.lastLessonId);
+            }
           })
           .finally(() => setIsSyncing(false));
       } else {
         const savedDone = localStorage.getItem(KEY_GUEST_DONE);
         if (savedDone) setCompleted(JSON.parse(savedDone));
+        const savedLast = localStorage.getItem(KEY_GUEST_LAST);
+        if (savedLast) setLastLessonId(savedLast);
       }
     } catch {
       // ignore storage errors
@@ -81,6 +92,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
     try {
       const remote = await fetchUserProgress(loggedInUser);
       setCompleted(remote.completedLessons);
+      setLastLessonId(remote.lastLessonId || null);
     } finally {
       setIsSyncing(false);
     }
@@ -92,26 +104,53 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
     try {
       const guestDone = localStorage.getItem(KEY_GUEST_DONE);
       setCompleted(guestDone ? JSON.parse(guestDone) : []);
+      const guestLast = localStorage.getItem(KEY_GUEST_LAST);
+      setLastLessonId(guestLast || null);
     } catch {
       setCompleted([]);
+      setLastLessonId(null);
     }
     showToast('ออกจากระบบเรียบร้อยแล้ว');
   };
 
   const isDone = (id: string) => completed.includes(id);
 
+  const recordLastLesson = (id: string) => {
+    setLastLessonId(prev => {
+      if (prev === id) return prev;
+      try {
+        if (user) {
+          localStorage.setItem(`lernweb:last:${user.id}`, id);
+          saveUserProgressToCloud(user, completed, id);
+        } else {
+          localStorage.setItem(KEY_GUEST_LAST, id);
+        }
+      } catch {
+        // ignore
+      }
+      return id;
+    });
+  };
+
   const toggleDone = (id: string) => {
     const exists = completed.includes(id);
     const added = !exists;
     const next = exists ? completed.filter(item => item !== id) : [...completed, id];
     setCompleted(next);
+    setLastLessonId(id);
 
     if (user) {
       setIsSyncing(true);
+      try {
+        localStorage.setItem(`lernweb:last:${user.id}`, id);
+      } catch {
+        // ignore
+      }
       saveUserProgressToCloud(user, next, id).finally(() => setIsSyncing(false));
     } else {
       try {
         localStorage.setItem(KEY_GUEST_DONE, JSON.stringify(next));
+        localStorage.setItem(KEY_GUEST_LAST, id);
       } catch {
         // ignore
       }
@@ -121,12 +160,19 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
 
   const resetProgress = () => {
     setCompleted([]);
+    setLastLessonId(null);
     if (user) {
       setIsSyncing(true);
+      try {
+        localStorage.removeItem(`lernweb:last:${user.id}`);
+      } catch {
+        // ignore
+      }
       saveUserProgressToCloud(user, []).finally(() => setIsSyncing(false));
     } else {
       try {
         localStorage.removeItem(KEY_GUEST_DONE);
+        localStorage.removeItem(KEY_GUEST_LAST);
       } catch {
         // ignore
       }
@@ -160,9 +206,11 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
         user,
         isSyncing,
         completed,
+        lastLessonId,
         theme,
         isDone,
         toggleDone,
+        recordLastLesson,
         resetProgress,
         getStats,
         toggleTheme,

@@ -25,7 +25,7 @@ function extractYouTubeId(rawUrl: string): string | null {
 }
 
 export default function LessonViewer({ lesson }: LessonViewerProps) {
-  const { isDone, toggleDone, getStats, showToast } = useProgress();
+  const { isDone, toggleDone, recordLastLesson, getStats, showToast } = useProgress();
   const [activeId, setActiveId] = useState<string>(lesson.sections[0]?.id || '');
   const [quizAnswers, setQuizAnswers] = useState<Record<number, number>>({});
   const [activeVideoIdx, setActiveVideoIdx] = useState<number>(0);
@@ -77,6 +77,7 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
   useEffect(() => {
     setQuizAnswers({});
     setActiveVideoIdx(0);
+    recordLastLesson(lesson.id);
   }, [lesson.id]);
 
   const renderTocList = () => (

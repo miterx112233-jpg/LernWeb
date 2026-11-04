@@ -3,17 +3,19 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { LESSONS, LEVELS } from '@/data/lessons';
 import { useProgress } from '@/context/ProgressContext';
 import { signInUser, signUpUser } from '@/lib/supabase';
 
 export default function LoginPage() {
   const router = useRouter();
-  const { user, loginWithUser, logout, getStats, showToast } = useProgress();
+  const { user, isDone, loginWithUser, logout, getStats, showToast } = useProgress();
 
   const [tab, setTab] = useState<'signin' | 'signup'>('signin');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
@@ -62,49 +64,73 @@ export default function LoginPage() {
   };
 
   const stats = getStats();
+  const nextLesson = LESSONS.find(l => !isDone(l.id)) || LESSONS[0];
 
   return (
-    <>
-      <section className="page-head">
-        <div className="container">
-          <h1>เข้าสู่ระบบ / สมัครสมาชิก</h1>
-          <p>
-            เข้าสู่ระบบเพื่อบันทึกและติดตามความก้าวหน้าการเรียนแต่ละบทเรียนตามบัญชีของคุณ
-          </p>
-        </div>
-      </section>
-
-      <section className="container" style={{ paddingTop: 36, paddingBottom: 72 }}>
-        <div className="auth-wrap">
+    <section className="auth-stage">
+      <div className="container">
+        <div className="auth-minimal">
           {user ? (
-            <div className="auth-card">
-              <div className="auth-badge-row">
-                <span className="tag tag--basic">● เข้าสู่ระบบแล้ว</span>
+            <div className="auth-card auth-card--minimal">
+              <div className="auth-profile-head">
+                <div className="auth-profile-avatar">
+                  {user.displayName.charAt(0).toUpperCase()}
+                </div>
+                <div className="auth-profile-meta">
+                  <div className="auth-profile-status">● บัญชีผู้เรียนของคุณ</div>
+                  <h1 className="auth-card__title">{user.displayName}</h1>
+                  <p className="auth-card__sub">{user.email}</p>
+                </div>
               </div>
-
-              <h2 className="auth-card__title" style={{ marginTop: 14 }}>
-                สวัสดีคุณ {user.displayName}
-              </h2>
-              <p className="auth-card__sub">{user.email}</p>
 
               <div className="auth-summary-box">
-                <div>
-                  <div className="stat__label">ความก้าวหน้าของคุณ</div>
-                  <div className="stat__value">
-                    {stats.done}/{stats.total} บทเรียน ({stats.pct}%)
-                  </div>
+                <div className="auth-summary-row">
+                  <span className="stat__label">ความก้าวหน้ารวม</span>
+                  <strong className="auth-summary-pct">
+                    {stats.done}/{stats.total} บท ({stats.pct}%)
+                  </strong>
                 </div>
-                <div className="progress" style={{ marginTop: 10 }}>
+                <div className="progress" style={{ marginTop: 8 }}>
                   <div className="progress__bar" style={{ width: `${stats.pct}%` }} />
+                </div>
+
+                <div className="auth-level-mini">
+                  {LEVELS.map(lv => {
+                    const lvStat = getStats(lv.id);
+                    return (
+                      <div key={lv.id} className="auth-level-mini__item">
+                        <span className={`c-${lv.id}`} style={{ fontWeight: 600 }}>
+                          {lv.name}
+                        </span>
+                        <span>
+                          {lvStat.done}/{lvStat.total}
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 
-              <div className="hero__actions" style={{ marginTop: 22 }}>
-                <Link className="btn btn--primary" href="/progress">
-                  ดูตารางความก้าวหน้าของฉัน
+              {nextLesson && (
+                <Link
+                  href={`/lesson/${nextLesson.id}`}
+                  className="auth-next-lesson"
+                >
+                  <div>
+                    <div className="auth-next-lesson__label">
+                      {stats.done === stats.total ? 'ทบทวนบทเรียน' : 'เรียนต่อบทถัดไป'}
+                    </div>
+                    <div className="auth-next-lesson__title">
+                      บทที่ {String(nextLesson.no).padStart(2, '0')}: {nextLesson.keyword} ({nextLesson.subtitle})
+                    </div>
+                  </div>
+                  <span aria-hidden="true">→</span>
                 </Link>
-                <Link className="btn btn--outline" href="/roadmap">
-                  ไปหน้าแผนผังการเรียน
+              )}
+
+              <div className="auth-profile-actions">
+                <Link className="btn btn--primary" style={{ flex: 1, justifyContent: 'center' }} href="/progress">
+                  ดูตารางความก้าวหน้า
                 </Link>
                 <button
                   type="button"
@@ -116,91 +142,148 @@ export default function LoginPage() {
               </div>
             </div>
           ) : (
-            <div className="auth-card">
-              <div className="auth-tabs" style={{ marginTop: 0 }}>
-                <button
-                  type="button"
-                  className={`auth-tab ${tab === 'signin' ? 'is-active' : ''}`}
-                  onClick={() => {
-                    setTab('signin');
-                    setErrorMsg(null);
-                  }}
-                >
-                  เข้าสู่ระบบ
-                </button>
-                <button
-                  type="button"
-                  className={`auth-tab ${tab === 'signup' ? 'is-active' : ''}`}
-                  onClick={() => {
-                    setTab('signup');
-                    setErrorMsg(null);
-                  }}
-                >
-                  สมัครสมาชิกใหม่
-                </button>
+            <div className="auth-card auth-card--minimal">
+              <div className="auth-brand">
+                <div className="auth-brand__icon" aria-hidden="true">
+                  <svg width="22" height="22" viewBox="0 0 36 36" fill="none">
+                    <circle cx="15" cy="15" r="10" stroke="currentColor" strokeWidth="3.2" />
+                    <circle cx="15" cy="15" r="3.2" fill="currentColor" />
+                    <path d="M22.5 22.5L31 31" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" />
+                    <path d="M12 30L23 18" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" />
+                  </svg>
+                </div>
+                <h1 className="auth-card__title">
+                  {tab === 'signin' ? 'ยินดีต้อนรับสู่ LernWeb' : 'สร้างบัญชีผู้เรียนใหม่'}
+                </h1>
+                <p className="auth-card__sub">
+                  {tab === 'signin'
+                    ? 'กรอกอีเมลและรหัสผ่านเพื่อดูความก้าวหน้าการเรียนของคุณ'
+                    : 'สมัครสมาชิกฟรีเพื่อเริ่มบันทึกความคืบหน้าครบทั้ง 12 บทเรียน'}
+                </p>
               </div>
 
               <form onSubmit={handleSubmit} className="auth-form">
                 {tab === 'signup' && (
                   <div className="auth-field">
                     <label htmlFor="displayName">ชื่อที่ใช้แสดง</label>
-                    <input
-                      id="displayName"
-                      type="text"
-                      className="auth-input"
-                      placeholder="เช่น Somchai"
-                      value={displayName}
-                      onChange={e => setDisplayName(e.target.value)}
-                    />
+                    <div className="auth-input-wrap">
+                      <span className="auth-input-icon" aria-hidden="true">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <circle cx="12" cy="8" r="4" />
+                          <path d="M4 20c1.8-3.6 5-5.5 8-5.5s6.2 1.9 8 5.5" />
+                        </svg>
+                      </span>
+                      <input
+                        id="displayName"
+                        type="text"
+                        className="auth-input auth-input--with-icon"
+                        placeholder="เช่น Somchai"
+                        value={displayName}
+                        onChange={e => setDisplayName(e.target.value)}
+                      />
+                    </div>
                   </div>
                 )}
 
                 <div className="auth-field">
                   <label htmlFor="email">อีเมล</label>
-                  <input
-                    id="email"
-                    type="email"
-                    className="auth-input"
-                    placeholder="you@example.com"
-                    required
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                  />
+                  <div className="auth-input-wrap">
+                    <span className="auth-input-icon" aria-hidden="true">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <rect x="3" y="5" width="18" height="14" rx="2" />
+                        <path d="m3 7 9 6 9-6" />
+                      </svg>
+                    </span>
+                    <input
+                      id="email"
+                      type="email"
+                      className="auth-input auth-input--with-icon"
+                      placeholder="you@example.com"
+                      required
+                      value={email}
+                      onChange={e => setEmail(e.target.value)}
+                    />
+                  </div>
                 </div>
 
                 <div className="auth-field">
-                  <label htmlFor="password">รหัสผ่าน (อย่างน้อย 6 ตัวอักษร)</label>
-                  <input
-                    id="password"
-                    type="password"
-                    className="auth-input"
-                    placeholder="••••••••"
-                    required
-                    minLength={6}
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                  />
+                  <label htmlFor="password">รหัสผ่าน</label>
+                  <div className="auth-input-wrap">
+                    <span className="auth-input-icon" aria-hidden="true">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <rect x="4" y="11" width="16" height="10" rx="2" />
+                        <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+                      </svg>
+                    </span>
+                    <input
+                      id="password"
+                      type={showPassword ? 'text' : 'password'}
+                      className="auth-input auth-input--with-icon auth-input--with-toggle"
+                      placeholder="อย่างน้อย 6 ตัวอักษร"
+                      required
+                      minLength={6}
+                      value={password}
+                      onChange={e => setPassword(e.target.value)}
+                    />
+                    <button
+                      type="button"
+                      className="auth-pw-toggle"
+                      onClick={() => setShowPassword(prev => !prev)}
+                      tabIndex={-1}
+                    >
+                      {showPassword ? 'ซ่อน' : 'แสดง'}
+                    </button>
+                  </div>
                 </div>
 
                 {errorMsg && <div className="auth-error">{errorMsg}</div>}
 
                 <button
                   type="submit"
-                  className="btn btn--primary"
-                  style={{ width: '100%', justifyContent: 'center', marginTop: 6 }}
+                  className="btn btn--primary auth-submit-btn"
                   disabled={loading}
                 >
                   {loading
                     ? 'กำลังดำเนินการ...'
                     : tab === 'signin'
-                    ? 'เข้าสู่ระบบ'
-                    : 'สมัครสมาชิก'}
+                    ? 'เข้าสู่ระบบ →'
+                    : 'สร้างบัญชีผู้เรียน →'}
                 </button>
               </form>
+
+              <div className="auth-switch-foot">
+                {tab === 'signin' ? (
+                  <>
+                    ยังไม่มีบัญชีผู้เรียนใช่ไหม?{' '}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setTab('signup');
+                        setErrorMsg(null);
+                      }}
+                    >
+                      สมัครสมาชิกฟรี
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    มีบัญชีอยู่แล้วใช่ไหม?{' '}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setTab('signin');
+                        setErrorMsg(null);
+                      }}
+                    >
+                      เข้าสู่ระบบ
+                    </button>
+                  </>
+                )}
+              </div>
             </div>
           )}
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }

@@ -8,12 +8,62 @@ import { useProgress } from '@/context/ProgressContext';
 import { ArticleBanner } from '@/components/ArticleViewer';
 
 export default function HomePage() {
-  const { isDone, getStats } = useProgress();
+  const { user, lastLessonId, isDone, getStats } = useProgress();
 
-  const nextLesson = LESSONS.find(l => !isDone(l.id)) || LESSONS[0];
+  const totalStats = getStats();
+  const lastVisitedLesson = lastLessonId ? LESSONS.find(l => l.id === lastLessonId) : null;
+  const firstUncompletedLesson = LESSONS.find(l => !isDone(l.id)) || LESSONS[0];
+
+  // หากบทล่าสุดที่เปิดดูยังเรียนไม่จบ ให้พาไปเรียนต่อบทนั้น แต่ถ้าเรียนจบแล้วให้พาไปบทถัดไปที่ยังไม่ได้เรียน
+  const resumeLesson =
+    lastVisitedLesson && !isDone(lastVisitedLesson.id)
+      ? lastVisitedLesson
+      : firstUncompletedLesson;
 
   return (
     <>
+      {/* แถบต้อนรับและเรียนต่อจากที่ค้างไว้ สำหรับสมาชิกที่ล็อกอินแล้ว */}
+      {user && (
+        <section className="container" style={{ paddingTop: 28 }}>
+          <div className="continue-banner">
+            <div className="continue-banner__left">
+              <div className="continue-banner__avatar">
+                {user.displayName.charAt(0).toUpperCase()}
+              </div>
+              <div>
+                <div className="continue-banner__greet">
+                  ยินดีต้อนรับกลับมา, <strong>{user.displayName}</strong>
+                  <span className="continue-banner__badge">
+                    เรียนจบแล้ว {totalStats.done}/{totalStats.total} บท ({totalStats.pct}%)
+                  </span>
+                </div>
+                <p className="continue-banner__sub">
+                  {totalStats.done === totalStats.total
+                    ? 'ยอดเยี่ยมมาก! คุณเรียนครบทั้ง 12 บทใน Roadmap แล้ว สามารถกดทบทวนบทเรียนได้ทุกเมื่อ'
+                    : lastVisitedLesson && !isDone(lastVisitedLesson.id)
+                    ? `คุณเปิดดูค้างไว้ที่ บทที่ ${String(resumeLesson.no).padStart(2, '0')}: ${resumeLesson.title}`
+                    : `บทเรียนถัดไปของคุณคือ บทที่ ${String(resumeLesson.no).padStart(2, '0')}: ${resumeLesson.title}`}
+                </p>
+                <div className="progress continue-banner__progress">
+                  <div className="progress__bar" style={{ width: `${totalStats.pct}%` }} />
+                </div>
+              </div>
+            </div>
+
+            <div className="continue-banner__actions">
+              <Link className="btn btn--primary" href={`/lesson/${resumeLesson.id}`}>
+                {totalStats.done === totalStats.total
+                  ? 'ทบทวนบทเรียน →'
+                  : `เรียนต่อ บทที่ ${String(resumeLesson.no).padStart(2, '0')} →`}
+              </Link>
+              <Link className="btn btn--outline" href="/progress">
+                ดูความก้าวหน้าทั้งหมด
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* 1. HERO SECTION — เกริ่นยุค AI (โทนเรียบ ไม่ขายของ) */}
       <section className="container hero">
         <div>
@@ -34,8 +84,10 @@ export default function HomePage() {
             เพื่อให้ใช้ AI ได้อย่างคนที่รู้ว่ากำลังทำอะไรอยู่
           </p>
           <div className="hero__cta">
-            <Link className="btn btn--primary" href={`/lesson/${nextLesson.id}`}>
-              {nextLesson.no > 1 ? `เรียนต่อ บทที่ ${nextLesson.no}` : 'เริ่มจากบทแรก'}
+            <Link className="btn btn--primary" href={`/lesson/${resumeLesson.id}`}>
+              {resumeLesson.no > 1 || lastVisitedLesson
+                ? `เรียนต่อ บทที่ ${resumeLesson.no}`
+                : 'เริ่มจากบทแรก'}
             </Link>
             <Link className="link" href="/roadmap">
               ดู Roadmap ทั้งหมด →
