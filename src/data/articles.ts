@@ -35,7 +35,7 @@ export const ARTICLES: Article[] = [
     keyword: 'LLM',
     subtitle: 'Large Language Model',
     tagline: 'คืออะไร? ช่วยในงานธุรกิจได้อย่างไร',
-    title: 'Large Language Model (LLM) คืออะไร',
+    title: 'Large Language Model (LLM) คือ อะไร มีบทบาทและช่วยธุรกิจอย่างไร',
     summary:
       'ทำความรู้จักกับ Large Language Model (LLM) โมเดลภาษาขนาดใหญ่ หลักการทำงาน ตัวอย่างโมเดล และการประยุกต์ใช้งานจริงในภาคธุรกิจ',
     publishedAt: '5 พ.ย. 2026',
@@ -53,7 +53,7 @@ export const ARTICLES: Article[] = [
     sections: [
       {
         id: 'what-is-llm',
-        h: 'Large Language Model หรือ LLM คืออะไร',
+        h: 'ทำความรู้จักกับ Large Language Model (LLM)',
         html: `
           <p>LLM ย่อมาจาก Large Language Model หรือโมเดลภาษาขนาดใหญ่ คือระบบ AI ที่ได้รับการฝึกฝนด้วยข้อมูลข้อความมหาศาลจากทั่วโลก ไม่ว่าจะเป็นหนังสือ บทความ เว็บไซต์ งานวิจัย และเอกสารต่างๆ จำนวนมากมายมหาศาล โดย "LLM เป็นประเภทหนึ่งของ <a href="/articles/generative-ai-explained">Generative AI</a>"</p>
           <p>LLM ซึ่งเชี่ยวชาญด้านการสร้างและประมวลผลภาษา ในขณะที่ Generative AI เป็นคำเรียกที่กว้างกว่าซึ่งรวมถึงการสร้างเนื้อหาประเภทอื่นๆ นอกเหนือจากข้อความด้วย</p>
@@ -152,7 +152,7 @@ export const ARTICLES: Article[] = [
     keyword: 'GEN AI',
     subtitle: 'Generative AI คืออะไร ?',
     tagline: 'ทำความรู้จักกับ Generative AI ปัญญาประดิษฐ์สร้างสรรค์',
-    title: 'Generative AI คืออะไร ? ทำความรู้จักกับ Generative AI ปัญญาประดิษฐ์สร้างสรรค์',
+    title: 'Generative AI คือ อะไร มีหลักการทำงานยังไง และใช้ประโยชน์อย่างไร',
     summary:
       'เจาะลึกวิวัฒนาการ หลักการทำงานของ Generative AI (GAN & Transformer) กรณีศึกษาใน 5 อุตสาหกรรม จริยธรรม AI และการประยุกต์ใช้ในซอฟต์แวร์ยุคใหม่',
     publishedAt: '5 พ.ย. 2026',

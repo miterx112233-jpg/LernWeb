@@ -39,10 +39,15 @@ export default function Navbar() {
     };
     checkStandalone();
 
-    // ลงทะเบียน Service Worker เพื่อให้เบราว์เซอร์รองรับการติดตั้งเป็นแอป (PWA)
+    // ลงทะเบียน Service Worker เพื่อให้เบราว์เซอร์รองรับการติดตั้งเป็นแอป (PWA) และดึงข้อมูลใหม่ทันที
     if ('serviceWorker' in navigator) {
       const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
-      navigator.serviceWorker.register(`${basePath}/sw.js`).catch(() => {});
+      navigator.serviceWorker
+        .register(`${basePath}/sw.js?v=1.2.1.4`)
+        .then(reg => {
+          reg.update();
+        })
+        .catch(() => {});
     }
 
     const onBeforeInstallPrompt = (e: Event) => {

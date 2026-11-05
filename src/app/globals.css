@@ -2094,11 +2094,11 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 @media (max-width: 900px) {
   /* หัวข้อบทความ/บทเรียนบนหน้าจอมือถือและแท็บเล็ต */
   .lesson__title {
-    font-size: 19px !important;
+    font-size: 18px !important;
     line-height: 1.45 !important;
     margin-top: 14px !important;
-    word-break: break-word;
-    overflow-wrap: break-word;
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
   }
   .lesson__caption {
     font-size: 12px !important;
@@ -2117,11 +2117,15 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
     line-height: 1.8 !important;
   }
   .prose h2 {
-    font-size: 18px !important;
-    line-height: 1.4 !important;
-    margin: 32px 0 14px !important;
+    font-size: 17.5px !important;
+    line-height: 1.45 !important;
+    margin: 30px 0 14px !important;
     padding-left: 10px !important;
     border-left-width: 3.5px !important;
+    scroll-margin-top: calc(var(--nav-h) + 16px) !important;
+  }
+  .prose section:first-child h2 {
+    margin-top: 14px !important;
   }
   .prose h3 {
     font-size: 16px !important;
