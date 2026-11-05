@@ -71,7 +71,7 @@ export default function HomePage() {
           <h1 className="hero__title">
             AI เขียนโค้ดให้เราได้แล้ว
             <br />
-            แต่คนที่ต้องเข้าใจ<span className="brand">ว่ามันถูกหรือผิด</span>
+            แต่คนที่ต้องเข้าใจ<span className="brand" style={{ whiteSpace: 'nowrap' }}>ว่ามันถูกหรือผิด</span>
             <br />
             ยังเป็นเรา
           </h1>
