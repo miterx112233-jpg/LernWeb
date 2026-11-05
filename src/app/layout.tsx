@@ -6,6 +6,12 @@ import Footer from '@/components/Footer';
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
+const siteTitle = 'LernDev — พื้นฐานและความรู้ Software Engineer ในยุค AI';
+const siteDesc =
+  'คลังความรู้และ Roadmap สำหรับคนที่อยากเป็น Software Engineer ในยุคที่ AI เขียนโค้ดได้ เรียงลำดับจาก Basic ไปจนถึง Advanced';
+const siteUrl = 'https://miterx112233-jpg.github.io/LernWeb';
+const ogImageUrl = `${siteUrl}/images/og-image.png`;
+
 export const viewport: Viewport = {
   themeColor: '#1D4ED8',
   width: 'device-width',
@@ -13,9 +19,9 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: 'LernDev — พื้นฐานและความรู้ Software Engineer ในยุค AI',
-  description:
-    'คลังความรู้และ Roadmap สำหรับคนที่อยากเป็น Software Engineer ในยุคที่ AI เขียนโค้ดได้ เรียงลำดับจาก Basic ไปจนถึง Advanced',
+  metadataBase: new URL(siteUrl),
+  title: siteTitle,
+  description: siteDesc,
   manifest: `${basePath}/manifest.json`,
   appleWebApp: {
     capable: true,
@@ -28,6 +34,27 @@ export const metadata: Metadata = {
       { url: `${basePath}/icons/icon-512.png`, sizes: '512x512', type: 'image/png' }
     ],
     apple: [{ url: `${basePath}/icons/apple-touch-icon.png`, sizes: '180x180', type: 'image/png' }]
+  },
+  openGraph: {
+    type: 'website',
+    url: siteUrl,
+    title: siteTitle,
+    description: siteDesc,
+    siteName: 'LernDev',
+    images: [
+      {
+        url: ogImageUrl,
+        width: 1200,
+        height: 630,
+        alt: 'LernDev — Roadmap & พื้นฐาน Software Engineer ในยุค AI'
+      }
+    ]
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: siteTitle,
+    description: siteDesc,
+    images: [ogImageUrl]
   }
 };
 
