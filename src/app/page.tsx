@@ -84,14 +84,27 @@ export default function HomePage() {
             เพื่อให้ใช้ AI ได้อย่างคนที่รู้ว่ากำลังทำอะไรอยู่
           </p>
           <div className="hero__cta">
-            <Link className="btn btn--primary" href={`/lesson/${resumeLesson.id}`}>
-              {resumeLesson.no > 1 || lastVisitedLesson
-                ? `เรียนต่อ บทที่ ${resumeLesson.no}`
-                : 'เริ่มจากบทแรก'}
-            </Link>
-            <Link className="link" href="/roadmap">
-              ดู Roadmap ทั้งหมด →
-            </Link>
+            {user ? (
+              <>
+                <Link className="btn btn--primary" href={`/lesson/${resumeLesson.id}`}>
+                  {resumeLesson.no > 1 || lastVisitedLesson
+                    ? `เรียนต่อ บทที่ ${resumeLesson.no}`
+                    : 'เริ่มจากบทแรก'}
+                </Link>
+                <Link className="link" href="/roadmap">
+                  ดู Roadmap ทั้งหมด →
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link className="btn btn--primary" href="/login">
+                  🔒 เข้าสู่ระบบเพื่อเริ่มเรียนตามแผนผัง
+                </Link>
+                <Link className="link" href="/articles">
+                  อ่านบทความทั่วไปฟรี →
+                </Link>
+              </>
+            )}
           </div>
         </div>
 
@@ -244,11 +257,13 @@ export default function HomePage() {
             <div>
               <h2 className="section-title">เส้นทางการเรียนและความก้าวหน้า</h2>
               <p className="section-sub">
-                12 บท แบ่งเป็น 3 ระดับ เรียนตามลำดับและทำแบบทดสอบท้ายบทครบ 10 ข้อเพื่อบันทึกความก้าวหน้า
+                {user
+                  ? '12 บท แบ่งเป็น 3 ระดับ เรียนตามลำดับและทำแบบทดสอบท้ายบทครบ 10 ข้อเพื่อบันทึกความก้าวหน้า'
+                  : '🔒 แผนผังการเรียน 12 บท (3 ระดับ) และคลังข้อสอบท้ายบท เปิดให้เฉพาะสมาชิกที่เข้าสู่ระบบ'}
               </p>
             </div>
-            <Link className="link" href="/roadmap">
-              ดูรายละเอียดใน Roadmap →
+            <Link className="link" href={user ? '/roadmap' : '/login'}>
+              {user ? 'ดูรายละเอียดใน Roadmap →' : 'เข้าสู่ระบบเพื่อเปิด Roadmap →'}
             </Link>
           </div>
 
@@ -267,32 +282,47 @@ export default function HomePage() {
               flexWrap: 'wrap'
             }}
           >
-            <div style={{ flex: 1, minWidth: 240 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-                <span style={{ fontWeight: 700, fontSize: 15 }}>
-                  ความก้าวหน้ารวมทั้งหมด: {totalStats.done} / {totalStats.total} บทเรียน ({totalStats.pct}%)
-                </span>
-                <span className="muted" style={{ fontSize: 13 }}>
-                  {user ? `ซิงค์กับบัญชี ${user.displayName}` : 'โหมดผู้เยี่ยมชม'}
-                </span>
-              </div>
-              <div className="progress">
-                <div className="progress__bar" style={{ width: `${totalStats.pct}%` }} />
-              </div>
-            </div>
+            {user ? (
+              <>
+                <div style={{ flex: 1, minWidth: 240 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                    <span style={{ fontWeight: 700, fontSize: 15 }}>
+                      ความก้าวหน้ารวมทั้งหมด: {totalStats.done} / {totalStats.total} บทเรียน ({totalStats.pct}%)
+                    </span>
+                    <span className="muted" style={{ fontSize: 13 }}>
+                      ซิงค์กับบัญชี {user.displayName}
+                    </span>
+                  </div>
+                  <div className="progress">
+                    <div className="progress__bar" style={{ width: `${totalStats.pct}%` }} />
+                  </div>
+                </div>
 
-            <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
-              <Link className="btn btn--primary" href={`/lesson/${resumeLesson.id}`}>
-                {totalStats.done === totalStats.total
-                  ? 'ทบทวนบทเรียน →'
-                  : `เรียนต่อ บทที่ ${String(resumeLesson.no).padStart(2, '0')} →`}
-              </Link>
-              {!user && (
-                <Link className="btn btn--outline" href="/login">
-                  เข้าสู่ระบบเพื่อบันทึกข้อมูล
-                </Link>
-              )}
-            </div>
+                <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+                  <Link className="btn btn--primary" href={`/lesson/${resumeLesson.id}`}>
+                    {totalStats.done === totalStats.total
+                      ? 'ทบทวนบทเรียน →'
+                      : `เรียนต่อ บทที่ ${String(resumeLesson.no).padStart(2, '0')} →`}
+                  </Link>
+                </div>
+              </>
+            ) : (
+              <>
+                <div style={{ flex: 1, minWidth: 240 }}>
+                  <div style={{ fontWeight: 700, fontSize: 15, marginBottom: 4 }}>
+                    🔒 แผนการเรียนและระบบติดตามความก้าวหน้าถูกล็อกไว้สำหรับสมาชิก
+                  </div>
+                  <p className="muted" style={{ margin: 0, fontSize: 13.5 }}>
+                    เข้าสู่ระบบหรือสมัครสมาชิกฟรี เพื่อปลดล็อกบทเรียนทั้ง 12 บท แบบทดสอบท้ายบท 240 ข้อ และระบบบันทึกความก้าวหน้ารายบุคคล
+                  </p>
+                </div>
+                <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+                  <Link className="btn btn--primary" href="/login">
+                    เข้าสู่ระบบ / สมัครสมาชิกฟรี →
+                  </Link>
+                </div>
+              </>
+            )}
           </div>
 
           <div className="levels">
@@ -305,25 +335,33 @@ export default function HomePage() {
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <p className={`level-box__label c-${lv.id}`}>{lv.label}</p>
                       <span className="muted" style={{ fontSize: 12.5, fontWeight: 600 }}>
-                        {stats.done}/{stats.total} บท ({stats.pct}%)
+                        {user ? `${stats.done}/${stats.total} บท (${stats.pct}%)` : '🔒 เฉพาะสมาชิก'}
                       </span>
                     </div>
                     <h3 className="level-box__title">{lv.title}</h3>
-                    <div className="progress" style={{ marginTop: 10, height: 6 }}>
-                      <div className="progress__bar" style={{ width: `${stats.pct}%` }} />
-                    </div>
+                    {user && (
+                      <div className="progress" style={{ marginTop: 10, height: 6 }}>
+                        <div className="progress__bar" style={{ width: `${stats.pct}%` }} />
+                      </div>
+                    )}
                   </div>
                   <ul>
                     {lessons.map(l => (
                       <li key={l.id}>
-                        <Link href={`/lesson/${l.id}`}>
+                        <Link href={user ? `/lesson/${l.id}` : '/login'}>
                           <span>
                             <span className="num">{String(l.no).padStart(2, '0')}</span>
                             {l.tagline}
                           </span>
-                          {isDone(l.id) && (
-                            <span className="check" title="เรียนจบแล้ว">
-                              ✓
+                          {user ? (
+                            isDone(l.id) && (
+                              <span className="check" title="เรียนจบแล้ว">
+                                ✓
+                              </span>
+                            )
+                          ) : (
+                            <span className="muted" style={{ fontSize: 12 }} title="ต้องเข้าสู่ระบบก่อนเรียน">
+                              🔒
                             </span>
                           )}
                         </Link>

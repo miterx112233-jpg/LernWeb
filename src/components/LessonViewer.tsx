@@ -27,7 +27,7 @@ function extractYouTubeId(rawUrl: string): string | null {
 }
 
 export default function LessonViewer({ lesson }: LessonViewerProps) {
-  const { isDone, toggleDone, recordLastLesson, getStats, showToast } = useProgress();
+  const { user, isDone, toggleDone, recordLastLesson, getStats, showToast } = useProgress();
   const [activeId, setActiveId] = useState<string>(lesson.sections[0]?.id || '');
   const [examQuestions, setExamQuestions] = useState<QuizItem[]>(() => lesson.quiz || []);
   const [examSetLabel, setExamSetLabel] = useState<string>('ชุดที่ 1 (มาตรฐาน)');
@@ -97,8 +97,65 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
     setShowQuizSummary(false);
     setReviewFilter('all');
     setActiveVideoIdx(0);
-    recordLastLesson(lesson.id);
-  }, [lesson.id]);
+    if (user) {
+      recordLastLesson(lesson.id);
+    }
+  }, [lesson.id, user]);
+
+  // ล็อกเนื้อหาบทเรียนในแผนการเรียน: ต้องเข้าสู่ระบบก่อนจึงจะเข้าเรียนและทำข้อสอบได้
+  if (!user) {
+    return (
+      <div className="container lesson">
+        <Link className="breadcrumb" href="/">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+            <path d="m15 18-6-6 6-6" />
+          </svg>
+          กลับไปยังหน้าแรก
+        </Link>
+
+        <div className="auth-minimal" style={{ margin: '28px auto 64px' }}>
+          <div className="auth-card auth-card--minimal" style={{ textAlign: 'center' }}>
+            <div className="auth-brand" style={{ marginBottom: 18 }}>
+              <div className="auth-brand__icon" aria-hidden="true">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                  <rect x="4" y="11" width="16" height="10" rx="2" />
+                  <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+                </svg>
+              </div>
+              <span className={`tag tag--${lesson.level}`} style={{ marginBottom: 10 }}>
+                🔒 บทที่ {String(lesson.no).padStart(2, '0')} · ระดับ {lv?.name}
+              </span>
+              <h1 className="auth-card__title" style={{ fontSize: '1.3rem' }}>
+                {lesson.title}
+              </h1>
+              <p className="auth-card__sub" style={{ marginTop: 10, lineHeight: 1.75 }}>
+                บทเรียนในแผนผังการเรียน (Roadmap) และระบบแบบทดสอบท้ายบทเปิดให้เฉพาะสมาชิกที่เข้าสู่ระบบ
+                กรุณาเข้าสู่ระบบหรือสมัครสมาชิกฟรีก่อนเริ่มเรียนบทนี้
+              </p>
+            </div>
+
+            <div className="auth-summary-box" style={{ textAlign: 'left', marginBottom: 22 }}>
+              <div style={{ fontWeight: 700, fontSize: 13.5, marginBottom: 6 }}>
+                ทำไมต้องเรียนบทนี้:
+              </div>
+              <p style={{ margin: 0, fontSize: 13.5, color: 'var(--text-2)', lineHeight: 1.75 }}>
+                {lesson.why}
+              </p>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <Link className="btn btn--primary auth-submit-btn" href="/login">
+                เข้าสู่ระบบ / สมัครสมาชิกเพื่อเข้าเรียน →
+              </Link>
+              <Link className="btn btn--outline" style={{ justifyContent: 'center' }} href="/articles">
+                อ่านบทความทั่วไป (ไม่ต้องล็อกอิน)
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const renderTocList = () => (
     <ul className="toc__list">

@@ -43,8 +43,8 @@ export default function LoginPage() {
         }
         if (res.user) {
           await loginWithUser(res.user);
-          showToast(`ยินดีต้อนรับคุณ ${res.user.displayName}!`);
-          router.push('/progress');
+          showToast(`ยินดีต้อนรับคุณ ${res.user.displayName}! ปลดล็อกแผนผังการเรียนเรียบร้อยแล้ว`);
+          router.push('/roadmap');
         }
       } else {
         const res = await signInUser(email, password);
@@ -55,7 +55,7 @@ export default function LoginPage() {
         if (res.user) {
           await loginWithUser(res.user);
           showToast(`เข้าสู่ระบบในชื่อ ${res.user.displayName} เรียบร้อยแล้ว`);
-          router.push('/progress');
+          router.push('/roadmap');
         }
       }
     } finally {
@@ -129,8 +129,8 @@ export default function LoginPage() {
               )}
 
               <div className="auth-profile-actions">
-                <Link className="btn btn--primary" style={{ flex: 1, justifyContent: 'center' }} href="/#progress">
-                  ดูความก้าวหน้าในหน้าแรก
+                <Link className="btn btn--primary" style={{ flex: 1, justifyContent: 'center' }} href="/roadmap">
+                  เปิดแผนผังการเรียน (Roadmap) →
                 </Link>
                 <button
                   type="button"
