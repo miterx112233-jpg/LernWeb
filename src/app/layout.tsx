@@ -5,7 +5,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {
-  title: 'LernWeb — พื้นฐานและความรู้ Software Engineer ในยุค AI',
+  title: 'LernDev — พื้นฐานและความรู้ Software Engineer ในยุค AI',
   description:
     'คลังความรู้และ Roadmap สำหรับคนที่อยากเป็น Software Engineer ในยุคที่ AI เขียนโค้ดได้ เรียงลำดับจาก Basic ไปจนถึง Advanced'
 };

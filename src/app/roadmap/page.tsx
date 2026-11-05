@@ -110,21 +110,9 @@ export default function RoadmapPage() {
                         </div>
 
                         <div className="step__side">
-                          <button
-                            type="button"
-                            className={`status ${done ? 'is-done' : ''}`}
-                            style={{ background: 'none', border: 0, padding: 0 }}
-                            onClick={() => {
-                              const marked = toggleDone(lesson.id);
-                              showToast(
-                                marked
-                                  ? `บันทึกว่าเรียนบทที่ ${lesson.no} จบแล้ว`
-                                  : `ยกเลิกสถานะเรียนจบบทที่ ${lesson.no}`
-                              );
-                            }}
-                          >
-                            {done ? '✓ เรียนจบแล้ว' : '○ ทำเครื่องหมายว่าเรียนจบ'}
-                          </button>
+                          <span className={`status ${done ? 'is-done' : ''}`}>
+                            {done ? '✓ เรียนจบแล้ว (ครบ 10 ข้อ)' : '○ ทำแบบทดสอบท้ายบทเพื่อผ่าน'}
+                          </span>
                           <Link
                             className={`btn ${done ? 'btn--outline' : 'btn--primary'}`}
                             href={`/lesson/${lesson.id}`}

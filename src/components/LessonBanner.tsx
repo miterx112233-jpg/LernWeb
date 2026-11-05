@@ -75,14 +75,14 @@ export function LessonBanner({ lesson, small = false }: LessonBannerProps) {
         <span className="banner__cat-dot" />
         {lesson.category}
       </span>
-      <span className="banner__logo">LernWeb</span>
+      <span className="banner__logo">LernDev</span>
       <div className="banner__text">
         <div className="banner__key">{lesson.keyword}</div>
         <div className="banner__sub">{lesson.subtitle}</div>
         <div className="banner__tagline">{lesson.tagline}</div>
       </div>
       <div className="banner__art">{renderIllustration(lesson)}</div>
-      <span className="banner__by">บทความโดย: LernWeb Training</span>
+      <span className="banner__by">บทความโดย: LernDev Training</span>
       <span className="banner__slogan">
         Never Stop
         <br />

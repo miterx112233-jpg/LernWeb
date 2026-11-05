@@ -6,6 +6,19 @@ import { ARTICLES, Article } from '@/data/articles';
 import { enrichHtmlWithGlossary } from '@/data/glossary';
 
 export function ArticleBanner({ article, small = false }: { article: Article; small?: boolean }) {
+  if (article.coverImage) {
+    return (
+      <div className={`banner banner--cover ${small ? 'banner--sm' : ''}`}>
+        <img
+          src={article.coverImage}
+          alt={article.title}
+          className="banner__cover-img"
+          loading="lazy"
+        />
+      </div>
+    );
+  }
+
   return (
     <div className={`banner ${small ? 'banner--sm' : ''}`}>
       <div className="banner__grid" />
@@ -13,7 +26,7 @@ export function ArticleBanner({ article, small = false }: { article: Article; sm
         <span className="banner__cat-dot" />
         {article.category}
       </span>
-      <span className="banner__logo">LernWeb</span>
+      <span className="banner__logo">LernDev</span>
       <div className="banner__text">
         <div className="banner__key">{article.keyword}</div>
         <div className="banner__sub">{article.subtitle}</div>

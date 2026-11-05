@@ -14,6 +14,7 @@ export interface Article {
   minutes: number;
   sourceName: string;
   sourceUrl: string;
+  coverImage?: string;
   hashtags?: string[];
   sections: LessonSection[];
 }
@@ -41,6 +42,7 @@ export const ARTICLES: Article[] = [
     minutes: 10,
     sourceName: '9Expert Training',
     sourceUrl: 'https://www.9experttraining.com/articles/large-language-model-%E0%B8%84%E0%B8%B7%E0%B8%AD%E0%B8%AD%E0%B8%B0%E0%B9%84%E0%B8%A3',
+    coverImage: '/images/articles/llm-for-business-and-developers.jpg',
     hashtags: [
       '#ธุรกิจยุคดิจิทัล',
       '#digital transformation',
@@ -157,6 +159,7 @@ export const ARTICLES: Article[] = [
     minutes: 12,
     sourceName: '9Expert Training',
     sourceUrl: 'https://www.9experttraining.com/articles/generative-ai-%E0%B8%84%E0%B8%B7%E0%B8%AD%E0%B8%AD%E0%B8%B0%E0%B9%84%E0%B8%A3',
+    coverImage: '/images/articles/generative-ai-explained.jpg',
     hashtags: [
       '#generative ai',
       '#ธุรกิจยุคดิจิทัล',
@@ -281,6 +284,7 @@ export const ARTICLES: Article[] = [
     minutes: 10,
     sourceName: 'AddIn.co.th',
     sourceUrl: 'https://addin.co.th/blog/what-is-big-data/',
+    coverImage: '/images/articles/what-is-big-data.jpg',
     hashtags: [
       '#big data',
       '#data analytics',
@@ -391,6 +395,7 @@ export const ARTICLES: Article[] = [
     minutes: 9,
     sourceName: 'AddIn.co.th',
     sourceUrl: 'https://addin.co.th/blog/what-is-computer/',
+    coverImage: '/images/articles/what-is-computer.jpg',
     hashtags: [
       '#computer basics',
       '#hardware',
@@ -488,6 +493,7 @@ export const ARTICLES: Article[] = [
     tagline: 'Input · Processor (CPU/GPU) · Memory & Storage · Hardware vs Software',
     sourceName: 'AddIn.co.th',
     sourceUrl: 'https://addin.co.th/blog/what-is-hardware/',
+    coverImage: '/images/articles/what-is-hardware.jpg',
     hashtags: [
       '#hardware',
       '#ฮาร์ดแวร์คืออะไร',

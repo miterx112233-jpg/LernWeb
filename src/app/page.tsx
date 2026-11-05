@@ -56,8 +56,8 @@ export default function HomePage() {
                   ? 'ทบทวนบทเรียน →'
                   : `เรียนต่อ บทที่ ${String(resumeLesson.no).padStart(2, '0')} →`}
               </Link>
-              <Link className="btn btn--outline" href="/progress">
-                ดูความก้าวหน้าทั้งหมด
+              <Link className="btn btn--outline" href="/roadmap">
+                ดูแผนผัง Roadmap
               </Link>
             </div>
           </div>
@@ -237,18 +237,64 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 4. เส้นทางการเรียน 3 ระดับ (Basic -> Intermediate -> Advanced) */}
-      <section className="section section--alt">
+      {/* 4. เส้นทางการเรียนและความก้าวหน้า 3 ระดับ (Basic -> Intermediate -> Advanced) */}
+      <section className="section section--alt" id="progress">
         <div className="container">
           <div className="section-head">
             <div>
-              <h2 className="section-title">เส้นทางการเรียน</h2>
-              <p className="section-sub">12 บท แบ่งเป็น 3 ระดับ แนะนำให้เรียนตามลำดับ</p>
+              <h2 className="section-title">เส้นทางการเรียนและความก้าวหน้า</h2>
+              <p className="section-sub">
+                12 บท แบ่งเป็น 3 ระดับ เรียนตามลำดับและทำแบบทดสอบท้ายบทครบ 10 ข้อเพื่อบันทึกความก้าวหน้า
+              </p>
             </div>
             <Link className="link" href="/roadmap">
-              ดูแบบละเอียด →
+              ดูรายละเอียดใน Roadmap →
             </Link>
           </div>
+
+          {/* แถบสรุปความก้าวหน้ารวมบนหน้าแรก */}
+          <div
+            style={{
+              padding: '18px 22px',
+              marginBottom: 22,
+              borderRadius: 10,
+              border: '1px solid var(--border)',
+              background: 'var(--surface)',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              gap: 20,
+              flexWrap: 'wrap'
+            }}
+          >
+            <div style={{ flex: 1, minWidth: 240 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                <span style={{ fontWeight: 700, fontSize: 15 }}>
+                  ความก้าวหน้ารวมทั้งหมด: {totalStats.done} / {totalStats.total} บทเรียน ({totalStats.pct}%)
+                </span>
+                <span className="muted" style={{ fontSize: 13 }}>
+                  {user ? `ซิงค์กับบัญชี ${user.displayName}` : 'โหมดผู้เยี่ยมชม'}
+                </span>
+              </div>
+              <div className="progress">
+                <div className="progress__bar" style={{ width: `${totalStats.pct}%` }} />
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+              <Link className="btn btn--primary" href={`/lesson/${resumeLesson.id}`}>
+                {totalStats.done === totalStats.total
+                  ? 'ทบทวนบทเรียน →'
+                  : `เรียนต่อ บทที่ ${String(resumeLesson.no).padStart(2, '0')} →`}
+              </Link>
+              {!user && (
+                <Link className="btn btn--outline" href="/login">
+                  เข้าสู่ระบบเพื่อบันทึกข้อมูล
+                </Link>
+              )}
+            </div>
+          </div>
+
           <div className="levels">
             {LEVELS.map(lv => {
               const stats = getStats(lv.id);
@@ -256,11 +302,16 @@ export default function HomePage() {
               return (
                 <div key={lv.id} className="level-box">
                   <div className="level-box__head">
-                    <p className={`level-box__label c-${lv.id}`}>{lv.label}</p>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <p className={`level-box__label c-${lv.id}`}>{lv.label}</p>
+                      <span className="muted" style={{ fontSize: 12.5, fontWeight: 600 }}>
+                        {stats.done}/{stats.total} บท ({stats.pct}%)
+                      </span>
+                    </div>
                     <h3 className="level-box__title">{lv.title}</h3>
-                    <p className="muted" style={{ fontSize: 13, marginTop: 4 }}>
-                      เรียนแล้ว {stats.done}/{stats.total} บท
-                    </p>
+                    <div className="progress" style={{ marginTop: 10, height: 6 }}>
+                      <div className="progress__bar" style={{ width: `${stats.pct}%` }} />
+                    </div>
                   </div>
                   <ul>
                     {lessons.map(l => (
@@ -271,7 +322,7 @@ export default function HomePage() {
                             {l.tagline}
                           </span>
                           {isDone(l.id) && (
-                            <span className="check" title="เรียนแล้ว">
+                            <span className="check" title="เรียนจบแล้ว">
                               ✓
                             </span>
                           )}

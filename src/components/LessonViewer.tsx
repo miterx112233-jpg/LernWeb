@@ -2,7 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { LESSONS, LEVELS, LESSON_VIDEOS, Lesson } from '@/data/lessons';
+import { LESSONS, LEVELS, LESSON_VIDEOS, Lesson, QuizItem } from '@/data/lessons';
+import { buildExamQuestions } from '@/data/quizPool';
 import { enrichHtmlWithGlossary } from '@/data/glossary';
 import { useProgress } from '@/context/ProgressContext';
 import { LessonBanner } from '@/components/LessonBanner';
@@ -28,7 +29,14 @@ function extractYouTubeId(rawUrl: string): string | null {
 export default function LessonViewer({ lesson }: LessonViewerProps) {
   const { isDone, toggleDone, recordLastLesson, getStats, showToast } = useProgress();
   const [activeId, setActiveId] = useState<string>(lesson.sections[0]?.id || '');
+  const [examQuestions, setExamQuestions] = useState<QuizItem[]>(() => lesson.quiz || []);
+  const [examSetLabel, setExamSetLabel] = useState<string>('ชุดที่ 1 (มาตรฐาน)');
+  const [examAttempt, setExamAttempt] = useState<number>(0);
   const [quizAnswers, setQuizAnswers] = useState<Record<number, number>>({});
+  const [currentQuizIdx, setCurrentQuizIdx] = useState<number>(0);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [showQuizSummary, setShowQuizSummary] = useState<boolean>(false);
+  const [reviewFilter, setReviewFilter] = useState<'all' | 'wrong' | 'correct'>('all');
   const [activeVideoIdx, setActiveVideoIdx] = useState<number>(0);
 
   const lv = LEVELS.find(item => item.id === lesson.level);
@@ -54,6 +62,9 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
     if (videoList.length > 0) {
       ids.push('lesson-video');
     }
+    if (lesson.quiz && lesson.quiz.length > 0) {
+      ids.push('lesson-quiz');
+    }
 
     const onScroll = () => {
       const offset = 120;
@@ -76,7 +87,15 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
   }, [lesson, videoList.length]);
 
   useEffect(() => {
+    const initial = buildExamQuestions(lesson, 0, []);
+    setExamQuestions(initial.questions);
+    setExamSetLabel(initial.setLabel);
+    setExamAttempt(0);
     setQuizAnswers({});
+    setCurrentQuizIdx(0);
+    setIsSubmitted(false);
+    setShowQuizSummary(false);
+    setReviewFilter('all');
     setActiveVideoIdx(0);
     recordLastLesson(lesson.id);
   }, [lesson.id]);
@@ -117,6 +136,16 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
           </a>
         </li>
       )}
+      {lesson.quiz && lesson.quiz.length > 0 && (
+        <li>
+          <a
+            href="#lesson-quiz"
+            className={activeId === 'lesson-quiz' ? 'is-active' : ''}
+          >
+            แบบทดสอบท้ายบท ({lesson.quiz.length} ข้อ)
+          </a>
+        </li>
+      )}
     </ul>
   );
 
@@ -136,7 +165,7 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
           {/* แบนเนอร์หัวข้อบทเรียนสไตล์ 9Expert */}
           <LessonBanner lesson={lesson} />
 
-          <p className="lesson__caption">บทความโดย: LernWeb Team</p>
+          <p className="lesson__caption">บทความโดย: LernDev Team</p>
 
           <h1 className="lesson__title">{lesson.title}</h1>
 
@@ -245,70 +274,388 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
             )}
           </div>
 
-          {/* แบบทดสอบเช็คความเข้าใจท้ายบท */}
-          {lesson.quiz && lesson.quiz.length > 0 && (
-            <section className="quiz" aria-label="คำถามทบทวนความเข้าใจ">
-              <h2>เช็คความเข้าใจท้ายบท</h2>
-              <p className="text2" style={{ fontSize: 14.5 }}>
-                ลองตอบคำถามสั้นๆ เพื่อทบทวนประเด็นสำคัญในบทนี้
-              </p>
+          {/* แบบทดสอบท้ายบท (Exam Mode: ตอบทีละข้อ ย้อนแก้ข้อเก่าได้ ส่งตรวจและเฉลยตอนท้าย + สุ่มชุดข้อสอบใหม่ได้) */}
+          {examQuestions && examQuestions.length > 0 && (() => {
+            const totalQ = examQuestions.length;
+            const answeredCount = Object.keys(quizAnswers).length;
+            const allAnswered = answeredCount === totalQ;
+            const correctCount = examQuestions.reduce((acc, item, idx) => {
+              return acc + (quizAnswers[idx] === item.answer ? 1 : 0);
+            }, 0);
+            const wrongCount = totalQ - correctCount;
+            const scorePct = Math.round((correctCount / totalQ) * 100);
+            const activeItem = examQuestions[currentQuizIdx] || examQuestions[0];
+            const chosen = quizAnswers[currentQuizIdx];
+            const answered = chosen !== undefined;
+            const isCorrect = chosen === activeItem.answer;
 
-              {lesson.quiz.map((item, qIdx) => {
-                const chosen = quizAnswers[qIdx];
-                const answered = chosen !== undefined;
-                return (
-                  <div key={qIdx} className="quiz__q">
-                    <p>
-                      ข้อที่ {qIdx + 1}: {item.q}
-                    </p>
-                    {item.options.map((opt, optIdx) => {
-                      let stateClass = '';
-                      if (answered) {
-                        if (optIdx === item.answer) stateClass = 'is-correct';
-                        else if (optIdx === chosen) stateClass = 'is-wrong';
-                      }
-                      return (
-                        <button
-                          key={optIdx}
-                          type="button"
-                          className={`quiz__opt ${stateClass}`}
-                          disabled={answered}
-                          onClick={() =>
-                            setQuizAnswers(prev => ({ ...prev, [qIdx]: optIdx }))
-                          }
-                        >
-                          {opt}
-                        </button>
-                      );
-                    })}
-                    {answered && (
-                      <p className="quiz__explain">
-                        {chosen === item.answer ? '✓ ถูกต้อง — ' : 'คำอธิบาย: '}
-                        {item.explain}
-                      </p>
+            // หาข้อไกลสุดที่เปิดให้กดเข้าไปทำได้ (ต้องตอบข้อก่อนหน้าก่อนจึงจะไปข้อถัดไปได้ แต่ย้อนกลับไปข้อเก่าได้เสมอ)
+            let maxUnlockedIdx = 0;
+            for (let i = 0; i < totalQ; i++) {
+              if (quizAnswers[i] !== undefined) {
+                maxUnlockedIdx = Math.min(totalQ - 1, i + 1);
+              } else {
+                maxUnlockedIdx = i;
+                break;
+              }
+            }
+
+            const startNewExamSet = () => {
+              const nextAttempt = examAttempt + 1;
+              const prevQs = examQuestions.map(q => q.q);
+              const nextExam = buildExamQuestions(lesson, nextAttempt, prevQs);
+              setExamQuestions(nextExam.questions);
+              setExamSetLabel(nextExam.setLabel);
+              setExamAttempt(nextAttempt);
+              setQuizAnswers({});
+              setCurrentQuizIdx(0);
+              setIsSubmitted(false);
+              setShowQuizSummary(false);
+              setReviewFilter('all');
+              showToast(`สุ่มข้อสอบชุดใหม่ (${nextExam.setLabel}) เรียบร้อยแล้ว`);
+            };
+
+            const handleSubmitExam = () => {
+              if (!allAnswered) {
+                showToast(`กรุณาตอบคำถามให้ครบทั้ง ${totalQ} ข้อก่อนส่งข้อสอบ`);
+                return;
+              }
+              setIsSubmitted(true);
+              setShowQuizSummary(true);
+              setReviewFilter('all');
+              if (!done) {
+                toggleDone(lesson.id);
+                showToast(
+                  `🎉 ส่งข้อสอบเรียบร้อย! คุณได้ ${correctCount}/${totalQ} คะแนน และผ่านบทที่ ${lesson.no} แล้ว`
+                );
+              } else {
+                showToast(`ตรวจคำตอบเรียบร้อย! คุณทำได้ ${correctCount}/${totalQ} คะแนน`);
+              }
+            };
+
+            return (
+              <section id="lesson-quiz" className="quiz-card" aria-label="คำถามทบทวนความเข้าใจ">
+                {/* ส่วนหัวของการ์ดแบบทดสอบ */}
+                <div className="quiz-card__head">
+                  <div>
+                    <h2 className="quiz-card__title">แบบทดสอบท้ายบทเรียน ({totalQ} ข้อ)</h2>
+                  </div>
+                  <div className="quiz-card__stats">
+                    {isSubmitted ? (
+                      <span className="quiz-score-pill">
+                        ผลคะแนน <strong>{correctCount}</strong>/{totalQ} ({scorePct}%)
+                      </span>
+                    ) : (
+                      <span className="quiz-score-pill">
+                        เลือกคำตอบแล้ว <strong>{answeredCount}</strong>/{totalQ} ข้อ
+                      </span>
                     )}
                   </div>
-                );
-              })}
-            </section>
-          )}
+                </div>
 
-          {/* ปุ่มบันทึกว่าเรียนจบแล้ว */}
+                {/* แถบปุ่มหมายเลขข้อ 1–10 (ย้อนกลับไปแก้ข้อเก่าได้ก่อนส่ง / หลังส่งแสดงสีเขียว-แดงตามผลตรวจ) */}
+                <div className="quiz-stepper" role="tablist" aria-label="เลือกข้อคำถาม">
+                  {examQuestions.map((qItem, idx) => {
+                    const ans = quizAnswers[idx];
+                    const isAns = ans !== undefined;
+                    const right = isAns && ans === qItem.answer;
+                    const active = !showQuizSummary && idx === currentQuizIdx;
+                    const isLockedStep = !isSubmitted && idx > maxUnlockedIdx;
+
+                    let stepStateClass = '';
+                    if (isSubmitted) {
+                      stepStateClass = right ? 'is-correct' : 'is-wrong';
+                    } else if (isAns) {
+                      stepStateClass = 'is-answered';
+                    }
+
+                    return (
+                      <button
+                        key={idx}
+                        type="button"
+                        role="tab"
+                        aria-selected={active}
+                        disabled={isLockedStep}
+                        className={`quiz-step ${active ? 'is-current' : ''} ${stepStateClass}`}
+                        onClick={() => {
+                          if (isLockedStep) return;
+                          setShowQuizSummary(false);
+                          setCurrentQuizIdx(idx);
+                        }}
+                        title={
+                          isLockedStep
+                            ? `กรุณาตอบข้อที่ ${maxUnlockedIdx + 1} ก่อนจึงจะไปข้อถัดไปได้`
+                            : `ข้อที่ ${idx + 1}`
+                        }
+                      >
+                        {isSubmitted ? (right ? '✓' : '✕') : idx + 1}
+                      </button>
+                    );
+                  })}
+                  {isSubmitted && (
+                    <button
+                      type="button"
+                      className={`quiz-step quiz-step--sum ${showQuizSummary ? 'is-current' : ''}`}
+                      onClick={() => setShowQuizSummary(true)}
+                    >
+                      ใบสรุปผล &amp; เฉลย ({correctCount}/{totalQ})
+                    </button>
+                  )}
+                </div>
+
+                {/* หน้าสรุปคะแนนพร้อมเฉลยละเอียดทุกข้อ (แสดงเมื่อกดส่งข้อสอบแล้ว) */}
+                {isSubmitted && showQuizSummary ? (
+                  <div className="quiz-summary">
+                    <div className="quiz-summary__badge">
+                      {scorePct >= 80
+                        ? '🏆 ยอดเยี่ยมมาก!'
+                        : scorePct >= 60
+                        ? '👍 ผ่านเกณฑ์ความเข้าใจ'
+                        : '💡 แนะนำให้ดูเฉลยด้านล่างแล้วลองสุ่มทำชุดใหม่'}
+                    </div>
+                    <div className="quiz-summary__score">
+                      {correctCount} <span>/ {totalQ} คะแนน ({scorePct}%)</span>
+                    </div>
+                    <p className="quiz-summary__desc">
+                      ตอบถูก <strong style={{ color: 'var(--basic)' }}>{correctCount} ข้อ</strong> · ตอบผิด{' '}
+                      <strong style={{ color: '#C9353A' }}>{wrongCount} ข้อ</strong>
+                    </p>
+
+                    <div className="quiz-summary__actions">
+                      <button type="button" className="btn btn--primary" onClick={startNewExamSet}>
+                        ทำแบบทดสอบใหม่
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn--outline"
+                        onClick={() => {
+                          setShowQuizSummary(false);
+                          setCurrentQuizIdx(0);
+                        }}
+                      >
+                        เปิดดูทีละข้อ (1–{totalQ})
+                      </button>
+                    </div>
+
+                    {/* ตัวกรองและรายการเฉลยละเอียดทุกข้อ */}
+                    <div className="quiz-review">
+                      <div className="quiz-review__head">
+                        <h3 className="quiz-review__title">เฉลยและคำอธิบายละเอียด</h3>
+                        <div className="tabs" style={{ margin: 0 }}>
+                          <button
+                            type="button"
+                            className={`tab ${reviewFilter === 'all' ? 'is-active' : ''}`}
+                            onClick={() => setReviewFilter('all')}
+                          >
+                            ทั้งหมด ({totalQ})
+                          </button>
+                          <button
+                            type="button"
+                            className={`tab ${reviewFilter === 'wrong' ? 'is-active' : ''}`}
+                            onClick={() => setReviewFilter('wrong')}
+                          >
+                            เฉพาะข้อที่ผิด ({wrongCount})
+                          </button>
+                          <button
+                            type="button"
+                            className={`tab ${reviewFilter === 'correct' ? 'is-active' : ''}`}
+                            onClick={() => setReviewFilter('correct')}
+                          >
+                            เฉพาะข้อที่ถูก ({correctCount})
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="quiz-review__list">
+                        {examQuestions.map((item, idx) => {
+                          const userAns = quizAnswers[idx];
+                          const right = userAns === item.answer;
+                          if (reviewFilter === 'wrong' && right) return null;
+                          if (reviewFilter === 'correct' && !right) return null;
+
+                          const userLetter = userAns !== undefined ? String.fromCharCode(65 + userAns) : '-';
+                          const correctLetter = String.fromCharCode(65 + item.answer);
+
+                          return (
+                            <div
+                              key={idx}
+                              className={`quiz-review__item ${right ? 'is-correct' : 'is-wrong'}`}
+                            >
+                              <div className="quiz-review__item-top">
+                                <span className="quiz-review__num">ข้อที่ {idx + 1}</span>
+                                <span className={`quiz-review__status ${right ? 'is-correct' : 'is-wrong'}`}>
+                                  {right ? '✓ ตอบถูก' : '✕ ตอบผิด'}
+                                </span>
+                              </div>
+                              <p className="quiz-review__q">{item.q}</p>
+                              <div className="quiz-review__ans-grid">
+                                <div className={`quiz-review__ans ${right ? 'is-correct' : 'is-wrong'}`}>
+                                  <span className="quiz-review__ans-label">คำตอบของคุณ ({userLetter}):</span>
+                                  <span>{userAns !== undefined ? item.options[userAns] : 'ไม่ได้เลือก'}</span>
+                                </div>
+                                {!right && (
+                                  <div className="quiz-review__ans is-correct">
+                                    <span className="quiz-review__ans-label">เฉลยที่ถูกต้อง ({correctLetter}):</span>
+                                    <span>{item.options[item.answer]}</span>
+                                  </div>
+                                )}
+                              </div>
+                              <div className="quiz-review__explain">
+                                <strong>คำอธิบาย:</strong> {item.explain}
+                              </div>
+                            </div>
+                          );
+                        })}
+                        {reviewFilter === 'wrong' && wrongCount === 0 && (
+                          <div className="empty" style={{ padding: '24px 0' }}>
+                            🎉 ยอดเยี่ยม! คุณตอบถูกครบทุกข้อ ไม่มีข้อที่ตอบผิดเลย
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="quiz-stage">
+                    <div className="quiz-stage__meta">
+                      <span>
+                        คำถามข้อที่ {currentQuizIdx + 1} จาก {totalQ}
+                      </span>
+                      <span>
+                        {isSubmitted
+                          ? 'โหมดดูเฉลยรายข้อ'
+                          : 'เลือกคำตอบเพื่อไปข้อถัดไป (ย้อนกลับมาแก้ข้อเก่าได้ก่อนกดส่งข้อสอบ)'}
+                      </span>
+                    </div>
+
+                    <h3 className="quiz-stage__q">{activeItem.q}</h3>
+
+                    <div className="quiz-options">
+                      {activeItem.options.map((opt, optIdx) => {
+                        const letter = String.fromCharCode(65 + optIdx); // A, B, C
+                        let stateClass = '';
+                        if (isSubmitted) {
+                          if (optIdx === activeItem.answer) stateClass = 'is-correct';
+                          else if (optIdx === chosen) stateClass = 'is-wrong';
+                        } else if (optIdx === chosen) {
+                          stateClass = 'is-selected';
+                        }
+                        return (
+                          <button
+                            key={optIdx}
+                            type="button"
+                            className={`quiz-option ${stateClass}`}
+                            disabled={isSubmitted}
+                            onClick={() => {
+                              if (isSubmitted) return;
+                              setQuizAnswers(prev => ({ ...prev, [currentQuizIdx]: optIdx }));
+                            }}
+                          >
+                            <span className="quiz-option__letter">{letter}</span>
+                            <span className="quiz-option__text">{opt}</span>
+                            {!isSubmitted && optIdx === chosen && (
+                              <span className="quiz-option__mark is-selected">เลือกข้อนี้</span>
+                            )}
+                            {isSubmitted && optIdx === activeItem.answer && (
+                              <span className="quiz-option__mark">✓ เฉลย</span>
+                            )}
+                            {isSubmitted && optIdx === chosen && optIdx !== activeItem.answer && (
+                              <span className="quiz-option__mark">✕ ที่เลือก</span>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {/* แสดงคำอธิบายเฉลยเฉพาะหลังจากกดส่งข้อสอบแล้วเท่านั้น */}
+                    {isSubmitted && (
+                      <div className={`quiz-feedback ${isCorrect ? 'is-correct' : 'is-wrong'}`}>
+                        <div className="quiz-feedback__title">
+                          {isCorrect ? '✓ ตอบถูกต้อง!' : '✕ ข้อนี้คุณตอบผิด — คำอธิบายเฉลย:'}
+                        </div>
+                        <p className="quiz-feedback__text">{activeItem.explain}</p>
+                      </div>
+                    )}
+
+                    {/* แถบปุ่มควบคุม: ย้อนกลับไปแก้ข้อเก่าได้ / ต้องตอบข้อปัจจุบันก่อนจึงจะไปข้อถัดไปได้ / ข้อสุดท้ายกดส่งข้อสอบ */}
+                    <div className="quiz-nav">
+                      <button
+                        type="button"
+                        className="btn btn--outline"
+                        disabled={currentQuizIdx === 0}
+                        onClick={() => setCurrentQuizIdx(prev => Math.max(0, prev - 1))}
+                      >
+                        ← ย้อนกลับข้อก่อนหน้า
+                      </button>
+
+                      <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+                        {!isSubmitted && allAnswered && currentQuizIdx < totalQ - 1 && (
+                          <button
+                            type="button"
+                            className="btn btn--outline"
+                            onClick={handleSubmitExam}
+                          >
+                            ส่งข้อสอบทันที ({answeredCount}/{totalQ})
+                          </button>
+                        )}
+
+                        {currentQuizIdx < totalQ - 1 ? (
+                          <button
+                            type="button"
+                            className="btn btn--primary"
+                            disabled={!isSubmitted && !answered}
+                            onClick={() => setCurrentQuizIdx(prev => Math.min(totalQ - 1, prev + 1))}
+                          >
+                            {answered || isSubmitted
+                              ? `ข้อถัดไป (${currentQuizIdx + 2}/${totalQ}) →`
+                              : 'กรุณาเลือกคำตอบก่อนไปข้อถัดไป'}
+                          </button>
+                        ) : isSubmitted ? (
+                          <button
+                            type="button"
+                            className="btn btn--primary"
+                            onClick={() => setShowQuizSummary(true)}
+                          >
+                            กลับไปหน้าใบสรุปผลคะแนน ({correctCount}/{totalQ}) →
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            className="btn btn--primary"
+                            disabled={!allAnswered}
+                            onClick={handleSubmitExam}
+                          >
+                            {allAnswered
+                              ? `✓ ส่งข้อสอบและดูเฉลย (${answeredCount}/${totalQ} ข้อ)`
+                              : `กรุณาตอบให้ครบก่อนส่ง (${answeredCount}/${totalQ} ข้อ)`}
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </section>
+            );
+          })()}
+
+          {/* สถานะการเรียนจบบทนี้ (ต้องทำแบบทดสอบและกดส่งข้อสอบให้เรียบร้อยก่อนจึงจะติ๊กเรียนจบได้) */}
           <div className="lesson__complete">
-            <button
-              type="button"
-              className={`btn ${done ? 'btn--done' : 'btn--primary'}`}
-              onClick={() => {
-                const marked = toggleDone(lesson.id);
-                showToast(
-                  marked
-                    ? `บันทึกว่าเรียนจบบทที่ ${lesson.no} แล้ว`
-                    : `ยกเลิกสถานะเรียนจบบทที่ ${lesson.no}`
-                );
-              }}
-            >
-              {done ? '✓ เรียนจบบทนี้แล้ว (กดเพื่อยกเลิก)' : 'ทำเครื่องหมายว่าเรียนจบบทนี้แล้ว'}
-            </button>
+            {done ? (
+              <div className="btn btn--done" style={{ cursor: 'default' }}>
+                ✓ เรียนจบบทนี้แล้ว (ผ่านการส่งแบบทดสอบท้ายบท)
+              </div>
+            ) : (
+              <a
+                href="#lesson-quiz"
+                className="btn btn--outline"
+                onClick={() =>
+                  showToast(
+                    `กรุณาทำแบบทดสอบท้ายบทให้ครบ ${examQuestions.length} ข้อแล้วกด "ส่งข้อสอบ" เพื่อผ่านบทเรียนนี้`
+                  )
+                }
+              >
+                🔒 ทำแบบทดสอบท้ายบทให้ครบแล้วกดส่งข้อสอบ ({Object.keys(quizAnswers).length}/{examQuestions.length} ข้อ) เพื่อผ่านบทนี้
+              </a>
+            )}
             <Link className="link" href="/roadmap">
               ดูตำแหน่งใน Roadmap →
             </Link>

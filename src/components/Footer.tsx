@@ -22,12 +22,17 @@ export default function Footer() {
           <div>
             <Link className="logo" href="/" style={{ fontSize: 20 }}>
               <svg className="logo__mark" viewBox="0 0 36 36" fill="none" style={{ width: 26, height: 26 }}>
-                <circle cx="15" cy="15" r="10" stroke="currentColor" strokeWidth="3.2" />
-                <circle cx="15" cy="15" r="3.2" fill="currentColor" />
-                <path d="M22.5 22.5L31 31" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" />
-                <path d="M12 30L23 18" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" />
+                <rect x="2" y="2" width="32" height="32" rx="8" fill="currentColor" />
+                <path
+                  d="M10 13L16 18L10 23"
+                  stroke="#FFFFFF"
+                  strokeWidth="2.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path d="M18 23H26" stroke="#5CE6A0" strokeWidth="2.8" strokeLinecap="round" />
               </svg>
-              <span>LernWeb</span>
+              <span>LernDev</span>
             </Link>
             <p className="footer__about">
               คลังความรู้และ Roadmap พื้นฐานสำหรับ Software Engineer ในยุคที่มี AI เป็นผู้ช่วย เรียงลำดับจาก Basic ไปจนถึง Advanced
@@ -38,7 +43,7 @@ export default function Footer() {
             <ul>
               <li><Link href="/roadmap">แผนผังการเรียน (Roadmap)</Link></li>
               <li><Link href="/articles">บทความทั้งหมด</Link></li>
-              <li><Link href="/progress">เช็คความก้าวหน้า</Link></li>
+              <li><Link href="/glossary">คลังคำศัพท์เทคนิค</Link></li>
             </ul>
           </div>
           <div>
@@ -54,7 +59,7 @@ export default function Footer() {
             </ul>
           </div>
         </div>
-        <div className="footer__copy">© 2026 LernWeb · Never Stop Learning</div>
+        <div className="footer__copy">© 2026 LernDev · Never Stop Learning</div>
       </footer>
 
       {showFab && (

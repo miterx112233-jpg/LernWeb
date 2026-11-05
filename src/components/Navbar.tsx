@@ -11,15 +11,22 @@ import { useProgress } from '@/context/ProgressContext';
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, getStats, theme, toggleTheme } = useProgress();
+  const { user, isDone, lastLessonId, getStats, theme, toggleTheme } = useProgress();
   const totalStats = getStats();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [roadmapMenuOpen, setRoadmapMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState('');
   const searchInputRef = useRef<HTMLInputElement>(null);
 
+  const resumeLesson =
+    (lastLessonId ? LESSONS.find(l => l.id === lastLessonId) : null) ||
+    LESSONS.find(l => !isDone(l.id)) ||
+    LESSONS[0];
+
   useEffect(() => {
     setMobileOpen(false);
+    setRoadmapMenuOpen(false);
     setSearchOpen(false);
   }, [pathname]);
 
@@ -83,14 +90,19 @@ export default function Navbar() {
     <>
       <header className="nav">
         <div className="container nav__inner">
-          <Link className="logo" href="/" aria-label="LernWeb หน้าแรก">
+          <Link className="logo" href="/" aria-label="LernDev หน้าแรก">
             <svg className="logo__mark" viewBox="0 0 36 36" fill="none">
-              <circle cx="15" cy="15" r="10" stroke="currentColor" strokeWidth="3.2" />
-              <circle cx="15" cy="15" r="3.2" fill="currentColor" />
-              <path d="M22.5 22.5L31 31" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" />
-              <path d="M12 30L23 18" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" />
+              <rect x="2" y="2" width="32" height="32" rx="8" fill="currentColor" />
+              <path
+                d="M10 13L16 18L10 23"
+                stroke="#FFFFFF"
+                strokeWidth="2.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path d="M18 23H26" stroke="#5CE6A0" strokeWidth="2.8" strokeLinecap="round" />
             </svg>
-            <span>LernWeb</span>
+            <span>LernDev</span>
           </Link>
 
           <nav className="nav__menu" aria-label="เมนูหลัก">
@@ -101,35 +113,83 @@ export default function Navbar() {
               </Link>
             </div>
 
-            {/* 2. แผนผังการเรียน (Roadmap + 3 ระดับบทเรียนหลัก) */}
-            <div className="nav__item">
+            {/* 2. แผนผังการเรียน (Mega-Dropdown 3 ระดับ เข้าถึงทั้ง 12 บทเรียนได้โดยตรงแบบไม่ซ้ำซ้อน) */}
+            <div
+              className={`nav__item ${roadmapMenuOpen ? 'is-open' : ''}`}
+              onMouseEnter={() => setRoadmapMenuOpen(true)}
+              onMouseLeave={() => setRoadmapMenuOpen(false)}
+            >
               <Link
                 className={`nav__link ${isActive('/roadmap') || isActive('/lesson') ? 'is-active' : ''}`}
                 href="/roadmap"
+                onClick={() => setRoadmapMenuOpen(false)}
               >
                 แผนผังการเรียน
                 <svg className="nav__chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.7">
                   <path d="m3 4.5 3 3 3-3" />
                 </svg>
               </Link>
-              <div className="dropdown">
-                <Link href="/roadmap">
-                  <div className="dropdown__title">ดูแผนผังทั้งหมด (12 บทเรียน)</div>
-                  <div className="dropdown__desc">เรียงลำดับจาก Basic ไปจนถึง Advanced</div>
-                </Link>
-                {LEVELS.map(lv => {
-                  const lessonsInLevel = LESSONS.filter(l => l.level === lv.id);
-                  return (
-                    <Link key={lv.id} href={`/roadmap#${lv.id}`}>
-                      <div className="dropdown__title">
-                        ระดับที่ {lv.no}: {lv.name}
+              <div className="dropdown dropdown--mega">
+                <div className="mega-grid">
+                  {LEVELS.map(lv => {
+                    const lessonsInLevel = LESSONS.filter(l => l.level === lv.id);
+                    const lvStats = getStats(lv.id);
+                    return (
+                      <div key={lv.id} className="mega-col">
+                        <Link
+                          href={`/roadmap#${lv.id}`}
+                          className="mega-col__head"
+                          onClick={() => setRoadmapMenuOpen(false)}
+                        >
+                          <span className={`tag tag--${lv.id}`}>
+                            ระดับ {lv.no} · {lv.name}
+                          </span>
+                          <span className="mega-col__stat">
+                            {lvStats.done}/{lvStats.total}
+                          </span>
+                        </Link>
+                        <div className="mega-col__list">
+                          {lessonsInLevel.map(lesson => {
+                            const done = isDone(lesson.id);
+                            const current = pathname === `/lesson/${lesson.id}`;
+                            const shortTitle = lesson.title.replace(/\s*\([^)]*\)\s*$/, '');
+                            return (
+                              <Link
+                                key={lesson.id}
+                                href={`/lesson/${lesson.id}`}
+                                className={`mega-lesson ${done ? 'is-done' : ''} ${current ? 'is-current' : ''}`}
+                                onClick={() => setRoadmapMenuOpen(false)}
+                              >
+                                <span className="mega-lesson__num">
+                                  {done ? '✓' : String(lesson.no).padStart(2, '0')}
+                                </span>
+                                <span className="mega-lesson__title">{shortTitle}</span>
+                              </Link>
+                            );
+                          })}
+                        </div>
                       </div>
-                      <div className="dropdown__desc">
-                        {lv.title} (บทที่ {lessonsInLevel[0]?.no}–{lessonsInLevel[lessonsInLevel.length - 1]?.no})
-                      </div>
+                    );
+                  })}
+                </div>
+                <div className="mega-foot">
+                  <Link
+                    href="/roadmap"
+                    className="mega-foot__link"
+                    onClick={() => setRoadmapMenuOpen(false)}
+                  >
+                    ดูตารางเปรียบเทียบทั้ง 3 ระดับในหน้า Roadmap →
+                  </Link>
+                  {resumeLesson && (
+                    <Link
+                      href={`/lesson/${resumeLesson.id}`}
+                      className="mega-foot__resume"
+                      onClick={() => setRoadmapMenuOpen(false)}
+                    >
+                      เรียนต่อบทที่ {String(resumeLesson.no).padStart(2, '0')} →
                     </Link>
-                  );
-                })}
+                  )}
+                </div>
               </div>
             </div>
 
@@ -144,13 +204,6 @@ export default function Navbar() {
             <div className="nav__item">
               <Link className={`nav__link ${isActive('/glossary') ? 'is-active' : ''}`} href="/glossary">
                 คลังคำศัพท์
-              </Link>
-            </div>
-
-            {/* 5. ความก้าวหน้าการเรียน */}
-            <div className="nav__item">
-              <Link className={`nav__link ${isActive('/progress') ? 'is-active' : ''}`} href="/progress">
-                ความก้าวหน้า
               </Link>
             </div>
           </nav>
@@ -235,7 +288,6 @@ export default function Navbar() {
         ))}
         <Link href="/articles">บทความและเกร็ดความรู้</Link>
         <Link href="/glossary">คลังคำศัพท์เทคนิค (Glossary)</Link>
-        <Link href="/progress">ความก้าวหน้าการเรียน</Link>
         <Link href="/login">
           {user ? `บัญชีของฉัน (${user.displayName})` : 'เข้าสู่ระบบ / สมัครสมาชิก'}
         </Link>
