@@ -23,6 +23,7 @@ interface ProgressContextType {
   lastLessonId: string | null;
   theme: 'light' | 'dark';
   isDone: (id: string) => boolean;
+  isLessonUnlocked: (id: string) => boolean;
   toggleDone: (id: string) => boolean;
   recordLastLesson: (id: string) => void;
   resetProgress: () => void;
@@ -114,6 +115,13 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
   };
 
   const isDone = (id: string) => completed.includes(id);
+
+  // ตรวจสอบว่าบทเรียนนี้ปลดล็อกหรือยัง (ต้องเรียนและสอบผ่านบทก่อนหน้าครบทุกบทตามลำดับ 1 -> 12 อย่างเคร่งครัด)
+  const isLessonUnlocked = (id: string) => {
+    const lesson = LESSONS.find(l => l.id === id);
+    if (!lesson || lesson.no <= 1) return true;
+    return LESSONS.filter(l => l.no < lesson.no).every(l => completed.includes(l.id));
+  };
 
   const recordLastLesson = (id: string) => {
     setLastLessonId(prev => {
@@ -209,6 +217,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
         lastLessonId,
         theme,
         isDone,
+        isLessonUnlocked,
         toggleDone,
         recordLastLesson,
         resetProgress,

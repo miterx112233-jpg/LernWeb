@@ -16,7 +16,7 @@ interface BeforeInstallPromptEvent extends Event {
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, isDone, lastLessonId, getStats, theme, toggleTheme, showToast } = useProgress();
+  const { user, isDone, isLessonUnlocked, lastLessonId, getStats, theme, toggleTheme, showToast } = useProgress();
   const totalStats = getStats();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [roadmapMenuOpen, setRoadmapMenuOpen] = useState(false);
@@ -213,6 +213,7 @@ export default function Navbar() {
                         <div className="mega-col__list">
                           {lessonsInLevel.map(lesson => {
                             const done = user ? isDone(lesson.id) : false;
+                            const unlocked = user ? isLessonUnlocked(lesson.id) : false;
                             const current = pathname === `/lesson/${lesson.id}`;
                             const shortTitle = lesson.title.replace(/\s*\([^)]*\)\s*$/, '');
                             return (
@@ -220,10 +221,24 @@ export default function Navbar() {
                                 key={lesson.id}
                                 href={user ? `/lesson/${lesson.id}` : '/login'}
                                 className={`mega-lesson ${done ? 'is-done' : ''} ${current ? 'is-current' : ''}`}
-                                onClick={() => setRoadmapMenuOpen(false)}
+                                style={user && !unlocked ? { opacity: 0.6 } : undefined}
+                                onClick={e => {
+                                  if (user && !unlocked) {
+                                    e.preventDefault();
+                                    showToast(
+                                      `🔒 กรุณาเรียนและสอบผ่านบทที่ ${lesson.no - 1} (คะแนน ≥ 80%) ก่อนครับ`
+                                    );
+                                    return;
+                                  }
+                                  setRoadmapMenuOpen(false);
+                                }}
                               >
                                 <span className="mega-lesson__num">
-                                  {!user ? '🔒' : done ? '✓' : String(lesson.no).padStart(2, '0')}
+                                  {!user || !unlocked
+                                    ? '🔒'
+                                    : done
+                                    ? '✓'
+                                    : String(lesson.no).padStart(2, '0')}
                                 </span>
                                 <span className="mega-lesson__title">{shortTitle}</span>
                               </Link>
@@ -535,14 +550,25 @@ export default function Navbar() {
                 ))}
                 {matchedLessons.map(l => {
                   const lv = LEVELS.find(item => item.id === l.level);
+                  const unlocked = user ? isLessonUnlocked(l.id) : false;
                   return (
                     <Link
                       key={`lesson-${l.id}`}
-                      href={`/lesson/${l.id}`}
-                      onClick={() => setSearchOpen(false)}
+                      href={user ? `/lesson/${l.id}` : '/login'}
+                      style={user && !unlocked ? { opacity: 0.65 } : undefined}
+                      onClick={e => {
+                        if (user && !unlocked) {
+                          e.preventDefault();
+                          showToast(
+                            `🔒 ต้องสอบผ่านบทที่ ${l.no - 1} ให้ได้คะแนน ≥ 80% ก่อนจึงจะเข้าบทที่ ${l.no} ได้`
+                          );
+                          return;
+                        }
+                        setSearchOpen(false);
+                      }}
                     >
                       <div className="title">
-                        [บทเรียน {String(l.no).padStart(2, '0')}] {l.title}
+                        [{!user || !unlocked ? '🔒 ' : ''}บทเรียน {String(l.no).padStart(2, '0')}] {l.title}
                       </div>
                       <div className="meta">
                         Roadmap ระดับ {lv?.name} · {l.category} · อ่าน {l.minutes} นาที

@@ -27,7 +27,7 @@ function extractYouTubeId(rawUrl: string): string | null {
 }
 
 export default function LessonViewer({ lesson }: LessonViewerProps) {
-  const { user, isDone, toggleDone, recordLastLesson, getStats, showToast } = useProgress();
+  const { user, isDone, isLessonUnlocked, toggleDone, recordLastLesson, getStats, showToast } = useProgress();
   const [activeId, setActiveId] = useState<string>(lesson.sections[0]?.id || '');
   const [examQuestions, setExamQuestions] = useState<QuizItem[]>(() => lesson.quiz || []);
   const [examSetLabel, setExamSetLabel] = useState<string>('ชุดที่ 1 (มาตรฐาน)');
@@ -97,7 +97,7 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
     setShowQuizSummary(false);
     setReviewFilter('all');
     setActiveVideoIdx(0);
-    if (user) {
+    if (user && isLessonUnlocked(lesson.id)) {
       recordLastLesson(lesson.id);
     }
   }, [lesson.id, user]);
@@ -149,6 +149,59 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
               </Link>
               <Link className="btn btn--outline" style={{ justifyContent: 'center' }} href="/articles">
                 อ่านบทความทั่วไป (ไม่ต้องล็อกอิน)
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ล็อกตามลำดับการเรียน: ต้องสอบผ่านบทก่อนหน้าให้ได้คะแนน >= 80% จึงจะเข้าเรียนบทนี้ได้
+  if (!isLessonUnlocked(lesson.id)) {
+    const requiredLesson = LESSONS.find(l => !isDone(l.id)) || LESSONS[0];
+    return (
+      <div className="container lesson">
+        <Link className="breadcrumb" href="/roadmap">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+            <path d="m15 18-6-6 6-6" />
+          </svg>
+          กลับไปยังแผนผังการเรียน (Roadmap)
+        </Link>
+
+        <div className="auth-minimal" style={{ margin: '28px auto 64px' }}>
+          <div className="auth-card auth-card--minimal" style={{ textAlign: 'center' }}>
+            <div className="auth-brand" style={{ marginBottom: 18 }}>
+              <div className="auth-brand__icon" aria-hidden="true">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                  <rect x="4" y="11" width="16" height="10" rx="2" />
+                  <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+                </svg>
+              </div>
+              <span className="tag tag--advanced" style={{ marginBottom: 10 }}>
+                🔒 ล็อกตามลำดับการเรียน · บทที่ {String(lesson.no).padStart(2, '0')}
+              </span>
+              <h1 className="auth-card__title" style={{ fontSize: '1.3rem' }}>
+                {lesson.title}
+              </h1>
+              <p className="auth-card__sub" style={{ marginTop: 10, lineHeight: 1.75 }}>
+                เพื่อปูพื้นฐานอย่างเป็นลำดับขั้นตอน คุณต้องเรียนและทำแบบทดสอบท้ายบทของ{' '}
+                <strong>
+                  บทที่ {requiredLesson.no}: {requiredLesson.title}
+                </strong>{' '}
+                ให้ได้คะแนนอย่างน้อย <strong>80% (8/10 ข้อขึ้นไป)</strong> ก่อน จึงจะปลดล็อกบทเรียนนี้ได้
+              </p>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <Link
+                className="btn btn--primary auth-submit-btn"
+                href={`/lesson/${requiredLesson.id}`}
+              >
+                ไปเรียนบทที่ {String(requiredLesson.no).padStart(2, '0')}: {requiredLesson.keyword} →
+              </Link>
+              <Link className="btn btn--outline" style={{ justifyContent: 'center' }} href="/roadmap">
+                ดูลำดับบทเรียนใน Roadmap
               </Link>
             </div>
           </div>
@@ -380,13 +433,18 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
               setIsSubmitted(true);
               setShowQuizSummary(true);
               setReviewFilter('all');
-              if (!done) {
-                toggleDone(lesson.id);
+              const passed = scorePct >= 80;
+              if (passed) {
+                if (!done) {
+                  toggleDone(lesson.id);
+                }
                 showToast(
-                  `🎉 ส่งข้อสอบเรียบร้อย! คุณได้ ${correctCount}/${totalQ} คะแนน และผ่านบทที่ ${lesson.no} แล้ว`
+                  `🎉 ยอดเยี่ยม! คุณได้ ${correctCount}/${totalQ} คะแนน (${scorePct}% ≥ 80%) ผ่านบทที่ ${lesson.no} และปลดล็อกบทถัดไปเรียบร้อยแล้ว`
                 );
               } else {
-                showToast(`ตรวจคำตอบเรียบร้อย! คุณทำได้ ${correctCount}/${totalQ} คะแนน`);
+                showToast(
+                  `ได้ ${correctCount}/${totalQ} คะแนน (${scorePct}%) — ต้องได้ 80% ขึ้นไป (อย่างน้อย 8 ข้อ) เพื่อปลดล็อกบทถัดไป`
+                );
               }
             };
 
@@ -463,25 +521,42 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
                 {/* หน้าสรุปคะแนนพร้อมเฉลยละเอียดทุกข้อ (แสดงเมื่อกดส่งข้อสอบแล้ว) */}
                 {isSubmitted && showQuizSummary ? (
                   <div className="quiz-summary">
-                    <div className="quiz-summary__badge">
+                    <div
+                      className="quiz-summary__badge"
+                      style={
+                        scorePct >= 80
+                          ? { background: 'var(--basic-soft)', color: 'var(--basic)' }
+                          : { background: 'var(--adv-soft)', color: 'var(--adv)' }
+                      }
+                    >
                       {scorePct >= 80
-                        ? '🏆 ยอดเยี่ยมมาก!'
-                        : scorePct >= 60
-                        ? '👍 ผ่านเกณฑ์ความเข้าใจ'
-                        : '💡 แนะนำให้ดูเฉลยด้านล่างแล้วลองสุ่มทำชุดใหม่'}
+                        ? `🏆 ผ่านเกณฑ์ (${scorePct}% ≥ 80%) — ปลดล็อกบทถัดไปแล้ว!`
+                        : `⚠️ ยังไม่ผ่านเกณฑ์ 80% (ต้องตอบถูกอย่างน้อย 8/${totalQ} ข้อ เพื่อปลดล็อกบทถัดไป)`}
                     </div>
                     <div className="quiz-summary__score">
                       {correctCount} <span>/ {totalQ} คะแนน ({scorePct}%)</span>
                     </div>
                     <p className="quiz-summary__desc">
                       ตอบถูก <strong style={{ color: 'var(--basic)' }}>{correctCount} ข้อ</strong> · ตอบผิด{' '}
-                      <strong style={{ color: '#C9353A' }}>{wrongCount} ข้อ</strong>
+                      <strong style={{ color: '#C9353A' }}>{wrongCount} ข้อ</strong> · เกณฑ์ผ่านคือ{' '}
+                      <strong>80% (8 ข้อขึ้นไป)</strong>
                     </p>
 
                     <div className="quiz-summary__actions">
-                      <button type="button" className="btn btn--primary" onClick={startNewExamSet}>
-                        ทำแบบทดสอบใหม่
-                      </button>
+                      {scorePct >= 80 && nextLesson ? (
+                        <>
+                          <Link className="btn btn--primary" href={`/lesson/${nextLesson.id}`}>
+                            ไปเรียนบทถัดไป (บทที่ {nextLesson.no}) →
+                          </Link>
+                          <button type="button" className="btn btn--outline" onClick={startNewExamSet}>
+                            สุ่มทำแบบทดสอบชุดใหม่
+                          </button>
+                        </>
+                      ) : (
+                        <button type="button" className="btn btn--primary" onClick={startNewExamSet}>
+                          🔄 สุ่มข้อสอบชุดใหม่เพื่อสอบให้ผ่าน 80%
+                        </button>
+                      )}
                       <button
                         type="button"
                         className="btn btn--outline"
@@ -545,20 +620,66 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
                                 </span>
                               </div>
                               <p className="quiz-review__q">{item.q}</p>
-                              <div className="quiz-review__ans-grid">
-                                <div className={`quiz-review__ans ${right ? 'is-correct' : 'is-wrong'}`}>
-                                  <span className="quiz-review__ans-label">คำตอบของคุณ ({userLetter}):</span>
-                                  <span>{userAns !== undefined ? item.options[userAns] : 'ไม่ได้เลือก'}</span>
-                                </div>
-                                {!right && (
-                                  <div className="quiz-review__ans is-correct">
-                                    <span className="quiz-review__ans-label">เฉลยที่ถูกต้อง ({correctLetter}):</span>
-                                    <span>{item.options[item.answer]}</span>
-                                  </div>
-                                )}
+
+                              {/* แสดงตัวเลือกทั้งหมด A, B, C พร้อมเปรียบเทียบข้อที่เลือกกับข้อที่ถูก */}
+                              <div className="quiz-review__options">
+                                {item.options.map((optText, optIdx) => {
+                                  const optLetter = String.fromCharCode(65 + optIdx);
+                                  const isCorrectOpt = optIdx === item.answer;
+                                  const isUserOpt = optIdx === userAns;
+
+                                  let optClass = 'quiz-review__opt';
+                                  if (isCorrectOpt) optClass += ' is-correct';
+                                  else if (isUserOpt && !right) optClass += ' is-wrong';
+
+                                  return (
+                                    <div key={optIdx} className={optClass}>
+                                      <span className="quiz-review__opt-letter">{optLetter}</span>
+                                      <span className="quiz-review__opt-text">{optText}</span>
+                                      {isCorrectOpt && isUserOpt && (
+                                        <span className="quiz-review__opt-tag is-correct">
+                                          ✓ คุณเลือกข้อนี้ (ถูกต้อง)
+                                        </span>
+                                      )}
+                                      {isCorrectOpt && !isUserOpt && (
+                                        <span className="quiz-review__opt-tag is-correct">
+                                          ✓ คำตอบที่ถูกต้อง
+                                        </span>
+                                      )}
+                                      {!isCorrectOpt && isUserOpt && (
+                                        <span className="quiz-review__opt-tag is-wrong">
+                                          ✕ คุณเลือกข้อนี้ (ผิด)
+                                        </span>
+                                      )}
+                                    </div>
+                                  );
+                                })}
                               </div>
-                              <div className="quiz-review__explain">
-                                <strong>คำอธิบาย:</strong> {item.explain}
+
+                              {/* กล่องอธิบายละเอียดว่าทำไมถึงถูกและทำไมถึงผิด */}
+                              <div className={`quiz-review__explain-box ${right ? 'is-correct' : 'is-wrong'}`}>
+                                {right ? (
+                                  <>
+                                    <div className="quiz-review__explain-head is-correct">
+                                      ✅ ทำไมข้อ {correctLetter} จึงถูกต้อง:
+                                    </div>
+                                    <p className="quiz-review__explain-body">{item.explain}</p>
+                                  </>
+                                ) : (
+                                  <>
+                                    <div className="quiz-review__explain-head is-wrong">
+                                      ❌ ทำไมข้อ {userLetter} ที่คุณเลือกจึงผิด:
+                                    </div>
+                                    <p className="quiz-review__explain-body" style={{ marginBottom: 10 }}>
+                                      ตัวเลือก <strong>&ldquo;{userAns !== undefined ? item.options[userAns] : '-'}&rdquo;</strong>{' '}
+                                      ไม่ใช่คำตอบที่ถูกต้องสำหรับโจทย์ข้อนี้ เนื่องจากไม่ตรงกับหลักการทำงานจริง (ดูเหตุผลที่ถูกต้องด้านล่าง)
+                                    </p>
+                                    <div className="quiz-review__explain-head is-correct">
+                                      ✅ ทำไมข้อ {correctLetter} (&ldquo;{item.options[item.answer]}&rdquo;) จึงถูกต้อง:
+                                    </div>
+                                    <p className="quiz-review__explain-body">{item.explain}</p>
+                                  </>
+                                )}
                               </div>
                             </div>
                           );
@@ -626,10 +747,32 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
                     {/* แสดงคำอธิบายเฉลยเฉพาะหลังจากกดส่งข้อสอบแล้วเท่านั้น */}
                     {isSubmitted && (
                       <div className={`quiz-feedback ${isCorrect ? 'is-correct' : 'is-wrong'}`}>
-                        <div className="quiz-feedback__title">
-                          {isCorrect ? '✓ ตอบถูกต้อง!' : '✕ ข้อนี้คุณตอบผิด — คำอธิบายเฉลย:'}
-                        </div>
-                        <p className="quiz-feedback__text">{activeItem.explain}</p>
+                        {isCorrect ? (
+                          <>
+                            <div className="quiz-feedback__title">
+                              ✅ ตอบถูกต้อง! — ทำไมข้อ {String.fromCharCode(65 + activeItem.answer)} จึงถูก:
+                            </div>
+                            <p className="quiz-feedback__text">{activeItem.explain}</p>
+                          </>
+                        ) : (
+                          <>
+                            <div className="quiz-feedback__title">
+                              ❌ ข้อนี้คุณตอบผิด (คุณเลือกข้อ {chosen !== undefined ? String.fromCharCode(65 + chosen) : '-'})
+                            </div>
+                            <p className="quiz-feedback__text" style={{ marginBottom: 8 }}>
+                              <strong>ทำไมข้อที่เลือกจึงผิด:</strong> ตัวเลือก{' '}
+                              <strong>&ldquo;{chosen !== undefined ? activeItem.options[chosen] : '-'}&rdquo;</strong>{' '}
+                              ไม่ตรงกับหลักการที่โจทย์ถาม
+                            </p>
+                            <p className="quiz-feedback__text">
+                              <strong>
+                                ✅ ทำไมข้อ {String.fromCharCode(65 + activeItem.answer)} (&ldquo;
+                                {activeItem.options[activeItem.answer]}&rdquo;) จึงถูก:
+                              </strong>{' '}
+                              {activeItem.explain}
+                            </p>
+                          </>
+                        )}
                       </div>
                     )}
 
@@ -694,11 +837,11 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
             );
           })()}
 
-          {/* สถานะการเรียนจบบทนี้ (ต้องทำแบบทดสอบและกดส่งข้อสอบให้เรียบร้อยก่อนจึงจะติ๊กเรียนจบได้) */}
+          {/* สถานะการเรียนจบบทนี้ (ต้องทำแบบทดสอบและได้คะแนน >= 80% จึงจะผ่านและปลดล็อกบทถัดไป) */}
           <div className="lesson__complete">
             {done ? (
               <div className="btn btn--done" style={{ cursor: 'default' }}>
-                ✓ เรียนจบบทนี้แล้ว (ผ่านการส่งแบบทดสอบท้ายบท)
+                ✓ ผ่านบทเรียนนี้แล้ว (สอบได้คะแนน ≥ 80%)
               </div>
             ) : (
               <a
@@ -706,11 +849,11 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
                 className="btn btn--outline"
                 onClick={() =>
                   showToast(
-                    `กรุณาทำแบบทดสอบท้ายบทให้ครบ ${examQuestions.length} ข้อแล้วกด "ส่งข้อสอบ" เพื่อผ่านบทเรียนนี้`
+                    `กรุณาทำแบบทดสอบท้ายบทให้ได้คะแนนอย่างน้อย 80% (8/${examQuestions.length} ข้อ) เพื่อผ่านและปลดล็อกบทถัดไป`
                   )
                 }
               >
-                🔒 ทำแบบทดสอบท้ายบทให้ครบแล้วกดส่งข้อสอบ ({Object.keys(quizAnswers).length}/{examQuestions.length} ข้อ) เพื่อผ่านบทนี้
+                🔒 ต้องทำแบบทดสอบท้ายบทให้ได้คะแนน ≥ 80% (8/{examQuestions.length} ข้อ) เพื่อปลดล็อกบทถัดไป
               </a>
             )}
             <Link className="link" href="/roadmap">
@@ -718,7 +861,7 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
             </Link>
           </div>
 
-          {/* ปุ่มเปลี่ยนบทเรียนก่อนหน้า / ถัดไป */}
+          {/* ปุ่มเปลี่ยนบทเรียนก่อนหน้า / ถัดไป (ล็อกบทถัดไปจนกว่าจะสอบผ่านบทปัจจุบัน >= 80%) */}
           <nav className="pager" aria-label="บทเรียนก่อนหน้าและถัดไป">
             {prevLesson ? (
               <Link href={`/lesson/${prevLesson.id}`}>
@@ -728,12 +871,30 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
             ) : (
               <div />
             )}
-            {nextLesson && (
-              <Link className="next" href={`/lesson/${nextLesson.id}`}>
-                <div className="dir">บทถัดไป (บทที่ {nextLesson.no}) →</div>
-                <div className="t">{nextLesson.subtitle}</div>
-              </Link>
-            )}
+            {nextLesson &&
+              (done ? (
+                <Link className="next" href={`/lesson/${nextLesson.id}`}>
+                  <div className="dir">บทถัดไป (บทที่ {nextLesson.no}) →</div>
+                  <div className="t">{nextLesson.subtitle}</div>
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  className="next is-locked"
+                  onClick={() => {
+                    showToast(
+                      `🔒 ข้ามบทไม่ได้! ต้องทำแบบทดสอบท้ายบทที่ ${lesson.no} ให้ได้คะแนน ≥ 80% (8/10 ข้อ) ก่อน`
+                    );
+                    document.getElementById('lesson-quiz')?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                >
+                  <div className="dir">🔒 บทถัดไป (บทที่ {nextLesson.no}) — ยังไม่ปลดล็อก</div>
+                  <div className="t">{nextLesson.subtitle}</div>
+                  <div style={{ fontSize: 12, color: 'var(--adv)', marginTop: 4, fontWeight: 600 }}>
+                    ต้องสอบบทที่ {lesson.no} ให้ได้คะแนน ≥ 80% ก่อน
+                  </div>
+                </button>
+              ))}
           </nav>
         </article>
 

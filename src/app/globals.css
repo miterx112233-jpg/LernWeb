@@ -458,11 +458,38 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   background: var(--surface); border: 2px solid var(--border); color: var(--muted);
 }
 .step.is-done .step__dot { background: var(--basic); border-color: var(--basic); color: #fff; }
+.step.is-current .step__dot {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+  box-shadow: 0 0 0 4px var(--brand-soft);
+}
+.step.is-current .step__card {
+  border-color: var(--brand);
+}
+.step.is-locked .step__dot {
+  background: var(--bg2);
+  border-color: var(--border);
+  font-size: 13px;
+}
+.step.is-locked .step__card {
+  background: var(--bg2);
+  opacity: 0.78;
+}
 .step__card { display: grid; grid-template-columns: 1fr auto; gap: 20px; padding: 18px 22px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); transition: border-color 0.15s; }
 .step__card:hover { border-color: color-mix(in srgb, var(--brand) 45%, var(--border)); }
 .step__meta { display: flex; gap: 10px; align-items: center; font-size: 13px; color: var(--muted); flex-wrap: wrap; }
 .step__title { font-size: 18px; font-weight: 600; margin-top: 4px; }
 .step__title a:hover { color: var(--brand); text-decoration: underline; text-underline-offset: 3px; }
+.step__locked-title {
+  border: 0;
+  background: none;
+  padding: 0;
+  text-align: left;
+  font: inherit;
+  color: var(--text2);
+  cursor: not-allowed;
+}
 .step__why { color: var(--text2); margin-top: 6px; font-size: 15px; }
 .step__topics { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
 .step__topics span { font-size: 12.5px; padding: 2px 9px; background: var(--bg2); border: 1px solid var(--border); border-radius: 4px; color: var(--text2); }
@@ -643,11 +670,20 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 .lesson__complete { margin-top: 32px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding-top: 24px; border-top: 1px solid var(--border); }
 .pager { margin-top: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.pager a { display: block; padding: 14px 18px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); transition: border-color 0.15s; }
+.pager a, .pager button { display: block; width: 100%; padding: 14px 18px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); transition: border-color 0.15s; }
 .pager a:hover { border-color: var(--brand); }
 .pager .dir { font-size: 13px; color: var(--muted); }
 .pager .t { font-weight: 600; margin-top: 2px; }
 .pager .next { text-align: right; grid-column: 2; }
+.pager button.is-locked {
+  border-style: dashed;
+  background: var(--bg2);
+  color: var(--muted);
+  cursor: not-allowed;
+}
+.pager button.is-locked .t {
+  color: var(--text2);
+}
 
 .toc-mobile { display: none; margin-top: 20px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
 .toc-mobile summary { padding: 12px 16px; font-weight: 600; cursor: pointer; }
@@ -834,7 +870,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 .auth-level-mini {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
   margin-top: 14px;
   padding-top: 12px;
@@ -842,12 +878,16 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 .auth-level-mini__item {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  text-align: center;
   font-size: 12.5px;
   color: var(--text2);
-  padding: 4px 8px;
+  padding: 8px 6px;
   background: var(--surface);
-  border-radius: 6px;
+  border-radius: 8px;
   border: 1px solid var(--border);
 }
 .auth-tabs {
@@ -1018,6 +1058,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .auth-profile-actions {
   margin-top: 18px;
   display: flex;
+  flex-direction: column;
   gap: 10px;
 }
 .auth-error {
@@ -1929,6 +1970,106 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   border-top: 1px dashed var(--border);
 }
 
+/* ตัวเลือกทั้งหมด A, B, C และกล่องวิเคราะห์เหตุผลถูก/ผิดในหน้าใบสรุปผล */
+.quiz-review__options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.quiz-review__opt {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  font-size: 14px;
+  color: var(--text2);
+  flex-wrap: wrap;
+}
+.quiz-review__opt.is-correct {
+  border-color: var(--basic);
+  background: var(--basic-soft);
+  color: var(--basic);
+  font-weight: 600;
+}
+.quiz-review__opt.is-wrong {
+  border-color: #E5484D;
+  background: rgba(229, 72, 77, 0.08);
+  color: #C9353A;
+}
+.quiz-review__opt-letter {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: inline-grid;
+  place-items: center;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.quiz-review__opt.is-correct .quiz-review__opt-letter {
+  background: var(--basic);
+  border-color: var(--basic);
+  color: #fff;
+}
+.quiz-review__opt.is-wrong .quiz-review__opt-letter {
+  background: #E5484D;
+  border-color: #E5484D;
+  color: #fff;
+}
+.quiz-review__opt-text {
+  flex: 1;
+  min-width: 160px;
+}
+.quiz-review__opt-tag {
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 99px;
+  background: var(--surface);
+}
+.quiz-review__opt-tag.is-correct {
+  color: var(--basic);
+}
+.quiz-review__opt-tag.is-wrong {
+  color: #C9353A;
+}
+.quiz-review__explain-box {
+  padding: 13px 16px;
+  border-radius: 8px;
+  background: var(--bg2);
+  border-left: 3px solid var(--brand);
+}
+.quiz-review__explain-box.is-correct {
+  border-left-color: var(--basic);
+}
+.quiz-review__explain-box.is-wrong {
+  border-left-color: var(--adv);
+}
+.quiz-review__explain-head {
+  font-size: 13.5px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.quiz-review__explain-head.is-correct {
+  color: var(--basic);
+}
+.quiz-review__explain-head.is-wrong {
+  color: #C9353A;
+}
+.quiz-review__explain-body {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text2);
+  line-height: 1.68;
+}
+
 /* รูปปกบทความแบบเต็มกรอบ 16:9 */
 .banner--cover {
   padding: 0 !important;
@@ -1964,23 +2105,40 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
     font-size: 25px;
   }
 
-  /* Navbar บนจอมือถือ: ลดระยะห่างปุ่มด้านขวาไม่ให้เบียดโลโก้ */
+  /* Navbar บนจอมือถือ: ลดระยะห่างปุ่มด้านขวาไม่ให้เบียดโลโก้หรือล้นขอบจอ */
   .nav__inner {
-    gap: 10px;
-  }
-  .logo {
-    font-size: 20px;
-  }
-  .logo__mark {
-    width: 28px;
-    height: 28px;
-  }
-  .nav__actions {
     gap: 8px;
   }
+  .logo {
+    font-size: 19px;
+    gap: 6px;
+  }
+  .logo__mark {
+    width: 26px;
+    height: 26px;
+  }
+  .nav__actions {
+    gap: 6px;
+  }
+  .theme-switch {
+    width: 46px;
+    height: 26px;
+  }
+  .theme-switch__knob {
+    width: 20px;
+    height: 20px;
+  }
+  [data-theme="dark"] .theme-switch__knob {
+    left: 23px;
+  }
   .nav__user-btn {
-    padding: 5px 10px;
-    font-size: 12.5px;
+    padding: 4px 10px;
+    font-size: 12px;
+    gap: 6px;
+  }
+  .nav__user-stat {
+    font-size: 11px;
+    padding: 1px 5px;
   }
 
   /* แบนเนอร์กราฟิกบทเรียนบนจอมือถือ: ป้องกันตัวหนังสือซ้อนทับกันในกรอบ 16:9 */

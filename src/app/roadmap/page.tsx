@@ -6,7 +6,7 @@ import { LESSONS, LEVELS, LevelId } from '@/data/lessons';
 import { useProgress } from '@/context/ProgressContext';
 
 export default function RoadmapPage() {
-  const { user, isDone, getStats } = useProgress();
+  const { user, isDone, isLessonUnlocked, getStats, showToast } = useProgress();
   const [filter, setFilter] = useState<'all' | LevelId>('all');
 
   useEffect(() => {
@@ -92,7 +92,7 @@ export default function RoadmapPage() {
           <h1>Roadmap การเรียน</h1>
           <p>
             เรียงลำดับจากพื้นฐาน (Basic) ไปสู่การพัฒนาระบบ (Intermediate) และงานระดับสูง (Advanced)
-            แต่ละบทต่อยอดจากบทก่อนหน้า สามารถกดทำเครื่องหมายบทที่เรียนจบแล้วได้ทันที
+            ต้องเรียนตามลำดับและทำแบบทดสอบท้ายบทให้ได้คะแนน <strong>80% ขึ้นไป (อย่างน้อย 8/10 ข้อ)</strong> เพื่อปลดล็อกบทถัดไป
           </p>
           <div className="roadmap-summary">
             <div className="progress">
@@ -143,10 +143,16 @@ export default function RoadmapPage() {
               <div className="steps">
                 {lessons.map(lesson => {
                   const done = isDone(lesson.id);
+                  const unlocked = isLessonUnlocked(lesson.id);
+                  const prevLesson = LESSONS.find(l => l.no === lesson.no - 1);
+
                   return (
-                    <div key={lesson.id} className={`step ${done ? 'is-done' : ''}`}>
+                    <div
+                      key={lesson.id}
+                      className={`step ${done ? 'is-done' : unlocked ? 'is-current' : 'is-locked'}`}
+                    >
                       <span className="step__dot">
-                        {done ? '✓' : String(lesson.no).padStart(2, '0')}
+                        {done ? '✓' : unlocked ? String(lesson.no).padStart(2, '0') : '🔒'}
                       </span>
                       <div className="step__card">
                         <div>
@@ -156,9 +162,31 @@ export default function RoadmapPage() {
                             <span>{lesson.category}</span>
                             <span>·</span>
                             <span>อ่าน {lesson.minutes} นาที</span>
+                            {!unlocked && (
+                              <>
+                                <span>·</span>
+                                <span style={{ color: 'var(--adv)', fontWeight: 600 }}>
+                                  🔒 ล็อกตามลำดับ
+                                </span>
+                              </>
+                            )}
                           </div>
                           <h3 className="step__title">
-                            <Link href={`/lesson/${lesson.id}`}>{lesson.title}</Link>
+                            {unlocked ? (
+                              <Link href={`/lesson/${lesson.id}`}>{lesson.title}</Link>
+                            ) : (
+                              <button
+                                type="button"
+                                className="step__locked-title"
+                                onClick={() =>
+                                  showToast(
+                                    `🔒 กรุณาเรียนและสอบผ่านบทที่ ${lesson.no - 1} ให้ได้คะแนน 80% ขึ้นไปก่อนครับ`
+                                  )
+                                }
+                              >
+                                {lesson.title}
+                              </button>
+                            )}
                           </h3>
                           <p className="step__why">
                             <strong>ทำไมต้องรู้:</strong> {lesson.why}
@@ -172,14 +200,33 @@ export default function RoadmapPage() {
 
                         <div className="step__side">
                           <span className={`status ${done ? 'is-done' : ''}`}>
-                            {done ? '✓ เรียนจบแล้ว (ครบ 10 ข้อ)' : '○ ทำแบบทดสอบท้ายบทเพื่อผ่าน'}
+                            {done
+                              ? '✓ ผ่านแล้ว (สอบได้ ≥ 80%)'
+                              : unlocked
+                              ? '● สอบท้ายบทให้ได้ ≥ 80% (8/10 ข้อ) เพื่อผ่าน'
+                              : `🔒 ต้องผ่านบทที่ ${prevLesson?.no || lesson.no - 1} (≥ 80%) ก่อน`}
                           </span>
-                          <Link
-                            className={`btn ${done ? 'btn--outline' : 'btn--primary'}`}
-                            href={`/lesson/${lesson.id}`}
-                          >
-                            {done ? 'ทบทวนเนื้อหา' : 'เริ่มเรียน'}
-                          </Link>
+                          {unlocked ? (
+                            <Link
+                              className={`btn ${done ? 'btn--outline' : 'btn--primary'}`}
+                              href={`/lesson/${lesson.id}`}
+                            >
+                              {done ? 'ทบทวนเนื้อหา' : 'เริ่มเรียนบทนี้ →'}
+                            </Link>
+                          ) : (
+                            <button
+                              type="button"
+                              className="btn btn--outline"
+                              style={{ opacity: 0.65 }}
+                              onClick={() =>
+                                showToast(
+                                  `🔒 ต้องเรียนและสอบผ่านบทที่ ${lesson.no - 1} (คะแนน ≥ 80%) ก่อนจึงจะเข้าบทที่ ${lesson.no} ได้`
+                                )
+                              }
+                            >
+                              🔒 ยังไม่ปลดล็อก
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>

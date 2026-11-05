@@ -8,10 +8,13 @@ import { useProgress } from '@/context/ProgressContext';
 import { ArticleBanner } from '@/components/ArticleViewer';
 
 export default function HomePage() {
-  const { user, lastLessonId, isDone, getStats } = useProgress();
+  const { user, lastLessonId, isDone, isLessonUnlocked, getStats, showToast } = useProgress();
 
   const totalStats = getStats();
-  const lastVisitedLesson = lastLessonId ? LESSONS.find(l => l.id === lastLessonId) : null;
+  const lastVisitedLesson =
+    lastLessonId && isLessonUnlocked(lastLessonId)
+      ? LESSONS.find(l => l.id === lastLessonId)
+      : null;
   const firstUncompletedLesson = LESSONS.find(l => !isDone(l.id)) || LESSONS[0];
 
   // หากบทล่าสุดที่เปิดดูยังเรียนไม่จบ ให้พาไปเรียนต่อบทนั้น แต่ถ้าเรียนจบแล้วให้พาไปบทถัดไปที่ยังไม่ได้เรียน
@@ -22,48 +25,6 @@ export default function HomePage() {
 
   return (
     <>
-      {/* แถบต้อนรับและเรียนต่อจากที่ค้างไว้ สำหรับสมาชิกที่ล็อกอินแล้ว */}
-      {user && (
-        <section className="container" style={{ paddingTop: 28 }}>
-          <div className="continue-banner">
-            <div className="continue-banner__left">
-              <div className="continue-banner__avatar">
-                {user.displayName.charAt(0).toUpperCase()}
-              </div>
-              <div>
-                <div className="continue-banner__greet">
-                  ยินดีต้อนรับกลับมา, <strong>{user.displayName}</strong>
-                  <span className="continue-banner__badge">
-                    เรียนจบแล้ว {totalStats.done}/{totalStats.total} บท ({totalStats.pct}%)
-                  </span>
-                </div>
-                <p className="continue-banner__sub">
-                  {totalStats.done === totalStats.total
-                    ? 'ยอดเยี่ยมมาก! คุณเรียนครบทั้ง 12 บทใน Roadmap แล้ว สามารถกดทบทวนบทเรียนได้ทุกเมื่อ'
-                    : lastVisitedLesson && !isDone(lastVisitedLesson.id)
-                    ? `คุณเปิดดูค้างไว้ที่ บทที่ ${String(resumeLesson.no).padStart(2, '0')}: ${resumeLesson.title}`
-                    : `บทเรียนถัดไปของคุณคือ บทที่ ${String(resumeLesson.no).padStart(2, '0')}: ${resumeLesson.title}`}
-                </p>
-                <div className="progress continue-banner__progress">
-                  <div className="progress__bar" style={{ width: `${totalStats.pct}%` }} />
-                </div>
-              </div>
-            </div>
-
-            <div className="continue-banner__actions">
-              <Link className="btn btn--primary" href={`/lesson/${resumeLesson.id}`}>
-                {totalStats.done === totalStats.total
-                  ? 'ทบทวนบทเรียน →'
-                  : `เรียนต่อ บทที่ ${String(resumeLesson.no).padStart(2, '0')} →`}
-              </Link>
-              <Link className="btn btn--outline" href="/roadmap">
-                ดูแผนผัง Roadmap
-              </Link>
-            </div>
-          </div>
-        </section>
-      )}
-
       {/* 1. HERO SECTION — เกริ่นยุค AI (โทนเรียบ ไม่ขายของ) */}
       <section className="container hero">
         <div>
@@ -346,27 +307,50 @@ export default function HomePage() {
                     )}
                   </div>
                   <ul>
-                    {lessons.map(l => (
-                      <li key={l.id}>
-                        <Link href={user ? `/lesson/${l.id}` : '/login'}>
-                          <span>
-                            <span className="num">{String(l.no).padStart(2, '0')}</span>
-                            {l.tagline}
-                          </span>
-                          {user ? (
-                            isDone(l.id) && (
-                              <span className="check" title="เรียนจบแล้ว">
-                                ✓
-                              </span>
-                            )
-                          ) : (
-                            <span className="muted" style={{ fontSize: 12 }} title="ต้องเข้าสู่ระบบก่อนเรียน">
-                              🔒
+                    {lessons.map(l => {
+                      const unlocked = user ? isLessonUnlocked(l.id) : false;
+                      const done = user ? isDone(l.id) : false;
+                      return (
+                        <li key={l.id}>
+                          <Link
+                            href={user ? `/lesson/${l.id}` : '/login'}
+                            style={user && !unlocked ? { opacity: 0.65 } : undefined}
+                            onClick={e => {
+                              if (user && !unlocked) {
+                                e.preventDefault();
+                                showToast(
+                                  `🔒 ต้องสอบผ่านบทที่ ${l.no - 1} ให้ได้คะแนน ≥ 80% ก่อนจึงจะเข้าบทที่ ${l.no} ได้`
+                                );
+                              }
+                            }}
+                          >
+                            <span>
+                              <span className="num">{String(l.no).padStart(2, '0')}</span>
+                              {l.tagline}
                             </span>
-                          )}
-                        </Link>
-                      </li>
-                    ))}
+                            {user ? (
+                              done ? (
+                                <span className="check" title="เรียนจบแล้ว (≥ 80%)">
+                                  ✓
+                                </span>
+                              ) : unlocked ? (
+                                <span style={{ color: 'var(--brand)', fontSize: 12, fontWeight: 700 }} title="บทเรียนปัจจุบัน">
+                                  ●
+                                </span>
+                              ) : (
+                                <span className="muted" style={{ fontSize: 12 }} title="ต้องผ่านบทก่อนหน้าก่อน">
+                                  🔒
+                                </span>
+                              )
+                            ) : (
+                              <span className="muted" style={{ fontSize: 12 }} title="ต้องเข้าสู่ระบบก่อนเรียน">
+                                🔒
+                              </span>
+                            )}
+                          </Link>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
               );

@@ -99,12 +99,12 @@ export default function LoginPage() {
                     const lvStat = getStats(lv.id);
                     return (
                       <div key={lv.id} className="auth-level-mini__item">
-                        <span className={`c-${lv.id}`} style={{ fontWeight: 600 }}>
+                        <span className={`c-${lv.id}`} style={{ fontWeight: 700, fontSize: 12 }}>
                           {lv.name}
                         </span>
-                        <span>
-                          {lvStat.done}/{lvStat.total}
-                        </span>
+                        <strong style={{ fontSize: 13.5, color: 'var(--text)' }}>
+                          {lvStat.done}/{lvStat.total} บท
+                        </strong>
                       </div>
                     );
                   })}
@@ -121,7 +121,7 @@ export default function LoginPage() {
                       {stats.done === stats.total ? 'ทบทวนบทเรียน' : 'เรียนต่อบทถัดไป'}
                     </div>
                     <div className="auth-next-lesson__title">
-                      บทที่ {String(nextLesson.no).padStart(2, '0')}: {nextLesson.keyword} ({nextLesson.subtitle})
+                      บทที่ {String(nextLesson.no).padStart(2, '0')}: {nextLesson.tagline}
                     </div>
                   </div>
                   <span aria-hidden="true">→</span>
@@ -129,12 +129,13 @@ export default function LoginPage() {
               )}
 
               <div className="auth-profile-actions">
-                <Link className="btn btn--primary" style={{ flex: 1, justifyContent: 'center' }} href="/roadmap">
+                <Link className="btn btn--primary" style={{ width: '100%', justifyContent: 'center' }} href="/roadmap">
                   เปิดแผนผังการเรียน (Roadmap) →
                 </Link>
                 <button
                   type="button"
                   className="btn btn--outline"
+                  style={{ width: '100%', justifyContent: 'center' }}
                   onClick={() => logout()}
                 >
                   ออกจากระบบ
