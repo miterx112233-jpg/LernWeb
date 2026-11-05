@@ -458,6 +458,8 @@ export function enrichHtmlWithGlossary(html: string): string {
   });
   keywordEntries.sort((a, b) => b.keyword.length - a.keyword.length);
 
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+
   for (let i = 0; i < parts.length; i++) {
     const segment = parts[i];
     if (!segment || segment.startsWith('<')) continue;
@@ -469,7 +471,7 @@ export function enrichHtmlWithGlossary(html: string): string {
         const tooltip = escapeHtmlAttr(`${entry.item.term}: ${entry.item.shortDef}`);
         text = text.replace(entry.regex, match => {
           matchedSlugs.add(entry.item.slug);
-          return `<a href="/glossary#${entry.item.slug}" class="glossary-term" data-tooltip="${tooltip}">${match}</a>`;
+          return `<a href="${basePath}/glossary#${entry.item.slug}" class="glossary-term" data-tooltip="${tooltip}">${match}</a>`;
         });
       }
     }

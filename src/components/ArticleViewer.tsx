@@ -60,6 +60,15 @@ export function ArticleBanner({ article, small = false }: { article: Article; sm
 
 export default function ArticleViewer({ article }: { article: Article }) {
   const [activeId, setActiveId] = useState<string>(article.sections[0]?.id || '');
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+
+  const processArticleHtml = (rawHtml: string) => {
+    let html = rawHtml;
+    if (basePath) {
+      html = html.replace(/href="\/articles\//g, `href="${basePath}/articles/`);
+    }
+    return enrichHtmlWithGlossary(html);
+  };
 
   useEffect(() => {
     const ids: string[] = [];
@@ -128,11 +137,11 @@ export default function ArticleViewer({ article }: { article: Article }) {
             {article.sections.map(sec => (
               <section key={sec.id}>
                 <h2 id={sec.id}>{sec.h}</h2>
-                <div dangerouslySetInnerHTML={{ __html: enrichHtmlWithGlossary(sec.html) }} />
+                <div dangerouslySetInnerHTML={{ __html: processArticleHtml(sec.html) }} />
                 {sec.sub?.map(s => (
                   <div key={s.id}>
                     <h3 id={s.id}>{s.h}</h3>
-                    <div dangerouslySetInnerHTML={{ __html: enrichHtmlWithGlossary(s.html) }} />
+                    <div dangerouslySetInnerHTML={{ __html: processArticleHtml(s.html) }} />
                   </div>
                 ))}
               </section>

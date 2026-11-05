@@ -137,8 +137,9 @@ export const LESSON_VIDEOS: Record<string, LessonVideo[]> = {
       title: 'เทคนิค Prompt ใช้ AI รีวิวโค้ดแบบไม่หลอน'
     },
     {
-      url: 'https://www.youtube.com/watch?v=YXqB5YrpNO0',
-      title: 'รีวิว ‘Claude Code’ AI เขียนโค้ดที่ใครๆ ก็ใช้กัน?! | Dev รีวิววว ! SS2'
+      url: 'https://www.youtube.com/watch?v=QgkLBmLH3Go',
+      title: 'รีวิว ‘Claude Code’ AI เขียนโค้ดที่ใครๆ ก็ใช้กัน?! | Dev รีวิววว ! SS2',
+      channel: 'borntodev'
     }
   ],
 
