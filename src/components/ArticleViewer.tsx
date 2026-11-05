@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ARTICLES, Article } from '@/data/articles';
+import { enrichHtmlWithGlossary } from '@/data/glossary';
 
 export function ArticleBanner({ article, small = false }: { article: Article; small?: boolean }) {
   return (
@@ -30,7 +31,7 @@ export function ArticleBanner({ article, small = false }: { article: Article; sm
           <circle cx="138" cy="80" r="3.5" fill="#5CE6A0" />
         </svg>
       </div>
-      <span className="banner__by">บทความโดย: LernWeb Editorial</span>
+      <span className="banner__by">ที่มา: {article.sourceName}</span>
       <span className="banner__slogan">
         Never Stop
         <br />
@@ -81,28 +82,62 @@ export default function ArticleViewer({ article }: { article: Article }) {
       <div className="lesson__layout">
         <article>
           <ArticleBanner article={article} />
-          <p className="lesson__caption">บทความโดย: LernWeb Editorial Team</p>
+          <p className="lesson__caption">
+            ขอขอบคุณข้อมูลและบทความต้นฉบับจาก:{' '}
+            <a href={article.sourceUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--brand)', fontWeight: 600 }}>
+              {article.sourceName} ↗
+            </a>
+          </p>
           <h1 className="lesson__title">{article.title}</h1>
           <div className="lesson__info">
             <span className="tag tag--intermediate">{article.category}</span>
-            <span>เผยแพร่ {article.publishedAt}</span>
+            <span>ที่มา: {article.sourceName}</span>
             <span>·</span>
             <span>เวลาอ่าน {article.minutes} นาที</span>
           </div>
 
-          <div className="prose">
+          {/* แถบป้าย Hashtags สีฟ้าอ่อน + เส้นคั่นแนวนอนตามภาพต้นแบบ 9Expert */}
+          {article.hashtags && article.hashtags.length > 0 && (
+            <div className="article-hashtags">
+              {article.hashtags.map(tag => (
+                <span key={tag} className="article-hashtag">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+
+          <div className="prose prose--9expert">
             {article.sections.map(sec => (
               <section key={sec.id}>
                 <h2 id={sec.id}>{sec.h}</h2>
-                <div dangerouslySetInnerHTML={{ __html: sec.html }} />
+                <div dangerouslySetInnerHTML={{ __html: enrichHtmlWithGlossary(sec.html) }} />
                 {sec.sub?.map(s => (
                   <div key={s.id}>
                     <h3 id={s.id}>{s.h}</h3>
-                    <div dangerouslySetInnerHTML={{ __html: s.html }} />
+                    <div dangerouslySetInnerHTML={{ __html: enrichHtmlWithGlossary(s.html) }} />
                   </div>
                 ))}
               </section>
             ))}
+          </div>
+
+          {/* กล่องอ้างอิงแหล่งที่มาของบทความ (Source Attribution Box) */}
+          <div className="article-source-box">
+            <div className="article-source-box__label">📚 แหล่งที่มาและอ้างอิงเนื้อหา (Source &amp; Reference)</div>
+            <p className="article-source-box__desc">
+              เนื้อหาบทความเรื่อง <strong>“{article.title}”</strong> เรียบเรียงและอ้างอิงข้อมูลต้นฉบับจาก{' '}
+              <strong>{article.sourceName}</strong> เพื่อใช้เป็นสื่อการเรียนรู้สำหรับผู้เริ่มต้นศึกษาสายเทคโนโลยีและวิศวกรรมซอฟต์แวร์
+            </p>
+            <a
+              href={article.sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="article-source-box__link"
+            >
+              <span>อ่านบทความต้นฉบับบนเว็บไซต์ {article.sourceName}</span>
+              <span className="article-source-box__url">{article.sourceUrl} ↗</span>
+            </a>
           </div>
         </article>
 
@@ -150,4 +185,3 @@ export default function ArticleViewer({ article }: { article: Article }) {
     </div>
   );
 }
-

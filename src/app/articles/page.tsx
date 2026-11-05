@@ -76,7 +76,7 @@ export default function ArticlesPage() {
                 <div className="card__meta">
                   <span className="tag tag--intermediate">{article.category}</span>
                   <span>
-                    {article.publishedAt} · อ่าน {article.minutes} นาที
+                    ที่มา: {article.sourceName} · อ่าน {article.minutes} นาที
                   </span>
                 </div>
                 <h3 className="card__title">{article.title}</h3>

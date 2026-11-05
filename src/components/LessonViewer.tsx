@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { LESSONS, LEVELS, LESSON_VIDEOS, Lesson } from '@/data/lessons';
+import { enrichHtmlWithGlossary } from '@/data/glossary';
 import { useProgress } from '@/context/ProgressContext';
 import { LessonBanner } from '@/components/LessonBanner';
 
@@ -160,16 +161,16 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
             {renderTocList()}
           </details>
 
-          {/* เนื้อหาบทเรียน */}
+          {/* เนื้อหาบทเรียน (พร้อมลิงก์คำศัพท์เทคนิคอัตโนมัติไปยังคลังคำศัพท์) */}
           <div className="prose">
             {lesson.sections.map(sec => (
               <section key={sec.id}>
                 <h2 id={sec.id}>{sec.h}</h2>
-                <div dangerouslySetInnerHTML={{ __html: sec.html }} />
+                <div dangerouslySetInnerHTML={{ __html: enrichHtmlWithGlossary(sec.html) }} />
                 {sec.sub?.map(s => (
                   <div key={s.id}>
                     <h3 id={s.id}>{s.h}</h3>
-                    <div dangerouslySetInnerHTML={{ __html: s.html }} />
+                    <div dangerouslySetInnerHTML={{ __html: enrichHtmlWithGlossary(s.html) }} />
                   </div>
                 ))}
               </section>
@@ -349,9 +350,14 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
             <div className="progress">
               <div className="progress__bar" style={{ width: `${stats.pct}%` }} />
             </div>
-            <Link className="link" href="/roadmap" style={{ fontSize: 13 }}>
-              ดูแผนผังทั้งหมด →
-            </Link>
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap' }}>
+              <Link className="link" href="/roadmap" style={{ fontSize: 13 }}>
+                ดูแผนผังทั้งหมด →
+              </Link>
+              <Link className="link" href="/glossary" style={{ fontSize: 13 }}>
+                คลังคำศัพท์ →
+              </Link>
+            </div>
           </div>
         </aside>
       </div>

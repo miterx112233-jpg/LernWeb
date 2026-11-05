@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { LESSONS, LEVELS } from '@/data/lessons';
 import { ARTICLES } from '@/data/articles';
+import { GLOSSARY_ITEMS } from '@/data/glossary';
 import { useProgress } from '@/context/ProgressContext';
 
 export default function Navbar() {
@@ -63,6 +64,15 @@ export default function Navbar() {
           .includes(q)
       )
     : ARTICLES;
+
+  const matchedGlossary = q
+    ? GLOSSARY_ITEMS.filter(g =>
+        [g.term, g.shortDef, g.fullDef, ...g.keywords]
+          .join(' ')
+          .toLowerCase()
+          .includes(q)
+      )
+    : [];
 
   const isActive = (prefix: string) => {
     if (prefix === '/') return pathname === '/';
@@ -130,7 +140,14 @@ export default function Navbar() {
               </Link>
             </div>
 
-            {/* 4. ความก้าวหน้าการเรียน */}
+            {/* 4. คลังคำศัพท์เทคนิค (Glossary) */}
+            <div className="nav__item">
+              <Link className={`nav__link ${isActive('/glossary') ? 'is-active' : ''}`} href="/glossary">
+                คลังคำศัพท์
+              </Link>
+            </div>
+
+            {/* 5. ความก้าวหน้าการเรียน */}
             <div className="nav__item">
               <Link className={`nav__link ${isActive('/progress') ? 'is-active' : ''}`} href="/progress">
                 ความก้าวหน้า
@@ -217,6 +234,7 @@ export default function Navbar() {
           </Link>
         ))}
         <Link href="/articles">บทความและเกร็ดความรู้</Link>
+        <Link href="/glossary">คลังคำศัพท์เทคนิค (Glossary)</Link>
         <Link href="/progress">ความก้าวหน้าการเรียน</Link>
         <Link href="/login">
           {user ? `บัญชีของฉัน (${user.displayName})` : 'เข้าสู่ระบบ / สมัครสมาชิก'}
@@ -250,10 +268,22 @@ export default function Navbar() {
             }}
           />
           <div className="search-results">
-            {matchedLessons.length === 0 && matchedArticles.length === 0 ? (
+            {matchedLessons.length === 0 &&
+            matchedArticles.length === 0 &&
+            matchedGlossary.length === 0 ? (
               <div className="search-empty">ไม่พบเนื้อหาที่ตรงกับคำค้น</div>
             ) : (
               <>
+                {matchedGlossary.map(g => (
+                  <Link
+                    key={`glossary-${g.slug}`}
+                    href={`/glossary#${g.slug}`}
+                    onClick={() => setSearchOpen(false)}
+                  >
+                    <div className="title">[คำศัพท์] {g.term}</div>
+                    <div className="meta">{g.shortDef}</div>
+                  </Link>
+                ))}
                 {matchedLessons.map(l => {
                   const lv = LEVELS.find(item => item.id === l.level);
                   return (
