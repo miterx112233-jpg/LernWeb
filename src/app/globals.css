@@ -2091,6 +2091,62 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   white-space: nowrap;
 }
 
+@media (max-width: 900px) {
+  /* หัวข้อบทความ/บทเรียนบนหน้าจอมือถือและแท็บเล็ต */
+  .lesson__title {
+    font-size: 19px !important;
+    line-height: 1.45 !important;
+    margin-top: 14px !important;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+  .lesson__caption {
+    font-size: 12px !important;
+    margin-top: 10px !important;
+    word-break: break-all;
+  }
+  .lesson__info {
+    font-size: 12.5px !important;
+    gap: 8px !important;
+  }
+
+  /* ปรับเนื้อหาและหัวข้อย่อยในบทความบนมือถือและแท็บเล็ต */
+  .prose {
+    margin-top: 20px !important;
+    font-size: 15px !important;
+    line-height: 1.8 !important;
+  }
+  .prose h2 {
+    font-size: 18px !important;
+    line-height: 1.4 !important;
+    margin: 32px 0 14px !important;
+    padding-left: 10px !important;
+    border-left-width: 3.5px !important;
+  }
+  .prose h3 {
+    font-size: 16px !important;
+    margin: 22px 0 8px !important;
+  }
+  .prose p {
+    margin-bottom: 14px !important;
+  }
+  .prose ul, .prose ol {
+    padding-left: 20px !important;
+    margin-bottom: 16px !important;
+  }
+  .prose li {
+    margin-bottom: 5px !important;
+  }
+
+  /* ปรับขนาดกรอบรูปปกบทความบนจอมือถือให้กะทัดรัด */
+  .banner--cover {
+    max-height: 200px !important;
+  }
+  .banner--cover .banner__cover-img {
+    object-position: center !important;
+  }
+}
+
 @media (max-width: 640px) {
   .section {
     padding: 44px 0;
@@ -2103,60 +2159,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   }
   .page-head h1 {
     font-size: 25px;
-  }
-
-  /* หัวข้อบทความ/บทเรียนบนจอมือถือ */
-  .lesson__title {
-    font-size: 19px;
-    line-height: 1.45;
-    margin-top: 14px;
-    word-break: break-word;
-    overflow-wrap: break-word;
-  }
-  .lesson__caption {
-    font-size: 12px;
-    margin-top: 10px;
-    word-break: break-all;
-  }
-  .lesson__info {
-    font-size: 12.5px;
-    gap: 8px;
-  }
-
-  /* ปรับเนื้อหาและหัวข้อย่อยในบทความบนมือถือไม่ให้ใหญ่เทอะทะ */
-  .prose {
-    margin-top: 20px;
-    font-size: 15px;
-    line-height: 1.8;
-  }
-  .prose h2 {
-    font-size: 18px;
-    line-height: 1.4;
-    margin: 32px 0 14px;
-    padding-left: 10px;
-    border-left-width: 3.5px;
-  }
-  .prose h3 {
-    font-size: 16px;
-    margin: 22px 0 8px;
-  }
-  .prose p {
-    margin-bottom: 14px;
-  }
-  .prose ul, .prose ol {
-    padding-left: 20px;
-    margin-bottom: 16px;
-  }
-  .prose li {
-    margin-bottom: 5px;
-  }
-
-  /* ปรับขนาดกรอบรูปปกบทความบนจอมือถือให้กะทัดรัด ไม่กินพื้นที่เต็มหน้าจอ */
-  .banner--cover {
-    max-height: 200px;
-  }
-  .banner--cover .banner__cover-img {
-    object-position: center;
   }
 
   /* Navbar บนจอมือถือ: ลดระยะห่างปุ่มด้านขวาไม่ให้เบียดโลโก้หรือล้นขอบจอ */
