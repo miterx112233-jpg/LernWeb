@@ -2105,6 +2105,24 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
     font-size: 25px;
   }
 
+  /* หัวข้อบทความ/บทเรียนบนจอมือถือ */
+  .lesson__title {
+    font-size: 20px;
+    line-height: 1.45;
+    margin-top: 14px;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+  .lesson__caption {
+    font-size: 12.5px;
+    margin-top: 10px;
+    word-break: break-all;
+  }
+  .lesson__info {
+    font-size: 13px;
+    gap: 8px;
+  }
+
   /* Navbar บนจอมือถือ: ลดระยะห่างปุ่มด้านขวาไม่ให้เบียดโลโก้หรือล้นขอบจอ */
   .nav__inner {
     gap: 8px;

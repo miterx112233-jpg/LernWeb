@@ -152,7 +152,7 @@ export const ARTICLES: Article[] = [
     keyword: 'GEN AI',
     subtitle: 'Generative AI คืออะไร ?',
     tagline: 'ทำความรู้จักกับ Generative AI ปัญญาประดิษฐ์สร้างสรรค์',
-    title: 'Generative AI คืออะไร ? ทำความรู้จักกับปัญญาประดิษฐ์ที่ถูกออกแบบมาเพื่อสร้างผลลัพธ์จากการพิมพ์ (Prompt)',
+    title: 'Generative AI คืออะไร ? ทำความรู้จักกับ Generative AI ปัญญาประดิษฐ์สร้างสรรค์',
     summary:
       'เจาะลึกวิวัฒนาการ หลักการทำงานของ Generative AI (GAN & Transformer) กรณีศึกษาใน 5 อุตสาหกรรม จริยธรรม AI และการประยุกต์ใช้ในซอฟต์แวร์ยุคใหม่',
     publishedAt: '5 พ.ย. 2026',
