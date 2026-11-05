@@ -7,10 +7,14 @@ import { enrichHtmlWithGlossary } from '@/data/glossary';
 
 export function ArticleBanner({ article, small = false }: { article: Article; small?: boolean }) {
   if (article.coverImage) {
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+    const imgSrc = article.coverImage.startsWith('/')
+      ? `${basePath}${article.coverImage}`
+      : article.coverImage;
     return (
       <div className={`banner banner--cover ${small ? 'banner--sm' : ''}`}>
         <img
-          src={article.coverImage}
+          src={imgSrc}
           alt={article.title}
           className="banner__cover-img"
           loading="lazy"

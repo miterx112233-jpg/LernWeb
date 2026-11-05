@@ -41,7 +41,8 @@ export default function Navbar() {
 
     // ลงทะเบียน Service Worker เพื่อให้เบราว์เซอร์รองรับการติดตั้งเป็นแอป (PWA)
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').catch(() => {});
+      const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+      navigator.serviceWorker.register(`${basePath}/sw.js`).catch(() => {});
     }
 
     const onBeforeInstallPrompt = (e: Event) => {
