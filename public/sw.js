@@ -1,12 +1,9 @@
-const CACHE_NAME = 'lerndev-pwa-v1';
+const CACHE_NAME = 'lerndev-pwa-v2';
 const PRECACHE_URLS = [
-  '/',
-  '/articles',
-  '/glossary',
-  '/login',
-  '/manifest.json',
-  '/icons/icon-192.png',
-  '/icons/icon-512.png'
+  './',
+  './manifest.json',
+  './icons/icon-192.png',
+  './icons/icon-512.png'
 ];
 
 self.addEventListener('install', event => {
@@ -33,7 +30,6 @@ self.addEventListener('fetch', event => {
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
 
-  // Network-first strategy with cache fallback for smooth offline experience
   event.respondWith(
     fetch(request)
       .then(response => {
@@ -43,7 +39,6 @@ self.addEventListener('fetch', event => {
         }
         return response;
       })
-      .catch(() => caches.match(request).then(cached => cached || caches.match('/')))
+      .catch(() => caches.match(request).then(cached => cached || caches.match('./')))
   );
 });
-

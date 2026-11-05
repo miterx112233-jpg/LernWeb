@@ -4,6 +4,8 @@ import { ProgressProvider } from '@/context/ProgressContext';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+
 export const viewport: Viewport = {
   themeColor: '#1D4ED8',
   width: 'device-width',
@@ -14,7 +16,7 @@ export const metadata: Metadata = {
   title: 'LernDev — พื้นฐานและความรู้ Software Engineer ในยุค AI',
   description:
     'คลังความรู้และ Roadmap สำหรับคนที่อยากเป็น Software Engineer ในยุคที่ AI เขียนโค้ดได้ เรียงลำดับจาก Basic ไปจนถึง Advanced',
-  manifest: '/manifest.json',
+  manifest: `${basePath}/manifest.json`,
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
@@ -22,10 +24,10 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
-      { url: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' }
+      { url: `${basePath}/icons/icon-192.png`, sizes: '192x192', type: 'image/png' },
+      { url: `${basePath}/icons/icon-512.png`, sizes: '512x512', type: 'image/png' }
     ],
-    apple: [{ url: '/icons/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }]
+    apple: [{ url: `${basePath}/icons/apple-touch-icon.png`, sizes: '180x180', type: 'image/png' }]
   }
 };
 
