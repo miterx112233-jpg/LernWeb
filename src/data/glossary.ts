@@ -565,6 +565,54 @@ export const GLOSSARY_ITEMS: GlossaryItem[] = [
     analogy: 'เหมือนหน้าปัดรถยนต์และกล้องบันทึกเหตุการณ์ที่บอกทั้งความเร็ว อุณหภูมิเครื่องยนต์ และอัตราสิ้นเปลืองน้ำมันแบบเรียลไทม์',
     lessonId: 'future-tech-careers',
     lessonNo: 4
+  },
+  {
+    slug: 'operating-system',
+    term: 'Operating System (OS)',
+    keywords: ['Operating System', 'System Software'],
+    category: 'cs-git',
+    shortDef: 'ซอฟต์แวร์ระบบที่ทำหน้าที่เป็นตัวกลางควบคุมฮาร์ดแวร์ทั้งหมดของคอมพิวเตอร์ และจัดสรรทรัพยากรให้โปรแกรมประยุกต์ทำงานได้',
+    fullDef:
+      'ระบบปฏิบัติการ (เช่น Windows, macOS, Linux, iOS, Android) เป็นซอฟต์แวร์ระบบ (System Software) ที่สำคัญที่สุด คอยจัดการ CPU, หน่วยความจำ RAM, ระบบไฟล์ และอุปกรณ์ต่อพ่วง เพื่อให้ผู้ใช้และแอปพลิเคชันต่างๆ สั่งงานฮาร์ดแวร์ได้โดยไม่ต้องเขียนคำสั่งควบคุมวงจรไฟฟ้าโดยตรง',
+    analogy: 'เหมือนผู้จัดการอาคารที่คอยจัดสรรไฟฟ้า น้ำประปา ลิฟต์ และพื้นที่ใช้สอยให้ร้านค้าและผู้พักอาศัยในตึกทำงานร่วมกันได้อย่างราบรื่น',
+    lessonId: 'how-computers-web-work',
+    lessonNo: 1
+  },
+  {
+    slug: 'compiler-interpreter',
+    term: 'Compiler & Interpreter (Language Translator)',
+    keywords: ['Compiler', 'Interpreter', 'Language Translator'],
+    category: 'cs-git',
+    shortDef: 'โปรแกรมตัวแปลภาษาที่แปลงซอร์สโค้ดภาษาระดับสูง (เช่น Python, Java, C) ให้กลายเป็นภาษาเครื่องที่ CPU ประมวลผลได้',
+    fullDef:
+      'คอมพิวเตอร์เข้าใจเฉพาะสัญญาณเลขฐานสอง (0 กับ 1) ดังนั้นโค้ดที่มนุษย์หรือ AI เขียนขึ้นจึงต้องผ่านตัวแปลภาษา โดย Compiler จะแปลโค้ดทั้งไฟล์ให้เสร็จก่อนรัน (เช่น C, C++, Go) ส่วน Interpreter จะแปลและรันทีละบรรทัด (เช่น Python, JavaScript)',
+    analogy: 'Compiler เหมือนการแปลหนังสือทั้งเล่มเป็นภาษาไทยก่อนวางขาย ส่วน Interpreter เหมือนล่ามแปลสดที่แปลคำพูดให้ฟังประโยคต่อประโยคทันที',
+    lessonId: 'how-computers-web-work',
+    lessonNo: 1
+  },
+  {
+    slug: 'enterprise-software',
+    term: 'Enterprise Software (ERP / CRM / POS / HRM)',
+    keywords: ['Enterprise Software', 'ERP', 'CRM', 'POS', 'HRM'],
+    category: 'web-api',
+    shortDef: 'ซอฟต์แวร์ประยุกต์สำหรับบริหารจัดการกระบวนการทำงานหลักของธุรกิจ เช่น งานขาย (POS) ลูกค้าสัมพันธ์ (CRM) ทรัพยากรองค์กร (ERP) และบุคคล (HRM)',
+    fullDef:
+      'กลุ่มซอฟต์แวร์ที่ขับเคลื่อนการดำเนินงานขององค์กรยุคดิจิทัล ได้แก่ POS (Point of Sale จัดการจุดขายและสต็อกหน้าร้าน), CRM (Customer Relationship Management บริหารข้อมูลและพฤติกรรมลูกค้า), HRM (บริหารงานบุคคลและเงินเดือน) และ ERP (Enterprise Resource Planning ที่เชื่อมโยงบัญชี คลังสินค้า จัดซื้อ และการผลิตเข้าเป็นฐานข้อมูลเดียวกัน)',
+    analogy: 'เหมือนระบบประสาทส่วนกลางของบริษัทที่เชื่อมแผนกหน้าร้าน คลังสินค้า ฝ่ายขาย ฝ่ายบุคคล และฝ่ายบัญชีให้เห็นข้อมูลชุดเดียวกันแบบเรียลไทม์',
+    lessonId: 'backend-api',
+    lessonNo: 6
+  },
+  {
+    slug: 'srs',
+    term: 'SRS (Software Requirements Specification)',
+    keywords: ['SRS', 'Custom Software'],
+    category: 'cs-git',
+    shortDef: 'เอกสารข้อกำหนดความต้องการของซอฟต์แวร์ที่ระบุอย่างละเอียดว่าระบบต้องทำอะไรได้บ้าง มีเงื่อนไขอย่างไร และมีขอบเขตแค่ไหนก่อนเริ่มพัฒนา',
+    fullDef:
+      'เอกสารมาตรฐานในงานวิศวกรรมซอฟต์แวร์และการทำ Custom Software ที่รวบรวมทั้งความต้องการด้านฟังก์ชัน (Functional Requirements) เช่น หน้าจอและการคำนวณ และความต้องการด้านคุณภาพ (Non-Functional Requirements) เช่น ความเร็วและความปลอดภัย เพื่อใช้เป็นพิมพ์เขียวให้ทีมพัฒนาและ AI สร้างระบบได้ตรงตามเป้าหมาย',
+    analogy: 'เหมือนแบบพิมพ์เขียวก่อสร้างบ้านที่ระบุทั้งจำนวนห้อง ขนาดพื้นที่ และสเปกวัสดุอย่างชัดเจนก่อนที่ผู้รับเหมาจะลงมือตอกเสาเข็ม',
+    lessonId: 'ai-era-core-skills',
+    lessonNo: 2
   }
 ];
 
