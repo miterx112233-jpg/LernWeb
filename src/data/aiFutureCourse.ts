@@ -24,6 +24,28 @@ export const AI_FUTURE_LESSONS: Lesson[] = [
     why: 'ถ้าเข้าใจว่า Vibe Coding เหมาะกับงานแบบไหนและยังขาดอะไร จะใช้ AI สร้างงานได้เร็วโดยไม่พาระบบจริงไปสู่ความเสี่ยง',
     minutes: 14,
     topics: ['Vibe Coding', 'ภาษาธรรมชาติเป็น Interface', 'Prototype vs Production', 'งานใน SDLC ที่ AI ยังทำแทนไม่ได้'],
+    videos: [
+      {
+        url: 'https://www.youtube.com/watch?v=dLlepKTL6PQ',
+        title: '7 เรื่องที่ต้องรู้ (ก่อน) Vibe Coding | borntodev',
+        channel: 'BorntoDev'
+      },
+      {
+        url: 'https://www.youtube.com/watch?v=qqMmixOOyXw',
+        title: 'VIBE CODING 101: ใช้ AI เขียนโค้ด ทำยังไง',
+        channel: 'DataTH - Data Science ชิลชิล'
+      },
+      {
+        url: 'https://www.youtube.com/watch?v=yuIolV5cWmI',
+        title: 'ผมลอง Vibecode',
+        channel: '9arm'
+      },
+      {
+        url: 'https://www.youtube.com/watch?v=yN5uYbCzwsw',
+        title: '[🔴LIVE] Vibe Coding ยังไง ไม่ให้พังคามือ',
+        channel: 'BorntoDev'
+      }
+    ],
     sections: [
       {
         id: 'ai-coding-changes',
@@ -131,6 +153,23 @@ export const AI_FUTURE_LESSONS: Lesson[] = [
     why: 'ถ้านิยามปัญหาผิด แม้ AI จะเขียนโค้ดได้สมบูรณ์แบบ ระบบก็ยังแก้ปัญหาผิดเรื่องอยู่ดี ทักษะการคิดและสื่อสารจึงเป็นตัวกำหนดคุณภาพของงานที่ AI สร้าง',
     minutes: 16,
     topics: ['Prompting เป็นทักษะพื้นฐาน', 'ทำไม Logic & DSA ยังจำเป็น', 'Computational & Critical Thinking', 'Requirements Engineering'],
+    videos: [
+      {
+        url: 'https://www.youtube.com/watch?v=Ql0nTjTrUws',
+        title: 'สั่ง AI เขียนโค้ดเราต้องเข้าใจมั้ย?',
+        channel: '9arm'
+      },
+      {
+        url: 'https://www.youtube.com/watch?v=_127QgkSta8',
+        title: 'ฝึกเขียนโค้ด เริ่มจาก 0 ในยุค AI | borntodev',
+        channel: 'BorntoDev'
+      },
+      {
+        url: 'https://www.youtube.com/watch?v=xgOPNN9cMag',
+        title: 'รวมขั้นตอนเขียนโค้ดให้เก่งเพื่อทำงานสาย DEV แบบไม่กลัว AI',
+        channel: 'BorntoDev'
+      }
+    ],
     sections: [
       {
         id: 'prompt-engineer-future',
@@ -158,7 +197,7 @@ export const AI_FUTURE_LESSONS: Lesson[] = [
             <li><strong>แยกคำตอบที่ถูกต้องออกจากคำตอบที่ "ดูน่าเชื่อถือ"</strong></li>
           </ul>
           <blockquote>เปรียบได้กับสถาปนิกที่ใช้โปรแกรมสร้างแบบสามมิติ แม้ไม่ต้องผสมปูนหรือก่ออิฐเอง แต่ยังต้องเข้าใจโครงสร้าง แรงลม การรับน้ำหนัก วัสดุ และมาตรฐานความปลอดภัย</blockquote>
-          <p>AI ลดความจำเป็นในการพิมพ์โค้ดบางส่วน <strong>แต่เพิ่มความจำเป็นของคนที่เข้าใจว่าโค้ดนั้นควรทำงานอย่างไร</strong> <em>(ทบทวนพื้นฐานได้ในหลักสูตรที่ 1 บทที่ 02: Logic และ Data Structures)</em></p>`
+          <p>AI ลดความจำเป็นในการพิมพ์โค้ดบางส่วน <strong>แต่เพิ่มความจำเป็นของคนที่เข้าใจว่าโค้ดนั้นควรทำงานอย่างไร</strong> <em>(ฝึกเขียนและคำนวณ Big-O เชิงเทคนิคต่อได้ใน <a href="/lesson/logic-data-structures">หลักสูตรที่ 1 บทที่ 02: Logic และ Data Structures</a>)</em></p>`
       },
       {
         id: 'computational-thinking',
@@ -232,6 +271,23 @@ export const AI_FUTURE_LESSONS: Lesson[] = [
     why: 'เมื่อ AI เขียนโค้ด เรียกเครื่องมือ และเข้าถึงข้อมูลได้เอง ความผิดพลาดเพียงจุดเดียวอาจทำให้ข้อมูลรั่วหรือระบบเสียหาย การรู้ทันความเสี่ยงคือทักษะที่ขาดไม่ได้',
     minutes: 17,
     topics: ['AI Coding Tools', 'Data Literacy', 'Prompt Injection & Secret Leakage', 'Ethics & Human Judgment'],
+    videos: [
+      {
+        url: 'https://www.youtube.com/watch?v=M1nlRoX0j-g',
+        title: 'คู่มือ AI CODER',
+        channel: '9arm'
+      },
+      {
+        url: 'https://www.youtube.com/watch?v=D3Fr_NuJhXE',
+        title: 'Cursor AI ใช้งานยังไง? Demo Agent Mode + Debug ครบจบ | มือใหม่ดูได้เลย 2026',
+        channel: 'T-LIVE-CODE'
+      },
+      {
+        url: 'https://www.youtube.com/watch?v=c8MVDTou5lw',
+        title: 'ผมลองใช้ AI เขียนโค้ด',
+        channel: '9arm'
+      }
+    ],
     sections: [
       {
         id: 'tool-fluency',
@@ -239,7 +295,7 @@ export const AI_FUTURE_LESSONS: Lesson[] = [
         html: `
           <p>ควรเปิดโอกาสให้ทดลองใช้เครื่องมือยุคใหม่ เช่น <strong>GitHub Copilot, Cursor, Replit, Claude Code, Codex</strong> และเครื่องมือสร้างเว็บ/แอปจากภาษาธรรมชาติ แต่ต้องใช้ควบคู่กับทักษะเหล่านี้เสมอ:</p>
           <div class="flow"><span>อ่านโค้ดที่ AI สร้าง</span><i>→</i><span>ทดสอบ (Test)</span><i>→</i><span>แก้ Bug</span><i>→</i><span>ใช้ Version Control (Git)</span><i>→</i><span>ตรวจสอบความปลอดภัย</span></div>
-          <p>คนที่ใช้เครื่องมือเก่งแต่ไม่อ่านโค้ด เปรียบเหมือนคนขับรถเร็วที่ไม่ดูกระจก <em>(ทบทวนได้ในหลักสูตรที่ 1 บทที่ 03: Git และบทที่ 04: ใช้ AI ช่วยเขียนโค้ดอย่างถูกวิธี)</em></p>`
+          <p>คนที่ใช้เครื่องมือเก่งแต่ไม่อ่านโค้ด เปรียบเหมือนคนขับรถเร็วที่ไม่ดูกระจก <em>(ฝึกภาคปฏิบัติเชิงวิศวกรรมได้ใน <a href="/lesson/git-github">หลักสูตรที่ 1 บทที่ 03: Git</a> และ <a href="/lesson/ai-assisted-coding">บทที่ 04: ใช้ AI ช่วยเขียนโค้ดอย่างถูกวิธี</a>)</em></p>`
       },
       {
         id: 'data-literacy',
@@ -285,7 +341,8 @@ export const AI_FUTURE_LESSONS: Lesson[] = [
                 <li><strong>Dependency Risk</strong> — ตรวจแพ็กเกจทุกตัวก่อนติดตั้ง</li>
                 <li><strong>Least Privilege</strong> — ให้สิทธิ์ทั้งคนและ AI Agent เท่าที่จำเป็นเท่านั้น</li>
                 <li><strong>Social Engineering</strong> และ <strong>Responsible AI</strong></li>
-              </ul>`
+              </ul>
+              <div class="note"><strong>เจาะลึกภาคเทคนิค:</strong> หากต้องการดูวิธีเขียนโค้ดป้องกันจริง (เช่น Parameterized Query, Read-Only Role สำหรับ MCP Server, การ Hash รหัสผ่านด้วย <code>bcrypt</code> และ API Gateway) สามารถเรียนได้ที่ <a href="/lesson/ai-agents">หลักสูตรที่ 1 บทที่ 11: AI Agents &amp; MCP</a> และ <a href="/lesson/system-design-security">บทที่ 12: System Design &amp; Security</a></div>`
           }
         ]
       },
@@ -328,6 +385,23 @@ export const AI_FUTURE_LESSONS: Lesson[] = [
     why: 'การรู้ว่างานในอนาคตต้องการอะไร ช่วยให้วางแผนการเรียนและสร้าง Portfolio ได้ตรงจุด แทนที่จะไล่ตามเครื่องมือที่เปลี่ยนทุกเดือน',
     minutes: 18,
     topics: ['บทบาทมนุษย์ที่เปลี่ยนไป', '7 อาชีพแห่งอนาคต', 'สาขาวิชา & Computational X', 'Roadmap ตามช่วงวัย'],
+    videos: [
+      {
+        url: 'https://www.youtube.com/watch?v=vDXy4jOh9pk',
+        title: "'9arm' คิดว่า AI กำลังเปลี่ยนงาน Software Engineer แค่ไหน? | Podcast with CK Ep.50",
+        channel: 'CK Cheong'
+      },
+      {
+        url: 'https://www.youtube.com/watch?v=0wWO3D6nE64',
+        title: 'เด็กไอทีจะตกงานมั้ย ? | borntoDev x IT KMITL',
+        channel: 'BorntoDev'
+      },
+      {
+        url: 'https://www.youtube.com/watch?v=fYQ_Wl1D6LE',
+        title: 'AI Roadmap ควรรู้อะไรบ้าง ให้ทำงานได้จริง 300% | borntodev',
+        channel: 'BorntoDev'
+      }
+    ],
     sections: [
       {
         id: 'human-role-shift',

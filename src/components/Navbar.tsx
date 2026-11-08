@@ -181,7 +181,7 @@ export default function Navbar() {
               </Link>
             </div>
 
-            {/* 2. แผนผังการเรียน (Mega-Dropdown 3 ระดับ เข้าถึงทั้ง 12 บทเรียนได้โดยตรงแบบไม่ซ้ำซ้อน) */}
+            {/* 2. แผนผังการเรียน (Dropdown เลือกเฉพาะ หลักสูตรที่ 1 กับ หลักสูตรที่ 2) */}
             <div
               className={`nav__item ${roadmapMenuOpen ? 'is-open' : ''}`}
               onMouseEnter={() => setRoadmapMenuOpen(true)}
@@ -191,7 +191,7 @@ export default function Navbar() {
                 className={`nav__link ${isActive('/roadmap') || isActive('/lesson') ? 'is-active' : ''}`}
                 href={user ? '/roadmap' : '/login'}
                 onClick={() => setRoadmapMenuOpen(false)}
-                title={user ? 'แผนผังการเรียน 12 บท' : 'กรุณาเข้าสู่ระบบเพื่อเข้าใช้งานแผนผังการเรียน'}
+                title={user ? 'เลือกหลักสูตรการเรียน' : 'กรุณาเข้าสู่ระบบเพื่อเข้าใช้งานแผนผังการเรียน'}
               >
                 {!user && <span aria-hidden="true" style={{ fontSize: 13 }}>🔒</span>}
                 แผนผังการเรียน
@@ -199,172 +199,35 @@ export default function Navbar() {
                   <path d="m3 4.5 3 3 3-3" />
                 </svg>
               </Link>
-              <div className="dropdown dropdown--mega">
-                <div className="mega-grid">
-                  {LEVELS.map(lv => {
-                    const lessonsInLevel = LESSONS.filter(l => l.level === lv.id);
-                    const lvStats = getStats(lv.id);
-                    return (
-                      <div key={lv.id} className="mega-col">
-                        <Link
-                          href={user ? `/roadmap#${lv.id}` : '/login'}
-                          className="mega-col__head"
-                          onClick={() => setRoadmapMenuOpen(false)}
-                        >
-                          <span className={`tag tag--${lv.id}`}>
-                            ระดับ {lv.no} · {lv.name}
-                          </span>
-                          <span className="mega-col__stat">
-                            {user ? `${lvStats.done}/${lvStats.total}` : '🔒 ล็อกอิน'}
-                          </span>
-                        </Link>
-                        <div className="mega-col__list">
-                          {lessonsInLevel.map(lesson => {
-                            const done = user ? isDone(lesson.id) : false;
-                            const unlocked = user ? isLessonUnlocked(lesson.id) : false;
-                            const current = pathname === `/lesson/${lesson.id}`;
-                            const shortTitle = lesson.title.replace(/\s*\([^)]*\)\s*$/, '');
-                            return (
-                              <Link
-                                key={lesson.id}
-                                href={user ? `/lesson/${lesson.id}` : '/login'}
-                                className={`mega-lesson ${done ? 'is-done' : ''} ${current ? 'is-current' : ''}`}
-                                style={user && !unlocked ? { opacity: 0.6 } : undefined}
-                                onClick={e => {
-                                  if (user && !unlocked) {
-                                    e.preventDefault();
-                                    showToast(
-                                      `🔒 กรุณาเรียนและสอบผ่านบทที่ ${lesson.no - 1} (คะแนน ≥ 80%) ก่อนครับ`
-                                    );
-                                    return;
-                                  }
-                                  setRoadmapMenuOpen(false);
-                                }}
-                              >
-                                <span className="mega-lesson__num">
-                                  {!user || !unlocked
-                                    ? '🔒'
-                                    : done
-                                    ? '✓'
-                                    : String(lesson.no).padStart(2, '0')}
-                                </span>
-                                <span className="mega-lesson__title">{shortTitle}</span>
-                              </Link>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-                {/* แถบหลักสูตรที่ 2: AI Coding & Future Tech */}
-                <div
-                  style={{
-                    borderTop: '1px solid var(--border)',
-                    padding: '12px 16px',
-                    background: 'var(--bg-soft)'
-                  }}
-                >
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      marginBottom: 8
-                    }}
+              <div className="dropdown" style={{ minWidth: 340, padding: 6 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                  <Link
+                    href={user ? '/roadmap#core' : '/login'}
+                    className="mega-lesson"
+                    style={{ padding: '10px 12px', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}
+                    onClick={() => setRoadmapMenuOpen(false)}
                   >
-                    <Link
-                      href={user ? '/roadmap#ai-future' : '/login'}
-                      onClick={() => setRoadmapMenuOpen(false)}
-                      style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8 }}
-                    >
-                      <span className="tag tag--advanced" style={{ fontSize: 11.5 }}>
-                        🚀 หลักสูตรที่ 2 · ใหม่
-                      </span>
-                      <strong style={{ fontSize: 13.5, color: 'var(--text)' }}>
-                        AI Coding &amp; Future Tech: เมื่อภาษามนุษย์กลายเป็นภาษาโปรแกรม
-                      </strong>
-                    </Link>
-                    <span className="mega-col__stat">
-                      {user ? `${aiCourseStats.done}/${aiCourseStats.total} บท` : '🔒 ล็อกอิน'}
+                    <span style={{ fontWeight: 600, fontSize: 13.5, color: 'var(--text)' }}>
+                      หลักสูตรที่ 1: พื้นฐานวิศวกรรมซอฟต์แวร์ยุค AI (12 บท)
                     </span>
-                  </div>
-                  <div
-                    style={{
-                      display: 'grid',
-                      gridTemplateColumns: 'repeat(2, 1fr)',
-                      gap: 6
-                    }}
-                  >
-                    {aiFutureLessons.map(lesson => {
-                      const done = user ? isDone(lesson.id) : false;
-                      const unlocked = user ? isLessonUnlocked(lesson.id) : false;
-                      const current = pathname === `/lesson/${lesson.id}`;
-                      return (
-                        <Link
-                          key={lesson.id}
-                          href={user ? `/lesson/${lesson.id}` : '/login'}
-                          className={`mega-lesson ${done ? 'is-done' : ''} ${current ? 'is-current' : ''}`}
-                          style={user && !unlocked ? { opacity: 0.6 } : undefined}
-                          onClick={e => {
-                            if (user && !unlocked) {
-                              e.preventDefault();
-                              showToast(
-                                `🔒 กรุณาเรียนและสอบผ่านบทที่ ${lesson.no - 1} ของหลักสูตรที่ 2 (คะแนน ≥ 80%) ก่อนครับ`
-                              );
-                              return;
-                            }
-                            setRoadmapMenuOpen(false);
-                          }}
-                        >
-                          <span className="mega-lesson__num">
-                            {!user || !unlocked
-                              ? '🔒'
-                              : done
-                              ? '✓'
-                              : String(lesson.no).padStart(2, '0')}
-                          </span>
-                          <span className="mega-lesson__title">{lesson.title}</span>
-                        </Link>
-                      );
-                    })}
-                  </div>
-                </div>
+                    <span className="mega-col__stat">
+                      {user ? `${totalStats.done}/${totalStats.total}` : '🔒'}
+                    </span>
+                  </Link>
 
-                <div className="mega-foot">
-                  {user ? (
-                    <>
-                      <Link
-                        href="/roadmap"
-                        className="mega-foot__link"
-                        onClick={() => setRoadmapMenuOpen(false)}
-                      >
-                        ดูตารางเปรียบเทียบทั้ง 3 ระดับในหน้า Roadmap →
-                      </Link>
-                      {resumeLesson && (
-                        <Link
-                          href={`/lesson/${resumeLesson.id}`}
-                          className="mega-foot__resume"
-                          onClick={() => setRoadmapMenuOpen(false)}
-                        >
-                          เรียนต่อบทที่ {String(resumeLesson.no).padStart(2, '0')} →
-                        </Link>
-                      )}
-                    </>
-                  ) : (
-                    <>
-                      <span className="muted" style={{ fontSize: 13 }}>
-                        🔒 แผนผังการเรียน 12 บท และแบบทดสอบท้ายบท เปิดให้เฉพาะสมาชิกที่เข้าสู่ระบบ
-                      </span>
-                      <Link
-                        href="/login"
-                        className="mega-foot__resume"
-                        onClick={() => setRoadmapMenuOpen(false)}
-                      >
-                        เข้าสู่ระบบ / สมัครสมาชิกเพื่อปลดล็อก →
-                      </Link>
-                    </>
-                  )}
+                  <Link
+                    href={user ? '/roadmap#ai-future' : '/login'}
+                    className="mega-lesson"
+                    style={{ padding: '10px 12px', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}
+                    onClick={() => setRoadmapMenuOpen(false)}
+                  >
+                    <span style={{ fontWeight: 600, fontSize: 13.5, color: 'var(--text)' }}>
+                      หลักสูตรที่ 2: Vibe Coding &amp; การปรับตัวในโลก AI Coding (4 บท)
+                    </span>
+                    <span className="mega-col__stat">
+                      {user ? `${aiCourseStats.done}/${aiCourseStats.total}` : '🔒'}
+                    </span>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -447,7 +310,7 @@ export default function Navbar() {
                   </span>
                   <span className="nav__user-name">{user.displayName}</span>
                   <span className="nav__user-stat">
-                    {totalStats.done}/{totalStats.total}
+                    {totalStats.done + aiCourseStats.done}/{totalStats.total + aiCourseStats.total}
                   </span>
                 </>
               ) : (
@@ -473,15 +336,13 @@ export default function Navbar() {
       <div className={`mobile-menu ${mobileOpen ? 'is-open' : ''}`}>
         <Link href="/">หน้าแรก</Link>
         <Link href={user ? '/roadmap' : '/login'}>
-          {user ? '📘 หลักสูตรที่ 1: Software Engineer (12 บท)' : '🔒 แผนผังการเรียน (เข้าสู่ระบบก่อน)'}
+          {user ? 'แผนผังการเรียน' : '🔒 แผนผังการเรียน (เข้าสู่ระบบก่อน)'}
         </Link>
-        {LEVELS.map(lv => (
-          <Link key={lv.id} className="sub" href={user ? `/roadmap#${lv.id}` : '/login'}>
-            ระดับที่ {lv.no}: {lv.name} · {lv.title}
-          </Link>
-        ))}
-        <Link href={user ? '/roadmap#ai-future' : '/login'}>
-          {user ? '🚀 หลักสูตรที่ 2: AI Coding & Future Tech (4 บท)' : '🔒 หลักสูตรที่ 2: AI Coding & Future Tech'}
+        <Link className="sub" href={user ? '/roadmap#core' : '/login'}>
+          หลักสูตรที่ 1: พื้นฐานวิศวกรรมซอฟต์แวร์ยุค AI (12 บท)
+        </Link>
+        <Link className="sub" href={user ? '/roadmap#ai-future' : '/login'}>
+          หลักสูตรที่ 2: Vibe Coding &amp; การปรับตัวในโลก AI Coding (4 บท)
         </Link>
         <Link href="/articles">บทความและเกร็ดความรู้</Link>
         <Link href="/glossary">คลังคำศัพท์เทคนิค (Glossary)</Link>
@@ -636,6 +497,7 @@ export default function Navbar() {
                 {matchedLessons.map(l => {
                   const lv = LEVELS.find(item => item.id === l.level);
                   const unlocked = user ? isLessonUnlocked(l.id) : false;
+                  const courseTag = l.course === 'ai-future' ? 'หลักสูตรที่ 2' : 'หลักสูตรที่ 1';
                   return (
                     <Link
                       key={`lesson-${l.id}`}
@@ -645,7 +507,7 @@ export default function Navbar() {
                         if (user && !unlocked) {
                           e.preventDefault();
                           showToast(
-                            `🔒 ต้องสอบผ่านบทที่ ${l.no - 1} ให้ได้คะแนน ≥ 80% ก่อนจึงจะเข้าบทที่ ${l.no} ได้`
+                            `🔒 ต้องสอบผ่านบทที่ ${l.no - 1} ของ${courseTag}ให้ได้คะแนน ≥ 80% ก่อนจึงจะเข้าบทที่ ${l.no} ได้`
                           );
                           return;
                         }
@@ -653,10 +515,10 @@ export default function Navbar() {
                       }}
                     >
                       <div className="title">
-                        [{!user || !unlocked ? '🔒 ' : ''}บทเรียน {String(l.no).padStart(2, '0')}] {l.title}
+                        [{!user || !unlocked ? '🔒 ' : ''}{courseTag} · บทที่ {String(l.no).padStart(2, '0')}] {l.title}
                       </div>
                       <div className="meta">
-                        Roadmap ระดับ {lv?.name} · {l.category} · อ่าน {l.minutes} นาที
+                        {courseTag} ({lv?.name}) · {l.category} · อ่าน {l.minutes} นาที
                       </div>
                     </Link>
                   );

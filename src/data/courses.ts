@@ -19,17 +19,17 @@ export const COURSES: CourseInfo[] = [
     id: 'core',
     no: 1,
     icon: '📘',
-    name: 'พื้นฐาน Software Engineer ในยุค AI',
-    shortName: 'Software Engineer (12 บท)',
+    name: 'พื้นฐานวิศวกรรมซอฟต์แวร์ยุค AI (12 บท)',
+    shortName: 'พื้นฐานวิศวกรรมซอฟต์แวร์ยุค AI (12 บท)',
     desc: 'เรียงจาก Basic → Intermediate → Advanced ครอบคลุมเว็บ, Git, Frontend, Backend, Database, Testing, LLM, RAG, Agent และ System Design',
-    href: '/roadmap'
+    href: '/roadmap#core'
   },
   {
     id: 'ai-future',
     no: 2,
     icon: '🚀',
-    name: 'AI Coding & Future Tech: เมื่อภาษามนุษย์กลายเป็นภาษาโปรแกรม',
-    shortName: 'AI Coding & Future Tech (4 บท)',
+    name: 'Vibe Coding & การปรับตัวในโลก AI Coding (4 บท)',
+    shortName: 'Vibe Coding & การปรับตัวในโลก AI Coding (4 บท)',
     desc: 'Vibe Coding, ทักษะแก่นแท้ยุค AI, ความปลอดภัยของโค้ดที่ AI สร้าง และ 7 อาชีพสายเทคแห่งอนาคต — เรียนได้ทันทีโดยไม่ต้องจบหลักสูตรที่ 1',
     href: '/roadmap#ai-future'
   }

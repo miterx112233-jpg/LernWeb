@@ -151,7 +151,7 @@ export default function RoadmapPage() {
                       </span>
                     </div>
                     <div style={{ fontWeight: 700, fontSize: 16.5, color: 'var(--text)', lineHeight: 1.4 }}>
-                      {course.name}
+                      หลักสูตรที่ {course.no}: {course.name}
                     </div>
                     <p style={{ margin: '6px 0 0', fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.6 }}>
                       {course.desc}
@@ -322,8 +322,8 @@ export default function RoadmapPage() {
         ) : (
           <section className="stage" id="ai-future" style={{ paddingTop: 12 }}>
             <div className="stage__head">
-              <span className="stage__label c-advanced">หลักสูตรที่ 2 · AI CODING &amp; FUTURE TECH</span>
-              <h2 className="stage__title">เมื่อภาษามนุษย์กลายเป็นภาษาโปรแกรม: ทักษะและสายอาชีพยุค AI Coding</h2>
+              <span className="stage__label c-advanced">หลักสูตรที่ 2 · VIBE CODING &amp; AI CODING</span>
+              <h2 className="stage__title">หลักสูตรที่ 2: Vibe Coding &amp; การปรับตัวในโลก AI Coding (4 บท)</h2>
               <span className="muted" style={{ fontSize: 14 }}>
                 {currentStats.done}/{currentStats.total} บท
               </span>

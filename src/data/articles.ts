@@ -30,6 +30,179 @@ export const ARTICLE_CATEGORIES: ArticleCategory[] = [
    ===================================================================== */
 export const ARTICLES: Article[] = [
   {
+    slug: 'when-human-language-becomes-programming-language',
+    category: 'Data & AI',
+    keyword: 'VIBE CODING',
+    subtitle: 'เมื่อภาษามนุษย์กลายเป็นภาษาโปรแกรม',
+    tagline: 'เด็กยุคใหม่ควรเรียนอะไร เพื่ออยู่รอดในโลก AI Coding',
+    title: 'เมื่อภาษามนุษย์กลายเป็นภาษาโปรแกรม: เด็กยุคใหม่ควรเรียนอะไร เพื่ออยู่รอดในโลก AI Coding',
+    summary:
+      'เจาะลึกกระแส Vibe Coding บทบาทของภาษาธรรมชาติเหนือภาษาโปรแกรม 7 อาชีพสายเทคในอีก 10–20 ปีข้างหน้า 8 ทักษะแก่นแท้ที่คนยุคใหม่ต้องมี และแนวทางเตรียมตัวตั้งแต่วัยเรียนสู่มหาวิทยาลัย',
+    publishedAt: '8 พ.ย. 2026',
+    minutes: 15,
+    sourceName: 'LernDev Editorial (เชื่อมโยงหลักสูตรที่ 2)',
+    sourceUrl: '/roadmap#ai-future',
+    coverImage: '/images/articles/when-human-language-becomes-programming-language.webp',
+    hashtags: [
+      '#vibe coding',
+      '#ai coding',
+      '#software engineering',
+      '#อนาคตสายเทค',
+      '#ทักษะยุค ai'
+    ],
+    sections: [
+      {
+        id: 'intro-ai-coding-shift',
+        h: 'บทนำ: AI Coding กำลังเปลี่ยนวิธีสร้างซอฟต์แวร์อย่างรวดเร็ว',
+        html: `
+          <p>จากเดิมที่มนุษย์ต้องเขียนคำสั่งทีละบรรทัดด้วยภาษา <code>Python</code>, <code>JavaScript</code>, <code>Java</code> หรือ <code>C++</code> วันนี้เราสามารถอธิบายความต้องการด้วยภาษาธรรมชาติ แล้วให้ AI ช่วยวางแผน สร้างโค้ด ทดสอบ แก้ไข และจัดทำเอกสารประกอบได้</p>
+          <p>แนวทางดังกล่าวนำไปสู่กระแส <strong>Vibe Coding</strong> ซึ่งเปิดโอกาสให้คนที่ไม่ได้เป็นโปรแกรมเมอร์มืออาชีพสามารถสร้างเว็บไซต์ แอปพลิเคชัน เกม และเครื่องมือดิจิทัลจากการสนทนากับ AI</p>
+          <blockquote>
+            <p>แต่คำถามสำคัญไม่ใช่เพียงว่า <em>“ในอนาคต AI จะเขียนโค้ดแทนมนุษย์ได้มากเพียงใด?”</em></p>
+            <p>คำถามที่สำคัญกว่าคือ <strong>“เมื่อการพิมพ์โค้ดไม่ใช่งานหลักของมนุษย์อีกต่อไป มนุษย์ต้องมีความรู้และทักษะอะไรเพื่อควบคุมสิ่งที่ AI สร้างขึ้น?”</strong></p>
+          </blockquote>`
+      },
+      {
+        id: 'what-is-vibe-coding',
+        h: '1. Vibe Coding คืออะไร?',
+        html: `
+          <p><strong>Vibe Coding</strong> เป็นแนวทางพัฒนาซอฟต์แวร์ที่ผู้ใช้บอกเป้าหมายหรืออธิบายสิ่งที่ต้องการด้วยภาษาธรรมชาติ แล้วให้ AI สร้างและแก้ไขโค้ดให้ โดยคำนี้ได้รับการเผยแพร่โดย <strong>Andrej Karpathy</strong> อดีตผู้นำด้าน AI ของ Tesla และผู้ร่วมก่อตั้ง OpenAI ในปี 2025</p>
+          <p>Workflow โดยทั่วไปประกอบด้วย 6 ขั้นตอนวนซ้ำ:</p>
+          <div class="flow"><span>1. อธิบายสิ่งที่อยากสร้าง</span><i>→</i><span>2. AI สร้างโค้ดเบื้องต้น</span><i>→</i><span>3. ทดลองใช้งาน</span><i>→</i><span>4. แจ้งปัญหา/สิ่งที่ต้องปรับ</span><i>→</i><span>5. AI แก้ไขโค้ด</span><i>↺</i><span>6. ทำซ้ำจนได้ผลลัพธ์</span></div>
+          <p><strong>Alexandr Wang</strong> ผู้ร่วมก่อตั้ง Scale AI เป็นหนึ่งในผู้นำเทคโนโลยีที่สนับสนุนให้คนรุ่นใหม่ทดลองและสะสม <strong>“ชั่วโมงบิน”</strong> กับ AI Coding โดยมองว่านี่อาจเป็นช่วงเวลาแห่งโอกาสคล้ายกับคนรุ่นก่อนที่เติบโตมาพร้อม Personal Computer และ Internet</p>
+          <div class="note note--warn"><strong>ขอบเขตที่ต้องระวัง:</strong> Vibe Coding เหมาะมากกับการทดลองแนวคิด การสร้าง Prototype หรือโครงการที่มีความเสี่ยงต่ำ แต่หากนำไปใช้กับระบบการเงิน สุขภาพ โครงสร้างพื้นฐาน หรือข้อมูลส่วนบุคคล ยังต้องมี Software Engineering, Security Testing และ Human Review อย่างเข้มงวด</div>`
+      },
+      {
+        id: 'human-language-as-programming-language',
+        h: '2. ภาษามนุษย์กำลังกลายเป็น Programming Language จริงหรือไม่?',
+        html: `
+          <p>ในระดับหนึ่ง คำตอบคือ <strong>จริง</strong> — ภาษาธรรมชาติกำลังกลายเป็น Interface สำหรับสั่งการคอมพิวเตอร์ โดยผู้ใช้ไม่จำเป็นต้องแปลงทุกความต้องการเป็น Syntax ด้วยตนเอง</p>
+          <ul>
+            <li><strong>Jensen Huang</strong> ซีอีโอของ NVIDIA อธิบายว่า AI กำลังลดอุปสรรคของการเขียนโปรแกรม ทำให้ภาษาที่มนุษย์ใช้สามารถเป็นช่องทางสั่งงานคอมพิวเตอร์ได้</li>
+            <li><strong>Sundar Pichai</strong> ซีอีโอของ Google เปิดเผยว่าได้ทดลองใช้เครื่องมืออย่าง Cursor และ Replit เพื่อสร้าง Web Application ด้วยแนวทาง Vibe Coding โดยอธิบายว่าเป็นวิธีสร้างซอฟต์แวร์ที่เข้าถึงได้และสนุกมากขึ้น</li>
+          </ul>
+          <p>แต่ภาษาธรรมชาติยังมีข้อจำกัดสำคัญ เนื่องจากคำพูดของมนุษย์สามารถ <strong>กำกวม ไม่ครบถ้วน และตีความได้หลายแบบ</strong> ขณะที่ระบบคอมพิวเตอร์ต้องการข้อกำหนดที่แม่นยำ ดังนั้นสิ่งที่กำลังเกิดขึ้นไม่ใช่การสิ้นสุดของ Programming Language แต่คือ <strong>การเพิ่มชั้นใหม่เหนือภาษาโปรแกรมเดิม</strong>:</p>
+          <div class="flow"><span>มนุษย์อธิบายเจตนาเป็นภาษาธรรมชาติ</span><i>→</i><span>AI แปลงเจตนาเป็นโค้ด</span><i>→</i><span>ระบบคอมพิวเตอร์ประมวลผลโค้ดนั้น</span></div>`
+      },
+      {
+        id: 'will-ai-write-90-percent-code',
+        h: '3. AI จะเขียนโค้ดแทนมนุษย์ 80–90% หรือไม่?',
+        html: `
+          <p>มีผู้นำเทคโนโลยีหลายคนคาดการณ์ว่า AI อาจสร้างโค้ดส่วนใหญ่ในอนาคต แต่ตัวเลข 80–90% ยังไม่ควรถูกนำเสนอเป็นข้อเท็จจริงที่เกิดขึ้นแล้วกับทุกองค์กร เพราะคำว่า <strong>“AI สร้างโค้ด”</strong> หมายถึงได้หลายระดับ ตั้งแต่แนะนำโค้ดบางบรรทัด เติมฟังก์ชัน สร้าง Unit Test สร้าง Prototype แก้ Bug ไปจนถึงดำเนินงานตั้งแต่ Issue จนเป็น Pull Request</p>
+          <p>แม้ AI จะสร้างจำนวนบรรทัดของโค้ดได้มาก แต่ไม่ได้หมายความว่า AI รับผิดชอบ <strong>Software Development Lifecycle (SDLC)</strong> ทั้งหมดแล้ว:</p>
+          <table>
+            <tr><th>สิ่งที่ AI ช่วยทำได้ดี</th><th>งานสำคัญใน SDLC ที่มนุษย์ยังต้องรับผิดชอบ</th></tr>
+            <tr>
+              <td>
+                <ul>
+                  <li>แนะนำและเติมเต็มโค้ดให้สมบูรณ์</li>
+                  <li>สร้าง Prototype และโมดูลเบื้องต้น</li>
+                  <li>ร่าง Unit Test และช่วยแก้ Bug เฉพาะจุด</li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li>ทำความเข้าใจปัญหาธุรกิจ เก็บและวิเคราะห์ Requirement</li>
+                  <li>ออกแบบ Architecture ตัดสินใจเรื่องข้อมูลและการเชื่อมต่อระบบ</li>
+                  <li>ตรวจสอบความปลอดภัย ทดสอบกรณีผิดปกติ และควบคุมคุณภาพ</li>
+                  <li>นำระบบขึ้น Production เฝ้าระวัง บำรุงรักษาระยะยาว และ<strong>รับผิดชอบต่อความเสียหายที่เกิดขึ้น</strong></li>
+                </ul>
+              </td>
+            </tr>
+          </table>
+          <p>งานวิจัยด้าน Software Engineering (Roychoudhury และ Zeller) ชี้ว่า การสร้างโค้ดเป็นเพียงส่วนหนึ่งของงานทั้งหมด การบำรุงรักษาระบบขนาดใหญ่และรักษาความน่าเชื่อถือยังเป็นความท้าทายที่ AI ไม่สามารถรับผิดชอบแทนมนุษย์ได้ทั้งหมด</p>
+          <div class="note"><strong>สรุปที่แม่นยำ:</strong> ในอนาคต AI อาจสร้างโค้ดส่วนใหญ่ แต่มนุษย์ยังต้องกำหนดว่าอะไรควรถูกสร้าง ตรวจสอบว่าระบบทำงานถูกต้อง และรับผิดชอบต่อผลลัพธ์ <em>(เรียนพร้อมทำแบบทดสอบเรื่องนี้ได้ที่ <a href="/lesson/vibe-coding-shift">หลักสูตรที่ 2 บทที่ 1: Vibe Coding และการเปลี่ยนผ่านของภาษาโปรแกรม</a>)</em></div>`
+      },
+      {
+        id: 'future-tech-jobs-10-20-years',
+        h: '4. หน้าตาของงานเทคโนโลยีในอีก 10–20 ปี (7 อาชีพสำคัญ)',
+        html: `
+          <p>บทบาทของมนุษย์จะค่อย ๆ เปลี่ยนจากผู้พิมพ์โค้ดทุกบรรทัด ไปสู่ผู้กำหนดปัญหา ออกแบบระบบ ควบคุม AI และรับรองคุณภาพ โดยมี 7 บทบาทสำคัญดังนี้:</p>
+          <table>
+            <tr><th>ตำแหน่งงาน</th><th>หน้าที่และความรับผิดชอบหลัก</th></tr>
+            <tr><td><strong>1. AI System Architect</strong></td><td>ออกแบบภาพรวมของระบบตั้งแต่ Model, Data, Tools, API, Memory, Workflow, Security ไปจนถึง Governance ตัดสินใจว่างานใดควรใช้ AI งานใดควรใช้ระบบ Deterministic จุดใดต้องมีมนุษย์อนุมัติ และออกแบบระบบสำรอง</td></tr>
+            <tr><td><strong>2. AI Software Engineer</strong></td><td>สร้างระบบที่เชื่อม AI เข้ากับ Application, Database, API และ Cloud Infrastructure ได้จริง เชี่ยวชาญ RAG, Agent Orchestration, Evaluation, Observability และ Permission Control</td></tr>
+            <tr><td><strong>3. AI Code Reviewer &amp; Quality Engineer</strong></td><td>ตรวจสอบ Logic, ดักจับ Bug/Regression, ตรวจช่องโหว่, วิเคราะห์ Performance, ตรวจ Dependency และสร้าง Test Case เพราะโค้ดที่ AI สร้างมักดูน่าเชื่อถือแต่ซ่อนข้อผิดพลาดที่ตรวจพบยาก</td></tr>
+            <tr><td><strong>4. AI Security Engineer</strong></td><td>ป้องกันความเสี่ยงจาก AI-generated Code และ Agentic System เช่น Insecure Code, Prompt Injection, Supply-chain Attack, Secret Leakage, Excessive Permission, Malicious Package และ Data Exfiltration</td></tr>
+            <tr><td><strong>5. Domain-Specific AI Integrator</strong></td><td>เชื่อมความรู้เฉพาะทาง (การแพทย์ กฎหมาย การเงิน พลังงาน การผลิต การตลาด Cybersecurity) เข้ากับ AI โดยแปลปัญหาอุตสาหกรรมเป็น Requirement, Data Model, Workflow และเกณฑ์ประเมินผล</td></tr>
+            <tr><td><strong>6. Technical Product Manager</strong></td><td>เชื่อมผู้ใช้ ธุรกิจ นักพัฒนา และ AI เข้าด้วยกัน ค้นหาปัญหาที่ควรแก้ กำหนด Product Requirement วัดคุณค่าธุรกิจ ออกแบบ Human–AI Workflow และตัดสินใจระดับอิสระของ AI</td></tr>
+            <tr><td><strong>7. AI Evaluation &amp; Governance Specialist</strong></td><td>สร้าง Evaluation Dataset กำหนดเกณฑ์ความถูกต้อง ทดสอบความปลอดภัย ตรวจ Bias ติดตามต้นทุน จัดทำ Audit Trail กำหนด AI Policy และบริหาร Incident ที่เกิดจาก AI</td></tr>
+          </table>`
+      },
+      {
+        id: 'prompt-engineer-and-dsa',
+        h: '5. Prompt Engineer และพื้นฐาน Logic / Data Structure ยังจำเป็นหรือไม่?',
+        html: `
+          <p><strong>Prompt Engineer จะยังเป็นอาชีพหรือไม่?</strong> — การเขียน Prompt ยังสำคัญ แต่ตำแหน่ง “Prompt Engineer” แบบแยกเดี่ยวอาจไม่ได้เติบโตถาวร เพราะโมเดลเข้าใจภาษาธรรมชาติดีขึ้นและเครื่องมือช่วยปรับ Prompt อัตโนมัติได้ Prompting จึงมีแนวโน้มกลายเป็น <strong>ทักษะพื้นฐานของหลายวิชาชีพ</strong> เหมือนการใช้ Search Engine หรือ Spreadsheet</p>
+          <p>สิ่งที่มีคุณค่ามากกว่าการเขียน Prompt สวย ๆ คือ การกำหนดปัญหาอย่างถูกต้อง การให้บริบทที่เพียงพอ การออกแบบข้อจำกัด (Constraints) การกำหนด <strong>Acceptance Criteria</strong> การสร้าง Evaluation และการออกแบบ Workflow ที่ใช้งานได้จริง</p>`,
+        sub: [
+          {
+            id: 'why-dsa-still-needed',
+            h: 'Logic, Algorithm และ Data Structure ยังจำเป็นอย่างยิ่ง',
+            html: `
+              <p>AI อาจช่วยเขียน Linked List, Search Algorithm หรือ Database Query ได้ แต่หากผู้ใช้ไม่มีความเข้าใจพื้นฐาน ก็จะไม่สามารถตัดสินได้ว่าโค้ดนั้นเหมาะสมหรือไม่ ความรู้พื้นฐานช่วยให้มนุษย์สามารถแยกปัญหาเป็นส่วนย่อย วิเคราะห์ความซับซ้อน (Big-O) ตรวจพบ Logic Error ประเมิน Performance และแยกคำตอบที่ถูกต้องออกจากคำตอบที่แค่ดูน่าเชื่อถือ</p>
+              <blockquote>เปรียบได้กับสถาปนิกที่ใช้โปรแกรมสร้างแบบสามมิติ แม้ไม่ต้องผสมปูนหรือก่ออิฐเอง แต่ยังต้องเข้าใจโครงสร้าง แรงลม การรับน้ำหนัก วัสดุ และมาตรฐานความปลอดภัย — AI ลดความจำเป็นในการพิมพ์โค้ดบางส่วน แต่เพิ่มความจำเป็นของคนที่เข้าใจว่าโค้ดนั้นควรทำงานอย่างไร</blockquote>
+              <p><em>(ฝึกทักษะนี้ได้ใน <a href="/lesson/ai-era-core-skills">หลักสูตรที่ 2 บทที่ 2: ทักษะแก่นแท้ยุค AI</a> และ <a href="/lesson/logic-data-structures">หลักสูตรที่ 1 บทที่ 02: Logic และ Data Structures</a>)</em></p>`
+          }
+        ]
+      },
+      {
+        id: 'eight-essential-skills-for-new-gen',
+        h: '6. เด็กยุคใหม่ควรเรียนอะไร? (8 ทักษะแก่นแท้)',
+        html: `
+          <p>การศึกษาด้านเทคโนโลยีไม่ควรเลิกสอนการเขียนโปรแกรม แต่ควรเปลี่ยนจากการท่องจำ Syntax ไปสู่การใช้ความรู้สร้างและตรวจสอบระบบจริง ผ่าน 8 ทักษะหลัก:</p>
+          <ol>
+            <li><strong>Computational Thinking:</strong> แยกปัญหา มองหารูปแบบ สร้างนามธรรม ออกแบบขั้นตอน ทดสอบสมมติฐาน และตรวจสอบผลลัพธ์</li>
+            <li><strong>Programming Fundamentals:</strong> เรียนภาษาโปรแกรมอย่างน้อย 1 ภาษาเพื่อเข้าใจ Variable, Data Type, Control Flow, Function, Object/Module, Data Structure, Algorithm, Error Handling, Testing และ Debugging (เน้นเข้าใจกลไก ไม่ใช่ท่องจำ Syntax)</li>
+            <li><strong>Problem-Solving &amp; Critical Thinking:</strong> ฝึกตั้งคำถามว่าปัญหาที่แท้จริงคืออะไร ข้อมูลพอไหม สมมติฐานใดอาจผิด ผลลัพธ์ของ AI มีหลักฐานรองรับหรือไม่ และหากผิดพลาดจะกระทบใคร</li>
+            <li><strong>AI Coding &amp; Tool Fluency:</strong> ทดลองใช้ GitHub Copilot, Cursor, Replit, Claude Code, Codex ควบคู่กับการอ่านโค้ด ทดสอบ แก้ Bug ใช้ Git และตรวจความปลอดภัย</li>
+            <li><strong>Communication &amp; Requirements Engineering:</strong> เปลี่ยนความต้องการที่คลุมเครือเป็นข้อกำหนดที่ชัดเจน (ใครใช้ แก้ปัญหาอะไร ต้องทำอะไร ห้ามทำอะไร ข้อมูลมาจากไหน Acceptance Criteria คืออะไร วัดผลอย่างไร)</li>
+            <li><strong>Data Literacy:</strong> เข้าใจการจัดเก็บและโครงสร้างข้อมูล คุณภาพข้อมูล สถิติพื้นฐาน Bias, Privacy และ Data Governance</li>
+            <li><strong>Cybersecurity &amp; AI Safety:</strong> เข้าใจว่าโค้ดที่ทำงานได้ไม่ได้แปลว่าปลอดภัย เรียนรู้เรื่อง Authentication/Authorization, Secure Coding, Dependency Risk, Prompt Injection และ Least Privilege <em>(ดูเพิ่มเติมใน <a href="/lesson/ai-tools-data-security">หลักสูตรที่ 2 บทที่ 3</a>)</em></li>
+            <li><strong>Creativity, Ethics &amp; Human Judgment:</strong> ความคิดสร้างสรรค์ จริยธรรม ความรับผิดชอบ การทำงานเป็นทีม ความเข้าใจผู้ใช้ และการประเมินผลกระทบต่อสังคม</li>
+          </ol>`
+      },
+      {
+        id: 'future-fields-and-age-roadmap',
+        h: '7. สาขาวิชาที่น่าสนใจ และแนวทางเตรียมตัวตามช่วงวัย',
+        html: `
+          <p><strong>สาขาวิชาที่น่าจับตามองสำหรับอนาคต:</strong></p>
+          <ul>
+            <li><strong>Computer Science &amp; Computer Engineering:</strong> เลือกหลักสูตรที่ครอบคลุม Software Engineering, AI, Data, Cloud, Cybersecurity และ Human–AI Systems</li>
+            <li><strong>Artificial Intelligence &amp; Data Science:</strong> สำหรับผู้สนใจสร้างโมเดล วิเคราะห์ข้อมูล และพัฒนาระบบอัจฉริยะ</li>
+            <li><strong>Cybersecurity:</strong> ยิ่งสำคัญเมื่อ AI เขียนโค้ดและดำเนินงานบนระบบจริง</li>
+            <li><strong>Cognitive Science &amp; Human–Computer Interaction (HCI):</strong> ออกแบบระบบที่มนุษย์ทำงานร่วมกับ AI</li>
+            <li><strong>Computational X (คอมพิวเตอร์ผสานศาสตร์เฉพาะทาง):</strong> เช่น Computational Biology, Health Informatics, Computational Finance, Legal Tech, Business Analytics, Climate Informatics, Robotics และ AI for Energy</li>
+          </ul>`,
+        sub: [
+          {
+            id: 'roadmap-by-age',
+            h: 'ตารางแนวทางเตรียมตัวตามช่วงวัย',
+            html: `
+              <table>
+                <tr><th>ช่วงวัย</th><th>แนวทางฝึกฝนและสิ่งที่ควรลงมือทำ</th></tr>
+                <tr><td><strong>อายุ 8–12 ปี</strong></td><td>ฝึกตรรกะผ่านเกม เรียน Scratch / Block-based Programming สร้างเรื่องราวหรือแอนิเมชัน ฝึกตั้งคำถามและตรวจคำตอบจาก AI (ไม่ใช้ AI ทำการบ้านแทนทั้งหมด)</td></tr>
+                <tr><td><strong>อายุ 13–15 ปี</strong></td><td>เริ่มเรียน Python หรือ JavaScript สร้างเว็บหรือแอปขนาดเล็ก ใช้ AI Coding Assistant ควบคู่กับการอ่านโค้ด เรียนรู้ Git และฝึก Data Literacy / Cybersecurity เบื้องต้น</td></tr>
+                <tr><td><strong>อายุ 16–18 ปี</strong></td><td>เรียน Data Structure &amp; Algorithm ฝึก Software Architecture เบื้องต้น สร้างโปรเจกต์ที่มีผู้ใช้จริง ทดลอง API, Database, Cloud, AI Model ฝึก Testing/Code Review และทำ Portfolio ที่อธิบายปัญหา-กระบวนการ-ผลลัพธ์</td></tr>
+                <tr><td><strong>ระดับมหาวิทยาลัย</strong></td><td>เรียนพื้นฐาน CS ให้แข็งแรง ทำงานข้ามสาขา สร้างระบบ AI เชื่อม Workflow จริง ฝึก Evaluation &amp; Governance ทำ Internship กับภาคธุรกิจ และเข้าใจการบริหารต้นทุน</td></tr>
+              </table>`
+          }
+        ]
+      },
+      {
+        id: 'what-schools-should-change-and-conclusion',
+        h: '8. สิ่งที่สถาบันการศึกษาควรเปลี่ยน และบทสรุป',
+        html: `
+          <p>หลักสูตรไม่ควรประเมินผู้เรียนจากความสามารถในการจำ Syntax เพียงอย่างเดียว แต่ควรวัดที่การนิยามปัญหา การออกแบบวิธีแก้ การใช้ AI อย่างมีเหตุผล การอ่านและอธิบายโค้ด การทดสอบข้อผิดพลาด การสื่อสาร Requirement และการประเมินความปลอดภัย โจทย์สอบยุคใหม่ควรให้ผู้เรียนแสดงให้เห็นว่า:</p>
+          <div class="flow"><span>ใช้ AI ทำอะไร</span><i>→</i><span>ตรวจผลลัพธ์อย่างไร</span><i>→</i><span>พบข้อผิดพลาดอะไร</span><i>→</i><span>ปรับปรุงระบบอย่างไร</span><i>→</i><span>รับผิดชอบผลลัพธ์อย่างไร</span></div>
+          <p><strong>บทสรุป:</strong> AI Coding จะลดภาระการพิมพ์โค้ดและทำให้คนจำนวนมากสร้างซอฟต์แวร์ได้ง่ายขึ้น แต่ไม่ได้ทำให้ความรู้ด้าน Computer Science, Logic, Data Structure, Algorithm, Architecture และ Cybersecurity หมดความสำคัญ ตรงกันข้าม งานของมนุษย์กำลังเปลี่ยนจาก:</p>
+          <div class="flow"><span>เขียนทุกบรรทัด</span><i>→</i><span>ออกแบบระบบ</span><i>→</i><span>กำกับ AI</span><i>→</i><span>ตรวจสอบผลลัพธ์</span><i>→</i><span>รับผิดชอบผลกระทบ</span></div>
+          <p>คนที่พร้อมที่สุดในอีก 10–20 ปีข้างหน้าคือคนที่สามารถ <strong>เข้าใจปัญหา เข้าใจเทคโนโลยี เข้าใจมนุษย์ และใช้ AI สร้างสิ่งที่ถูกต้อง ปลอดภัย และมีคุณค่า</strong></p>
+          <div class="note"><strong>🚀 พร้อมฝึกและทำแบบทดสอบหรือยัง?</strong> เนื้อหาบทความนี้ถูกพัฒนาเป็นหลักสูตรเชิงโต้ตอบพร้อมวิดีโอคนไทยและข้อสอบวัดความเข้าใจครบทั้ง 4 บท สามารถเข้าเรียนได้ทันทีที่ <a href="/lesson/vibe-coding-shift"><strong>หลักสูตรที่ 2: Vibe Coding &amp; การปรับตัวในโลก AI Coding (4 บท) →</strong></a></div>`
+      }
+    ]
+  },
+  {
     slug: 'llm-for-business-and-developers',
     category: 'Tech Explainer',
     keyword: 'LLM',

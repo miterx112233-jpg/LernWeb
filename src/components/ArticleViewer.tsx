@@ -65,10 +65,15 @@ export default function ArticleViewer({ article }: { article: Article }) {
   const processArticleHtml = (rawHtml: string) => {
     let html = rawHtml;
     if (basePath) {
-      html = html.replace(/href="\/articles\//g, `href="${basePath}/articles/`);
+      html = html
+        .replace(/href="\/articles\//g, `href="${basePath}/articles/`)
+        .replace(/href="\/lesson\//g, `href="${basePath}/lesson/`)
+        .replace(/href="\/roadmap/g, `href="${basePath}/roadmap`);
     }
     return enrichHtmlWithGlossary(html);
   };
+
+  const isInternalSource = article.sourceUrl.startsWith('/');
 
   useEffect(() => {
     const ids: string[] = [];
@@ -109,10 +114,21 @@ export default function ArticleViewer({ article }: { article: Article }) {
         <article>
           <ArticleBanner article={article} />
           <p className="lesson__caption">
-            ขอขอบคุณข้อมูลและบทความต้นฉบับจาก:{' '}
-            <a href={article.sourceUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--brand)', fontWeight: 600 }}>
-              {article.sourceName} ↗
-            </a>
+            {isInternalSource ? (
+              <>
+                บทความพิเศษจากทีมงาน:{' '}
+                <Link href={article.sourceUrl} style={{ color: 'var(--brand)', fontWeight: 600 }}>
+                  {article.sourceName} →
+                </Link>
+              </>
+            ) : (
+              <>
+                ขอขอบคุณข้อมูลและบทความต้นฉบับจาก:{' '}
+                <a href={article.sourceUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--brand)', fontWeight: 600 }}>
+                  {article.sourceName} ↗
+                </a>
+              </>
+            )}
           </p>
           <h1 className="lesson__title">{article.title}</h1>
           <div className="lesson__info">
@@ -150,20 +166,40 @@ export default function ArticleViewer({ article }: { article: Article }) {
 
           {/* กล่องอ้างอิงแหล่งที่มาของบทความ (Source Attribution Box) */}
           <div className="article-source-box">
-            <div className="article-source-box__label">📚 แหล่งที่มาและอ้างอิงเนื้อหา (Source &amp; Reference)</div>
+            <div className="article-source-box__label">
+              {isInternalSource
+                ? '🎓 เชื่อมโยงกับหลักสูตรการเรียน (Interactive Course)'
+                : '📚 แหล่งที่มาและอ้างอิงเนื้อหา (Source & Reference)'}
+            </div>
             <p className="article-source-box__desc">
-              เนื้อหาบทความเรื่อง <strong>“{article.title}”</strong> เรียบเรียงและอ้างอิงข้อมูลต้นฉบับจาก{' '}
-              <strong>{article.sourceName}</strong> เพื่อใช้เป็นสื่อการเรียนรู้สำหรับผู้เริ่มต้นศึกษาสายเทคโนโลยีและวิศวกรรมซอฟต์แวร์
+              {isInternalSource ? (
+                <>
+                  บทความเรื่อง <strong>“{article.title}”</strong> เป็นบทความแกนหลักของ{' '}
+                  <strong>หลักสูตรที่ 2: Vibe Coding &amp; การปรับตัวในโลก AI Coding (4 บท)</strong> ซึ่งมีวิดีโอประกอบและแบบทดสอบวัดความเข้าใจท้ายบทครบทุกหัวข้อ
+                </>
+              ) : (
+                <>
+                  เนื้อหาบทความเรื่อง <strong>“{article.title}”</strong> เรียบเรียงและอ้างอิงข้อมูลต้นฉบับจาก{' '}
+                  <strong>{article.sourceName}</strong> เพื่อใช้เป็นสื่อการเรียนรู้สำหรับผู้เริ่มต้นศึกษาสายเทคโนโลยีและวิศวกรรมซอฟต์แวร์
+                </>
+              )}
             </p>
-            <a
-              href={article.sourceUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="article-source-box__link"
-            >
-              <span>อ่านบทความต้นฉบับบนเว็บไซต์ {article.sourceName}</span>
-              <span className="article-source-box__url">{article.sourceUrl} ↗</span>
-            </a>
+            {isInternalSource ? (
+              <Link href={article.sourceUrl} className="article-source-box__link">
+                <span>เข้าสู่หลักสูตรที่ 2: Vibe Coding &amp; การปรับตัวในโลก AI Coding (4 บท)</span>
+                <span className="article-source-box__url">เริ่มเรียนและทำแบบทดสอบ →</span>
+              </Link>
+            ) : (
+              <a
+                href={article.sourceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="article-source-box__link"
+              >
+                <span>อ่านบทความต้นฉบับบนเว็บไซต์ {article.sourceName}</span>
+                <span className="article-source-box__url">{article.sourceUrl} ↗</span>
+              </a>
+            )}
           </div>
         </article>
 

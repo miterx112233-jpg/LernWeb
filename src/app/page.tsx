@@ -379,7 +379,7 @@ export default function HomePage() {
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10 }}>
                 <h3 className="level-box__title" style={{ margin: 0 }}>
-                  เมื่อภาษามนุษย์กลายเป็นภาษาโปรแกรม: ทักษะและสายอาชีพยุค AI Coding
+                  หลักสูตรที่ 2: Vibe Coding &amp; การปรับตัวในโลก AI Coding (4 บท)
                 </h3>
                 <Link className="link" href={user ? '/roadmap#ai-future' : '/login'} style={{ fontSize: 13.5 }}>
                   เปิดดูหลักสูตรที่ 2 →

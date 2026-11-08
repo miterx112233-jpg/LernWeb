@@ -308,18 +308,31 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
 
           {/* เนื้อหาบทเรียน (พร้อมลิงก์คำศัพท์เทคนิคอัตโนมัติไปยังคลังคำศัพท์) */}
           <div className="prose">
-            {lesson.sections.map(sec => (
-              <section key={sec.id}>
-                <h2 id={sec.id}>{sec.h}</h2>
-                <div dangerouslySetInnerHTML={{ __html: enrichHtmlWithGlossary(sec.html) }} />
-                {sec.sub?.map(s => (
-                  <div key={s.id}>
-                    <h3 id={s.id}>{s.h}</h3>
-                    <div dangerouslySetInnerHTML={{ __html: enrichHtmlWithGlossary(s.html) }} />
-                  </div>
-                ))}
-              </section>
-            ))}
+            {lesson.sections.map(sec => {
+              const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+              const processLessonHtml = (rawHtml: string) => {
+                let html = rawHtml;
+                if (basePath) {
+                  html = html
+                    .replace(/href="\/lesson\//g, `href="${basePath}/lesson/`)
+                    .replace(/href="\/articles\//g, `href="${basePath}/articles/`)
+                    .replace(/href="\/roadmap/g, `href="${basePath}/roadmap`);
+                }
+                return enrichHtmlWithGlossary(html);
+              };
+              return (
+                <section key={sec.id}>
+                  <h2 id={sec.id}>{sec.h}</h2>
+                  <div dangerouslySetInnerHTML={{ __html: processLessonHtml(sec.html) }} />
+                  {sec.sub?.map(s => (
+                    <div key={s.id}>
+                      <h3 id={s.id}>{s.h}</h3>
+                      <div dangerouslySetInnerHTML={{ __html: processLessonHtml(s.html) }} />
+                    </div>
+                  ))}
+                </section>
+              );
+            })}
 
             {/* วิดีโอประกอบจาก YouTube (รองรับหลายคลิปแบบ Playlist) */}
             {currentYoutubeId && currentVideo && (
