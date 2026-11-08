@@ -28,16 +28,18 @@ export default function HomePage() {
 
   return (
     <>
-      {/* 1. HERO SECTION — เกริ่นยุค AI (โทนเรียบ ไม่ขายของ) */}
+      {/* 1. HERO SECTION — เกริ่นยุค AI */}
       <section className="container hero">
         <div>
           <p className="hero__eyebrow">คู่มือพื้นฐานสำหรับคนที่อยากเป็น Software Engineer</p>
           <h1 className="hero__title">
             AI เขียนโค้ดให้เราได้แล้ว
             <br />
-            แต่คนที่ต้องเข้าใจ<span className="brand" style={{ whiteSpace: 'nowrap' }}>ว่ามันถูกหรือผิด</span>
+            แต่คนที่ต้องเข้าใจ
             <br />
-            ยังเป็นเรา
+            <span className="hero__grad-cyan">ว่ามันถูกหรือผิด</span>
+            <br />
+            <span className="hero__grad-purple">ยังเป็นเรา</span>
           </h1>
           <p className="hero__p">
             ทุกวันนี้แค่พิมพ์บอกว่าอยากได้อะไร AI ก็เขียนโค้ดออกมาให้ได้เกือบทุกอย่าง
@@ -55,7 +57,7 @@ export default function HomePage() {
                     ? `เรียนต่อ บทที่ ${resumeLesson.no}`
                     : 'เริ่มจากบทแรก'}
                 </Link>
-                <Link className="link" href="/roadmap">
+                <Link className="btn btn--glass" href="/roadmap">
                   ดู Roadmap ทั้งหมด →
                 </Link>
               </>
@@ -64,7 +66,7 @@ export default function HomePage() {
                 <Link className="btn btn--primary" href="/login">
                   🔒 เข้าสู่ระบบเพื่อเริ่มเรียนตามแผนผัง
                 </Link>
-                <Link className="link" href="/articles">
+                <Link className="btn btn--glass" href="/articles">
                   อ่านบทความทั่วไปฟรี →
                 </Link>
               </>
@@ -72,8 +74,13 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* ภาพประกอบฝั่งขวา: หน้าจอ Code Review แบบ GitHub ธรรมดา */}
+        {/* ภาพประกอบฝั่งขวา: หน้าจอ Code Review สไตล์ IDE พร้อมไฟ 3 ดวง */}
         <div className="review" aria-label="ตัวอย่างการรีวิวโค้ด">
+          <div className="review__dots-bar" aria-hidden="true">
+            <span className="review__dot review__dot--red" />
+            <span className="review__dot review__dot--yellow" />
+            <span className="review__dot review__dot--green" />
+          </div>
           <div className="review__head">
             <span className="review__file">routes/login.js</span>
             <span className="muted">Pull request #42</span>
@@ -81,19 +88,36 @@ export default function HomePage() {
           <div className="review__code">
             <div className="review__line">
               <span className="ln">12</span>
-              <span className="code">{"app.post('/login', async (req, res) => {"}</span>
+              <span className="code">
+                <span className="syn-fn">app.post</span>(
+                <span className="syn-str">&apos;/login&apos;</span>,{' '}
+                <span className="syn-kw">async</span> (req, res) =&gt; {'{'}
+              </span>
             </div>
             <div className="review__line">
               <span className="ln">13</span>
-              <span className="code">{'  const sql = `SELECT * FROM users'}</span>
+              <span className="code">
+                {'  '}
+                <span className="syn-kw">const</span> sql ={' '}
+                <span className="syn-str">`SELECT * FROM users</span>
+              </span>
             </div>
             <div className="review__line is-bad">
               <span className="ln">14</span>
-              <span className="code">{"    WHERE email = '${req.body.email}'`;"}</span>
+              <span className="code">
+                {'    '}
+                <span className="syn-str">WHERE email = &apos;</span>
+                <span className="syn-warn">{'${req.body.email}'}</span>
+                <span className="syn-str">&apos;`;</span>
+              </span>
             </div>
             <div className="review__line">
               <span className="ln">15</span>
-              <span className="code">{'  const user = await db.query(sql);'}</span>
+              <span className="code">
+                {'  '}
+                <span className="syn-kw">const</span> user ={' '}
+                <span className="syn-kw">await</span> db.<span className="syn-fn">query</span>(sql);
+              </span>
             </div>
             <div className="review__line">
               <span className="ln">16</span>

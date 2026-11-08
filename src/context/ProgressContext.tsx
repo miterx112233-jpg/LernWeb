@@ -48,12 +48,12 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
   const [isSyncing, setIsSyncing] = useState(false);
   const [completed, setCompleted] = useState<string[]>([]);
   const [lastLessonId, setLastLessonId] = useState<string | null>(null);
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   useEffect(() => {
     try {
-      const savedTheme = (localStorage.getItem(KEY_THEME) as 'light' | 'dark') || 'light';
+      const savedTheme = (localStorage.getItem(KEY_THEME) as 'light' | 'dark') || 'dark';
       setTheme(savedTheme);
       document.documentElement.setAttribute('data-theme', savedTheme);
 
