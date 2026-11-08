@@ -1,6 +1,6 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
-import { LESSONS } from '@/data/lessons';
+import { ALL_LESSONS as LESSONS } from '@/data/courses';
 import LessonViewer from '@/components/LessonViewer';
 
 export function generateStaticParams() {

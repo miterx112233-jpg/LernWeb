@@ -2,7 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { LESSONS, LEVELS, LESSON_VIDEOS, Lesson, QuizItem } from '@/data/lessons';
+import { LEVELS, LESSON_VIDEOS, Lesson, QuizItem } from '@/data/lessons';
+import { getCourseInfo, getCourseLessons, getLessonCourseId } from '@/data/courses';
 import { buildExamQuestions } from '@/data/quizPool';
 import { enrichHtmlWithGlossary } from '@/data/glossary';
 import { useProgress } from '@/context/ProgressContext';
@@ -27,7 +28,7 @@ function extractYouTubeId(rawUrl: string): string | null {
 }
 
 export default function LessonViewer({ lesson }: LessonViewerProps) {
-  const { user, isDone, isLessonUnlocked, toggleDone, recordLastLesson, getStats, showToast } = useProgress();
+  const { user, isDone, isLessonUnlocked, toggleDone, recordLastLesson, getCourseStats, showToast } = useProgress();
   const [activeId, setActiveId] = useState<string>(lesson.sections[0]?.id || '');
   const [examQuestions, setExamQuestions] = useState<QuizItem[]>(() => lesson.quiz || []);
   const [examSetLabel, setExamSetLabel] = useState<string>('ชุดที่ 1 (มาตรฐาน)');
@@ -39,9 +40,14 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
   const [reviewFilter, setReviewFilter] = useState<'all' | 'wrong' | 'correct'>('all');
   const [activeVideoIdx, setActiveVideoIdx] = useState<number>(0);
 
+  const courseId = getLessonCourseId(lesson);
+  const courseInfo = getCourseInfo(courseId);
+  const courseLessons = getCourseLessons(courseId);
+  const roadmapHref = courseId === 'ai-future' ? '/roadmap#ai-future' : '/roadmap';
+
   const lv = LEVELS.find(item => item.id === lesson.level);
   const done = isDone(lesson.id);
-  const stats = getStats();
+  const stats = getCourseStats(courseId);
 
   const videoList = (lesson.videos || LESSON_VIDEOS[lesson.id] || []).filter(v =>
     Boolean(extractYouTubeId(v.url))
@@ -49,8 +55,8 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
   const currentVideo = videoList[activeVideoIdx] || videoList[0];
   const currentYoutubeId = currentVideo ? extractYouTubeId(currentVideo.url) : null;
 
-  const prevLesson = LESSONS.find(l => l.no === lesson.no - 1);
-  const nextLesson = LESSONS.find(l => l.no === lesson.no + 1);
+  const prevLesson = courseLessons.find(l => l.no === lesson.no - 1);
+  const nextLesson = courseLessons.find(l => l.no === lesson.no + 1);
 
   // Scroll-Spy สำหรับกล่องสารบัญ (Sticky TOC ด้านขวาตามต้นแบบ 9Expert)
   useEffect(() => {
@@ -159,14 +165,14 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
 
   // ล็อกตามลำดับการเรียน: ต้องสอบผ่านบทก่อนหน้าให้ได้คะแนน >= 80% จึงจะเข้าเรียนบทนี้ได้
   if (!isLessonUnlocked(lesson.id)) {
-    const requiredLesson = LESSONS.find(l => !isDone(l.id)) || LESSONS[0];
+    const requiredLesson = courseLessons.find(l => !isDone(l.id)) || courseLessons[0];
     return (
       <div className="container lesson">
-        <Link className="breadcrumb" href="/roadmap">
+        <Link className="breadcrumb" href={roadmapHref}>
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
             <path d="m15 18-6-6 6-6" />
           </svg>
-          กลับไปยังแผนผังการเรียน (Roadmap)
+          กลับไปยังแผนผังหลักสูตร ({courseInfo.shortName})
         </Link>
 
         <div className="auth-minimal" style={{ margin: '28px auto 64px' }}>
@@ -179,13 +185,13 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
                 </svg>
               </div>
               <span className="tag tag--advanced" style={{ marginBottom: 10 }}>
-                🔒 ล็อกตามลำดับการเรียน · บทที่ {String(lesson.no).padStart(2, '0')}
+                🔒 ล็อกตามลำดับการเรียน · หลักสูตรที่ {courseInfo.no} บทที่ {String(lesson.no).padStart(2, '0')}
               </span>
               <h1 className="auth-card__title" style={{ fontSize: '1.3rem' }}>
                 {lesson.title}
               </h1>
               <p className="auth-card__sub" style={{ marginTop: 10, lineHeight: 1.75 }}>
-                เพื่อปูพื้นฐานอย่างเป็นลำดับขั้นตอน คุณต้องเรียนและทำแบบทดสอบท้ายบทของ{' '}
+                เพื่อปูพื้นฐานอย่างเป็นลำดับขั้นตอนในหลักสูตร <strong>{courseInfo.name}</strong> คุณต้องเรียนและทำแบบทดสอบท้ายบทของ{' '}
                 <strong>
                   บทที่ {requiredLesson.no}: {requiredLesson.title}
                 </strong>{' '}
@@ -200,8 +206,8 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
               >
                 ไปเรียนบทที่ {String(requiredLesson.no).padStart(2, '0')}: {requiredLesson.keyword} →
               </Link>
-              <Link className="btn btn--outline" style={{ justifyContent: 'center' }} href="/roadmap">
-                ดูลำดับบทเรียนใน Roadmap
+              <Link className="btn btn--outline" style={{ justifyContent: 'center' }} href={roadmapHref}>
+                ดูลำดับบทเรียนในหลักสูตร
               </Link>
             </div>
           </div>
@@ -262,11 +268,11 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
   return (
     <div className="container lesson">
       {/* ลิงก์ย้อนกลับด้านบนสุด */}
-      <Link className="breadcrumb" href="/roadmap">
+      <Link className="breadcrumb" href={roadmapHref}>
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
           <path d="m15 18-6-6 6-6" />
         </svg>
-        กลับไปยังแผนผังการเรียน (Roadmap)
+        กลับไปยัง {courseInfo.icon} หลักสูตรที่ {courseInfo.no}: {courseInfo.shortName}
       </Link>
 
       {/* โครงสร้าง 2 คอลัมน์: เนื้อหาหลักซ้าย + สารบัญเกาะติดหน้าจอด้านขวา */}
@@ -275,13 +281,13 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
           {/* แบนเนอร์หัวข้อบทเรียนสไตล์ 9Expert */}
           <LessonBanner lesson={lesson} />
 
-          <p className="lesson__caption">บทความโดย: LernDev Team</p>
+          <p className="lesson__caption">บทความโดย: LernDev Team · หลักสูตรที่ {courseInfo.no}</p>
 
           <h1 className="lesson__title">{lesson.title}</h1>
 
           <div className="lesson__info">
             <span className={`tag tag--${lesson.level}`}>{lv?.name}</span>
-            <span>บทที่ {lesson.no} จาก 12</span>
+            <span>บทที่ {lesson.no} จาก {courseLessons.length}</span>
             <span>·</span>
             <span>หมวด {lesson.category}</span>
             <span>·</span>
@@ -856,8 +862,8 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
                 🔒 ต้องทำแบบทดสอบท้ายบทให้ได้คะแนน ≥ 80% (8/{examQuestions.length} ข้อ) เพื่อปลดล็อกบทถัดไป
               </a>
             )}
-            <Link className="link" href="/roadmap">
-              ดูตำแหน่งใน Roadmap →
+            <Link className="link" href={roadmapHref}>
+              ดูตำแหน่งในหลักสูตร →
             </Link>
           </div>
 
@@ -907,7 +913,7 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
 
           <div className="toc__progress">
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13 }}>
-              <span className="muted">ความคืบหน้ารวม</span>
+              <span className="muted">ความคืบหน้าหลักสูตรที่ {courseInfo.no}</span>
               <strong>
                 {stats.done}/{stats.total} บท
               </strong>
@@ -916,8 +922,8 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
               <div className="progress__bar" style={{ width: `${stats.pct}%` }} />
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap' }}>
-              <Link className="link" href="/roadmap" style={{ fontSize: 13 }}>
-                ดูแผนผังทั้งหมด →
+              <Link className="link" href={roadmapHref} style={{ fontSize: 13 }}>
+                ดูแผนผังหลักสูตร →
               </Link>
               <Link className="link" href="/glossary" style={{ fontSize: 13 }}>
                 คลังคำศัพท์ →

@@ -1,4 +1,5 @@
 import { Lesson, QuizItem } from '@/data/lessons';
+import { AI_FUTURE_EXTRA_QUIZZES } from '@/data/aiFutureCourse';
 
 /**
  * คลังข้อสอบชุดที่ 2 (Set B — เพิ่มเติมอีกบทละ 10 ข้อ รวมกับชุดหลักเป็นบทละ 20 ข้อ)
@@ -1202,7 +1203,7 @@ export function buildExamQuestions(
   previousQuestions: string[] = []
 ): { questions: QuizItem[]; setLabel: string } {
   const setA = lesson.quiz || [];
-  const setB = EXTRA_LESSON_QUIZZES[lesson.id] || [];
+  const setB = EXTRA_LESSON_QUIZZES[lesson.id] || AI_FUTURE_EXTRA_QUIZZES[lesson.id] || [];
   const fullPool = [...setA, ...setB];
 
   if (attempt === 0) {

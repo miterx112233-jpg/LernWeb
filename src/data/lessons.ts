@@ -36,8 +36,11 @@ export interface LessonVideo {
   duration?: string; // ความยาวคลิป เช่น "10:25"
 }
 
+export type CourseId = 'core' | 'ai-future';
+
 export interface Lesson {
   id: string;
+  course?: CourseId; // ไม่ระบุ = หลักสูตรที่ 1 (core)
   no: number;
   level: LevelId;
   category: string;

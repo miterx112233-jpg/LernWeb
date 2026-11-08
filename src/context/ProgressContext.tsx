@@ -1,7 +1,8 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { LESSONS, LevelId } from '@/data/lessons';
+import { CourseId, LESSONS, LevelId } from '@/data/lessons';
+import { ALL_LESSONS, getCourseLessons, getLessonCourseId } from '@/data/courses';
 import {
   AppUser,
   fetchUserProgress,
@@ -28,6 +29,7 @@ interface ProgressContextType {
   recordLastLesson: (id: string) => void;
   resetProgress: () => void;
   getStats: (level?: LevelId) => ProgressStats;
+  getCourseStats: (courseId: CourseId) => ProgressStats;
   toggleTheme: () => void;
   loginWithUser: (user: AppUser) => Promise<void>;
   logout: () => Promise<void>;
@@ -116,11 +118,13 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
 
   const isDone = (id: string) => completed.includes(id);
 
-  // ตรวจสอบว่าบทเรียนนี้ปลดล็อกหรือยัง (ต้องเรียนและสอบผ่านบทก่อนหน้าครบทุกบทตามลำดับ 1 -> 12 อย่างเคร่งครัด)
+  // ตรวจสอบว่าบทเรียนนี้ปลดล็อกหรือยัง (ต้องสอบผ่านบทก่อนหน้าครบทุกบทตามลำดับ "ภายในหลักสูตรเดียวกัน")
   const isLessonUnlocked = (id: string) => {
-    const lesson = LESSONS.find(l => l.id === id);
+    const lesson = ALL_LESSONS.find(l => l.id === id);
     if (!lesson || lesson.no <= 1) return true;
-    return LESSONS.filter(l => l.no < lesson.no).every(l => completed.includes(l.id));
+    return getCourseLessons(getLessonCourseId(lesson))
+      .filter(l => l.no < lesson.no)
+      .every(l => completed.includes(l.id));
   };
 
   const recordLastLesson = (id: string) => {
@@ -195,6 +199,15 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
     return { done, total, pct };
   };
 
+  // สถิติแยกตามหลักสูตร (เช่น หลักสูตรที่ 2: AI Coding & Future Tech)
+  const getCourseStats = (courseId: CourseId): ProgressStats => {
+    const list = getCourseLessons(courseId);
+    const done = list.filter(l => completed.includes(l.id)).length;
+    const total = list.length;
+    const pct = total ? Math.round((done / total) * 100) : 0;
+    return { done, total, pct };
+  };
+
   const toggleTheme = () => {
     setTheme(prev => {
       const next = prev === 'dark' ? 'light' : 'dark';
@@ -222,6 +235,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
         recordLastLesson,
         resetProgress,
         getStats,
+        getCourseStats,
         toggleTheme,
         loginWithUser,
         logout,

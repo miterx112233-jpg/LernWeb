@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { LESSONS, LEVELS } from '@/data/lessons';
+import { ALL_LESSONS, getCourseLessons } from '@/data/courses';
 import { ARTICLES } from '@/data/articles';
 import { GLOSSARY_ITEMS } from '@/data/glossary';
 import { useProgress } from '@/context/ProgressContext';
@@ -16,8 +17,10 @@ interface BeforeInstallPromptEvent extends Event {
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, isDone, isLessonUnlocked, lastLessonId, getStats, theme, toggleTheme, showToast } = useProgress();
+  const { user, isDone, isLessonUnlocked, lastLessonId, getStats, getCourseStats, theme, toggleTheme, showToast } = useProgress();
   const totalStats = getStats();
+  const aiCourseStats = getCourseStats('ai-future');
+  const aiFutureLessons = getCourseLessons('ai-future');
   const [mobileOpen, setMobileOpen] = useState(false);
   const [roadmapMenuOpen, setRoadmapMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -84,8 +87,8 @@ export default function Navbar() {
   };
 
   const resumeLesson =
-    (lastLessonId ? LESSONS.find(l => l.id === lastLessonId) : null) ||
-    LESSONS.find(l => !isDone(l.id)) ||
+    (lastLessonId ? ALL_LESSONS.find(l => l.id === lastLessonId) : null) ||
+    ALL_LESSONS.find(l => !isDone(l.id)) ||
     LESSONS[0];
 
   useEffect(() => {
@@ -120,13 +123,13 @@ export default function Navbar() {
 
   const q = query.trim().toLowerCase();
   const matchedLessons = q
-    ? LESSONS.filter(l =>
+    ? ALL_LESSONS.filter(l =>
         [l.title, l.summary, l.keyword, l.subtitle, l.category, l.level, ...l.topics]
           .join(' ')
           .toLowerCase()
           .includes(q)
       )
-    : LESSONS;
+    : ALL_LESSONS;
 
   const matchedArticles = q
     ? ARTICLES.filter(a =>
@@ -254,6 +257,80 @@ export default function Navbar() {
                     );
                   })}
                 </div>
+                {/* แถบหลักสูตรที่ 2: AI Coding & Future Tech */}
+                <div
+                  style={{
+                    borderTop: '1px solid var(--border)',
+                    padding: '12px 16px',
+                    background: 'var(--bg-soft)'
+                  }}
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      marginBottom: 8
+                    }}
+                  >
+                    <Link
+                      href={user ? '/roadmap#ai-future' : '/login'}
+                      onClick={() => setRoadmapMenuOpen(false)}
+                      style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8 }}
+                    >
+                      <span className="tag tag--advanced" style={{ fontSize: 11.5 }}>
+                        🚀 หลักสูตรที่ 2 · ใหม่
+                      </span>
+                      <strong style={{ fontSize: 13.5, color: 'var(--text)' }}>
+                        AI Coding &amp; Future Tech: เมื่อภาษามนุษย์กลายเป็นภาษาโปรแกรม
+                      </strong>
+                    </Link>
+                    <span className="mega-col__stat">
+                      {user ? `${aiCourseStats.done}/${aiCourseStats.total} บท` : '🔒 ล็อกอิน'}
+                    </span>
+                  </div>
+                  <div
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(2, 1fr)',
+                      gap: 6
+                    }}
+                  >
+                    {aiFutureLessons.map(lesson => {
+                      const done = user ? isDone(lesson.id) : false;
+                      const unlocked = user ? isLessonUnlocked(lesson.id) : false;
+                      const current = pathname === `/lesson/${lesson.id}`;
+                      return (
+                        <Link
+                          key={lesson.id}
+                          href={user ? `/lesson/${lesson.id}` : '/login'}
+                          className={`mega-lesson ${done ? 'is-done' : ''} ${current ? 'is-current' : ''}`}
+                          style={user && !unlocked ? { opacity: 0.6 } : undefined}
+                          onClick={e => {
+                            if (user && !unlocked) {
+                              e.preventDefault();
+                              showToast(
+                                `🔒 กรุณาเรียนและสอบผ่านบทที่ ${lesson.no - 1} ของหลักสูตรที่ 2 (คะแนน ≥ 80%) ก่อนครับ`
+                              );
+                              return;
+                            }
+                            setRoadmapMenuOpen(false);
+                          }}
+                        >
+                          <span className="mega-lesson__num">
+                            {!user || !unlocked
+                              ? '🔒'
+                              : done
+                              ? '✓'
+                              : String(lesson.no).padStart(2, '0')}
+                          </span>
+                          <span className="mega-lesson__title">{lesson.title}</span>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+
                 <div className="mega-foot">
                   {user ? (
                     <>
@@ -396,13 +473,16 @@ export default function Navbar() {
       <div className={`mobile-menu ${mobileOpen ? 'is-open' : ''}`}>
         <Link href="/">หน้าแรก</Link>
         <Link href={user ? '/roadmap' : '/login'}>
-          {user ? 'แผนผังการเรียน (Roadmap 12 บท)' : '🔒 แผนผังการเรียน (เข้าสู่ระบบก่อน)'}
+          {user ? '📘 หลักสูตรที่ 1: Software Engineer (12 บท)' : '🔒 แผนผังการเรียน (เข้าสู่ระบบก่อน)'}
         </Link>
         {LEVELS.map(lv => (
           <Link key={lv.id} className="sub" href={user ? `/roadmap#${lv.id}` : '/login'}>
             ระดับที่ {lv.no}: {lv.name} · {lv.title}
           </Link>
         ))}
+        <Link href={user ? '/roadmap#ai-future' : '/login'}>
+          {user ? '🚀 หลักสูตรที่ 2: AI Coding & Future Tech (4 บท)' : '🔒 หลักสูตรที่ 2: AI Coding & Future Tech'}
+        </Link>
         <Link href="/articles">บทความและเกร็ดความรู้</Link>
         <Link href="/glossary">คลังคำศัพท์เทคนิค (Glossary)</Link>
         <Link href="/login">
