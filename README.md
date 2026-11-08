@@ -16,30 +16,40 @@
 
 ---
 
-## 3. โครงสร้างเนื้อหาตามลำดับ Roadmap (Curriculum: Basic -> Advanced)
+## 3. โครงสร้างหลักสูตรการเรียนรู้ (2 หลักสูตร · รวม 16 บทเรียน)
 
-เนื้อหาถูกแบ่งออกเป็น **3 ระดับหลัก (12 โมดูลสำคัญ)** เรียงลำดับจากพื้นฐานที่ต้องแน่น ไปสู่การพัฒนาระบบระดับสูงในยุค AI:
+แพลตฟอร์มแบ่งเนื้อหาออกเป็น **2 หลักสูตร** ที่ทำงานส่งเสริมกันอย่างชัดเจน โดยปลดล็อกบทเรียนตามลำดับเมื่อทำแบบทดสอบท้ายบทผ่านเกณฑ์ $\ge 80\%$ (8/10 ข้อ):
 
-### 🟢 ระดับที่ 1: Basic — รากฐานวิศวกรรมซอฟต์แวร์และการทำงานร่วมกับ AI (Foundations)
-> เป้าหมาย: เข้าใจการทำงานของคอมพิวเตอร์ เว็บ โลจิกการเขียนโปรแกรม และการใช้ AI ช่วยเรียน/ช่วยเขียนโค้ดอย่างถูกวิธี
+### 💻 หลักสูตรที่ 1: พื้นฐานวิศวกรรมซอฟต์แวร์ยุค AI (12 บท)
+เน้นรากฐานทางเทคนิคและการลงมือสร้างระบบจริง แบ่งเป็น 3 ระดับ:
+
+#### 🟢 ระดับที่ 1: Basic — รากฐานวิศวกรรมซอฟต์แวร์และการทำงานร่วมกับ AI (Foundations)
 1. **Computer Science & Web Fundamentals:** คอมพิวเตอร์ทำงานอย่างไร, OS, Terminal/CLI, การทำงานของ Internet (DNS, IP, HTTP/HTTPS, Client-Server Architecture)
-2. **Programming Logic & Data Structures 101:** แนวคิดการเขียนโปรแกรม (Variables, Control Flow, Functions, OOP พื้นฐาน) และโครงสร้างข้อมูลที่พบบ่อย (Array, Hash Map, Tree, Complexity $O(n)$)
-3. **Git, GitHub & Modern Developer Workflow:** การจัดการเวอร์ชันของโค้ด, Branching Strategy, Pull Request และการเขียนเอกสาร Markdown
-4. **AI-Assisted Coding & Context Engineering Basics:** พื้นฐานการใช้ AI ช่วยเขียนโค้ด, การตั้งคำถาม (Prompting สำหรับ Developer), และการวางโครงสร้างไฟล์ `context.md`, `Design.md`, `backlog.md` (Spec-Driven Development)
+2. **Programming Logic & Data Structures 101:** แนวคิดการเขียนโปรแกรม (Variables, Control Flow, Functions) และโครงสร้างข้อมูลที่พบบ่อย (Array, Hash Map, Stack, Queue, Complexity $O(n)$)
+3. **Git, GitHub & Modern Developer Workflow:** การจัดการเวอร์ชันของโค้ด, Branching Strategy, Pull Request และการตรวจ `git diff`
+4. **AI-Assisted Coding & Developer Playbook:** กฎเหล็กทางวิศวกรรมเมื่อใช้ AI, การแกะ `Stack Trace` สั่งแก้บั๊กและรีวิวโค้ดแบบไม่หลอน, และการวางโครงสร้างไฟล์ `context.md`, `Design.md`, `backlog.md`
 
-### 🔵 ระดับที่ 2: Intermediate — การพัฒนาระบบ Full-Stack และการควบคุมคุณภาพโค้ด (Core Software Engineering)
-> เป้าหมาย: สร้างแอปพลิเคชันได้ครบวงจร ออกแบบฐานข้อมูลได้ และสามารถตรวจสอบ/ทดสอบโค้ดที่เขียนเองหรือที่ AI สร้างขึ้นได้อย่างมั่นใจ
-5. **Modern Frontend Architecture:** HTML5, CSS3, JavaScript/TypeScript, แนวคิด Component-Based UI, State Management และ Responsive Design
+#### 🔵 ระดับที่ 2: Intermediate — การพัฒนาระบบ Full-Stack และการควบคุมคุณภาพโค้ด (Core Software Engineering)
+5. **Modern Frontend Architecture:** HTML5, CSS3, JavaScript/TypeScript, แนวคิด Component-Based UI, State Management ใน React & Next.js
 6. **Backend Engineering & API Design:** การออกแบบ RESTful API, JSON Schema, Authentication & Authorization (JWT, OAuth2), Middleware และการจัดการ Error
-7. **Database Systems (SQL, NoSQL & Vector Intro):** การออกแบบตารางข้อมูล (ER Diagram, Normalization), การเขียน SQL, Indexing และการรู้จักฐานข้อมูลสำหรับ AI เบื้องต้น
-8. **Clean Code, Software Architecture & Automated Testing:** SOLID Principles, Design Patterns พื้นฐาน, การทำ Code Review โค้ดจาก AI, และการเขียน Unit / Integration / E2E Test
+7. **Database Systems (SQL, NoSQL & SQL Injection Defense):** การออกแบบตารางข้อมูล, การเขียน SQL, Indexing และการป้องกันช่องโหว่ SQL Injection
+8. **Clean Code, Software Architecture & Automated Testing:** Hexagonal Architecture, การทำ Code Review โค้ดจาก AI, และการเขียน Unit / Integration / E2E Test
 
-### 🟠 ระดับที่ 3: Advanced — การผสาน AI เข้าระบบจริง และสถาปัตยกรรมสเกลใหญ่ (AI Engineering & Production Scale)
-> เป้าหมาย: เข้าใจการทำงานเชิงลึกของ LLM, สร้างระบบ AI ในองค์กร, ดูแลความปลอดภัย และสเกลระบบบน Cloud
-9. **Large Language Models (LLM) & Generative AI Deep Dive:** LLM คืออะไร? ทำงานอย่างไร? (Tokenization, Next-Token Prediction, Transformer, Context Window, Temperature) และการเชื่อมต่อ LLM API ในระบบธุรกิจ *(บทเรียนเรือธงตามภาพต้นแบบ 9Expert)*
+#### 🟠 ระดับที่ 3: Advanced — การผสาน AI เข้าระบบจริง และสถาปัตยกรรมสเกลใหญ่ (AI Engineering & Production Scale)
+9. **Large Language Models (LLM) & Generative AI Deep Dive:** LLM คืออะไร? ทำงานอย่างไร? (Tokenization, Next-Token Prediction, Transformer, Context Window, Temperature) และการรันโมเดลด้วย Ollama
 10. **RAG (Retrieval-Augmented Generation) & Vector Databases:** การทำให้ AI ตอบคำถามจากฐานข้อมูลภายในองค์กร, Embedding Models, Chunking Strategies และ Semantic Search
-11. **AI Agents, Tool Calling & Multi-Agent Systems:** การสร้าง AI ที่เรียกใช้ฟังก์ชันและเครื่องมือภายนอกได้ (Function Calling, MCP, Agent Loop, Guardrails)
-12. **System Design, Cloud DevOps & AI Security:** การสเกลระบบ (Caching, Load Balancer, Message Queue), Docker & CI/CD, ความปลอดภัยทางไซเบอร์ (OWASP Top 10) และการป้องกันช่องโหว่ของ AI (Prompt Injection & Data Privacy)
+11. **AI Agents, Tool Calling & MCP (Model Context Protocol):** การสร้าง AI ที่เรียกใช้ฟังก์ชันและเครื่องมือภายนอกได้ผ่าน MCP และการตั้งค่า Technical Guardrails (Read-Only DB Role)
+12. **System Design & Cyber Security 101:** การสเกลระบบ (Caching, Load Balancer, API Gateway), พื้นฐานความปลอดภัยทางไซเบอร์ (CIA Triad, OWASP) และการป้องกัน Prompt Injection ในระดับโค้ด
+
+---
+
+### 🚀 หลักสูตรที่ 2: Vibe Coding & การปรับตัวในโลก AI Coding (4 บท)
+เน้นวิธีคิด การเปลี่ยนโจทย์ธุรกิจเป็นข้อกำหนด การกำกับดูแลความปลอดภัยของ AI และการวางแผนสายอาชีพยุคใหม่ (เรียนได้ทันทีโดยไม่ต้องรอจบหลักสูตรที่ 1):
+
+1. **Vibe Coding และการเปลี่ยนผ่านของภาษาโปรแกรมในยุค AI:** ความหมายและ 6 ขั้นตอนของ Vibe Coding, บทบาทของภาษาธรรมชาติเหนือภาษาโปรแกรม และงานใน SDLC ที่มนุษย์ยังต้องรับผิดชอบ
+2. **ทักษะแก่นแท้ยุค AI — Logic, Computational Thinking และ Requirements Engineering:** ทำไม Logic & DSA ยังจำเป็น, การคิดเชิงคำนวณ และการแปลงโจทย์คลุมเครือเป็น Requirement 7 ข้อพร้อม Acceptance Criteria
+3. **AI Tool Fluency, Data Literacy และความปลอดภัยของโค้ดที่ AI สร้าง:** การใช้เครื่องมือ AI Coding คู่กับการอ่านโค้ด, ความเข้าใจข้อมูล และภัยคุกคาม 7 ประเภทจาก AI-generated Code & Agentic System
+4. **7 อาชีพสายเทคแห่งอนาคต และ Roadmap เตรียมตัวในโลก AI Coding:** เจาะลึก 7 ตำแหน่งงานสำคัญในอีก 10–20 ปีข้างหน้า สาขาวิชาที่น่าสนใจ และแนวทางเตรียมตัวตามช่วงวัย (8–12 ปี ถึงระดับมหาวิทยาลัย)
 
 ---
 

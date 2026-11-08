@@ -1,4 +1,4 @@
-const CACHE_NAME = 'lerndev-pwa-v4';
+const CACHE_NAME = 'lerndev-pwa-v5';
 const PRECACHE_URLS = [
   './manifest.json',
   './icons/icon-192.png',

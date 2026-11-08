@@ -46,7 +46,7 @@ export default function Navbar() {
     if ('serviceWorker' in navigator) {
       const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
       navigator.serviceWorker
-        .register(`${basePath}/sw.js?v=1.2.1.4`)
+        .register(`${basePath}/sw.js?v=1.3.0.0`)
         .then(reg => {
           reg.update();
         })

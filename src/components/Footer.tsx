@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { LEVELS } from '@/data/lessons';
 
 export default function Footer() {
   const [showFab, setShowFab] = useState(false);
@@ -47,15 +46,18 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <h4>ระดับการเรียน</h4>
+            <h4>หลักสูตรการเรียน</h4>
             <ul>
-              {LEVELS.map(lv => (
-                <li key={lv.id}>
-                  <Link href={`/roadmap#${lv.id}`}>
-                    {lv.name} · {lv.title}
-                  </Link>
-                </li>
-              ))}
+              <li>
+                <Link href="/roadmap#core">
+                  หลักสูตรที่ 1: พื้นฐานวิศวกรรมซอฟต์แวร์ยุค AI (12 บท)
+                </Link>
+              </li>
+              <li>
+                <Link href="/roadmap#ai-future">
+                  หลักสูตรที่ 2: Vibe Coding &amp; การปรับตัวในโลก AI Coding (4 บท)
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
