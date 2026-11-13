@@ -8,6 +8,7 @@ import { buildExamQuestions } from '@/data/quizPool';
 import { enrichHtmlWithGlossary } from '@/data/glossary';
 import { useProgress } from '@/context/ProgressContext';
 import { LessonBanner } from '@/components/LessonBanner';
+import { fireNeonConfetti } from '@/lib/confetti';
 
 interface LessonViewerProps {
   lesson: Lesson;
@@ -37,6 +38,7 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
   const [currentQuizIdx, setCurrentQuizIdx] = useState<number>(0);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [showQuizSummary, setShowQuizSummary] = useState<boolean>(false);
+  const [showCelebrationModal, setShowCelebrationModal] = useState<boolean>(false);
   const [reviewFilter, setReviewFilter] = useState<'all' | 'wrong' | 'correct'>('all');
   const [activeVideoIdx, setActiveVideoIdx] = useState<number>(0);
 
@@ -57,6 +59,12 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
 
   const prevLesson = courseLessons.find(l => l.no === lesson.no - 1);
   const nextLesson = courseLessons.find(l => l.no === lesson.no + 1);
+
+  const totalQ = examQuestions?.length || 0;
+  const correctCount = examQuestions.reduce((acc, item, idx) => {
+    return acc + (quizAnswers[idx] === item.answer ? 1 : 0);
+  }, 0);
+  const scorePct = totalQ > 0 ? Math.round((correctCount / totalQ) * 100) : 0;
 
   // Scroll-Spy สำหรับกล่องสารบัญ (Sticky TOC ด้านขวาตามต้นแบบ 9Expert)
   useEffect(() => {
@@ -405,14 +413,9 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
 
           {/* แบบทดสอบท้ายบท (Exam Mode: ตอบทีละข้อ ย้อนแก้ข้อเก่าได้ ส่งตรวจและเฉลยตอนท้าย + สุ่มชุดข้อสอบใหม่ได้) */}
           {examQuestions && examQuestions.length > 0 && (() => {
-            const totalQ = examQuestions.length;
             const answeredCount = Object.keys(quizAnswers).length;
             const allAnswered = answeredCount === totalQ;
-            const correctCount = examQuestions.reduce((acc, item, idx) => {
-              return acc + (quizAnswers[idx] === item.answer ? 1 : 0);
-            }, 0);
             const wrongCount = totalQ - correctCount;
-            const scorePct = Math.round((correctCount / totalQ) * 100);
             const activeItem = examQuestions[currentQuizIdx] || examQuestions[0];
             const chosen = quizAnswers[currentQuizIdx];
             const answered = chosen !== undefined;
@@ -457,6 +460,8 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
                 if (!done) {
                   toggleDone(lesson.id);
                 }
+                fireNeonConfetti({ count: 160, originY: 0.55 });
+                setShowCelebrationModal(true);
                 showToast(
                   `🎉 ยอดเยี่ยม! คุณได้ ${correctCount}/${totalQ} คะแนน (${scorePct}% ≥ 80%) ผ่านบทที่ ${lesson.no} และปลดล็อกบทถัดไปเรียบร้อยแล้ว`
                 );
@@ -945,6 +950,81 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
           </div>
         </aside>
       </div>
+
+      {/* หน้าต่างเฉลิมฉลองเมื่อสอบผ่าน (Stage Complete Celebration Modal) */}
+      {showCelebrationModal && (
+        <div
+          className="celebration-backdrop"
+          onClick={e => {
+            if (e.target === e.currentTarget) setShowCelebrationModal(false);
+          }}
+        >
+          <div className="celebration-card" role="dialog" aria-modal="true" aria-label="ยินดีด้วย! คุณผ่านด่านแล้ว">
+            <button
+              type="button"
+              className="celebration-close"
+              onClick={() => setShowCelebrationModal(false)}
+              aria-label="ปิดหน้าต่าง"
+            >
+              ✕
+            </button>
+
+            <div className="celebration-trophy-wrap">
+              <div className="celebration-trophy-aura" />
+              <div className="celebration-trophy-icon">🏆</div>
+            </div>
+
+            <div className="celebration-badge">STAGE COMPLETE!</div>
+            <h3 className="celebration-title">ยินดีด้วย! คุณผ่านด่านแล้ว</h3>
+            <p className="celebration-sub">
+              คุณทำแบบทดสอบ <strong>บทที่ {lesson.no}: {lesson.title}</strong> ผ่านเกณฑ์แล้ว
+            </p>
+
+            <div className="celebration-score-pill">
+              <span className="celebration-score-num">
+                {correctCount} / {totalQ}
+              </span>
+              <span className="celebration-score-pct">({scorePct}%)</span>
+            </div>
+
+            <p className="celebration-msg">
+              {nextLesson
+                ? `✨ ยอดเยี่ยมมาก! ระบบได้ปลดล็อกบทถัดไป: บทที่ ${nextLesson.no} (${nextLesson.subtitle}) ให้คุณแล้ว`
+                : `🎉 ยอดเยี่ยมที่สุด! คุณได้พิชิตครบทุกบทในหลักสูตรที่ ${courseInfo.no} เรียบร้อยแล้ว`}
+            </p>
+
+            <div className="celebration-actions">
+              {nextLesson ? (
+                <Link
+                  className="btn btn--primary celebration-next-btn"
+                  href={`/lesson/${nextLesson.id}`}
+                  onClick={() => setShowCelebrationModal(false)}
+                >
+                  🚀 ไปลุยบทที่ {nextLesson.no} ต่อทันที →
+                </Link>
+              ) : (
+                <Link
+                  className="btn btn--primary celebration-next-btn"
+                  href={roadmapHref}
+                  onClick={() => setShowCelebrationModal(false)}
+                >
+                  🏆 ดูความสำเร็จใน Roadmap →
+                </Link>
+              )}
+              <button
+                type="button"
+                className="btn btn--outline"
+                onClick={() => {
+                  setShowCelebrationModal(false);
+                  document.getElementById('lesson-quiz')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                ดูใบสรุปผลและเฉลยละเอียด
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

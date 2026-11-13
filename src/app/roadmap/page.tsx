@@ -6,6 +6,14 @@ import { CourseId, LESSONS, LEVELS, LevelId } from '@/data/lessons';
 import { COURSES, getCourseLessons } from '@/data/courses';
 import { useProgress } from '@/context/ProgressContext';
 
+const getRank = (pct: number) => {
+  if (pct >= 100) return { title: '👑 Master Software Engineer', desc: 'ผู้พิชิตหลักสูตรสมบูรณ์แบบ', color: '#FBBF24' };
+  if (pct >= 75) return { title: '🚀 Senior Architect in Training', desc: 'ระดับเชี่ยวชาญ ใกล้ครบทุกด่านแล้ว', color: '#C084FC' };
+  if (pct >= 50) return { title: '⚡ Full-Stack Developer', desc: 'ระดับกลาง ลุยระบบหน้าบ้าน-หลังบ้าน', color: '#38BDF8' };
+  if (pct >= 25) return { title: '🌱 Code Explorer', desc: 'ระดับเริ่มต้น รากฐานกำลังแน่นขึ้น', color: '#34D399' };
+  return { title: '🔰 Tech Novice', desc: 'ผู้เริ่มต้น พร้อมลุยด่านแรก', color: '#94A3B8' };
+};
+
 export default function RoadmapPage() {
   const { user, isDone, isLessonUnlocked, getStats, getCourseStats, showToast } = useProgress();
   const [activeCourse, setActiveCourse] = useState<CourseId>('core');
@@ -93,6 +101,7 @@ export default function RoadmapPage() {
   const currentCourseInfo = COURSES.find(c => c.id === activeCourse) || COURSES[0];
   const visibleLevels = filter === 'all' ? LEVELS : LEVELS.filter(lv => lv.id === filter);
   const aiFutureLessons = getCourseLessons('ai-future');
+  const rank = getRank(currentStats.pct);
 
   return (
     <>
@@ -174,13 +183,51 @@ export default function RoadmapPage() {
             })}
           </div>
 
-          <div className="roadmap-summary" style={{ marginTop: 18 }}>
-            <div className="progress">
-              <div className="progress__bar" style={{ width: `${currentStats.pct}%` }} />
+          {/* การ์ดสถานะ Gamification Player Status & Quest Tracker */}
+          <div className="quest-status-card">
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+              <div
+                style={{
+                  width: 50,
+                  height: 50,
+                  borderRadius: 14,
+                  background: 'var(--brand-soft)',
+                  border: '1.5px solid var(--brand)',
+                  display: 'grid',
+                  placeItems: 'center',
+                  fontSize: 24,
+                  boxShadow: '0 0 16px var(--brand-glow)',
+                  flexShrink: 0
+                }}
+              >
+                🎮
+              </div>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                  <span className="quest-rank-badge" style={{ color: rank.color, borderColor: `${rank.color}55` }}>
+                    {rank.title}
+                  </span>
+                  <span style={{ fontSize: 13, color: 'var(--text2)' }}>
+                    • {rank.desc}
+                  </span>
+                </div>
+                <div style={{ fontSize: 13, color: 'var(--text2)', marginTop: 4 }}>
+                  ภารกิจหลัก: พิชิต {currentCourseInfo.name} ({currentStats.done}/{currentStats.total} ด่านสำเร็จ)
+                </div>
+              </div>
             </div>
-            <span className="text2">
-              {currentCourseInfo.icon} หลักสูตรที่ {currentCourseInfo.no}: เรียนจบแล้ว {currentStats.done} / {currentStats.total} บท ({currentStats.pct}%)
-            </span>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 220, flex: 1, maxWidth: 360 }}>
+              <div style={{ width: '100%' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, marginBottom: 4 }}>
+                  <span className="text2">EXP ความสำเร็จ ({currentStats.done}/{currentStats.total} ด่าน)</span>
+                  <strong style={{ color: rank.color }}>{currentStats.pct}%</strong>
+                </div>
+                <div className="progress" style={{ height: 8 }}>
+                  <div className="progress__bar" style={{ width: `${currentStats.pct}%`, background: rank.color }} />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -244,6 +291,17 @@ export default function RoadmapPage() {
                                 <span>{lesson.category}</span>
                                 <span>·</span>
                                 <span>อ่าน {lesson.minutes} นาที</span>
+                                {done && (
+                                  <span className="quest-badge-done">
+                                    ✓ พิชิตด่านนี้แล้ว
+                                  </span>
+                                )}
+                                {unlocked && !done && (
+                                  <span className="quest-badge-current">
+                                    <span className="quest-pulse-dot" />
+                                    ภารกิจปัจจุบัน (Active Quest)
+                                  </span>
+                                )}
                                 {!unlocked && (
                                   <>
                                     <span>·</span>
@@ -354,6 +412,17 @@ export default function RoadmapPage() {
                           <span>{lesson.category}</span>
                           <span>·</span>
                           <span>อ่าน {lesson.minutes} นาที</span>
+                          {done && (
+                            <span className="quest-badge-done">
+                              ✓ พิชิตด่านนี้แล้ว
+                            </span>
+                          )}
+                          {unlocked && !done && (
+                            <span className="quest-badge-current">
+                              <span className="quest-pulse-dot" />
+                              ภารกิจปัจจุบัน (Active Quest)
+                            </span>
+                          )}
                           {!unlocked && (
                             <>
                               <span>·</span>

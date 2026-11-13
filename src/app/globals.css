@@ -625,35 +625,374 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .stage__title { font-size: 22px; font-weight: 700; }
 .stage__desc { color: var(--text2); width: 100%; margin-top: -6px; font-size: 15px; }
 
-.steps { position: relative; padding-left: 42px; }
-.steps::before { content: ""; position: absolute; left: 15px; top: 8px; bottom: 8px; width: 2px; background: var(--border); }
-.step { position: relative; margin-bottom: 16px; }
+/* =========================================================
+   ROADMAP GAMIFICATION & GLOWING CIRCUIT PATH
+   ========================================================= */
+.steps {
+  position: relative;
+  padding-left: 48px;
+}
+.steps::before {
+  content: "";
+  position: absolute;
+  left: 17px;
+  top: 14px;
+  bottom: 14px;
+  width: 3px;
+  background: linear-gradient(
+    180deg,
+    rgba(56, 189, 248, 0.8) 0%,
+    rgba(99, 102, 241, 0.8) 50%,
+    rgba(168, 85, 247, 0.4) 100%
+  );
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.45);
+  border-radius: 99px;
+}
+[data-theme="dark"] .steps::before {
+  background: linear-gradient(
+    180deg,
+    rgba(56, 189, 248, 0.9) 0%,
+    rgba(129, 140, 248, 0.7) 40%,
+    rgba(192, 132, 252, 0.5) 80%,
+    rgba(255, 255, 255, 0.15) 100%
+  );
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.65), 0 0 32px rgba(124, 58, 237, 0.35);
+}
+
+.step {
+  position: relative;
+  margin-bottom: 20px;
+  transition: transform 0.2s ease;
+}
+
 .step__dot {
-  position: absolute; left: -42px; top: 18px; width: 32px; height: 32px; border-radius: 50%;
-  display: grid; place-items: center; font-size: 12.5px; font-weight: 700;
-  background: var(--surface); border: 2px solid var(--border); color: var(--muted);
-}
-.step.is-done .step__dot { background: var(--basic); border-color: var(--basic); color: #fff; }
-.step.is-current .step__dot {
-  background: var(--brand);
-  border-color: var(--brand);
-  color: #fff;
-  box-shadow: 0 0 0 4px var(--brand-soft);
-}
-.step.is-current .step__card {
-  border-color: var(--brand);
-}
-.step.is-locked .step__dot {
-  background: var(--bg2);
-  border-color: var(--border);
+  position: absolute;
+  left: -48px;
+  top: 20px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
   font-size: 13px;
+  font-weight: 700;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  color: var(--muted);
+  z-index: 2;
+  transition: all 0.25s ease;
 }
-.step.is-locked .step__card {
-  background: var(--bg2);
-  opacity: 0.78;
+
+/* เมื่อเคลียร์ด่านแล้ว (is-done) */
+.step.is-done .step__dot {
+  background: linear-gradient(135deg, #10B981, #059669);
+  border-color: #34D399;
+  color: #fff;
+  box-shadow: 0 0 18px rgba(52, 211, 153, 0.75), inset 0 0 6px rgba(255, 255, 255, 0.4);
 }
-.step__card { display: grid; grid-template-columns: 1fr auto; gap: 20px; padding: 18px 22px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); transition: border-color 0.15s; }
-.step__card:hover { border-color: color-mix(in srgb, var(--brand) 45%, var(--border)); }
+
+/* ด่านปัจจุบันที่ต้องทำ (is-current) */
+.step.is-current .step__dot {
+  background: linear-gradient(135deg, #38BDF8 0%, #3B82F6 100%);
+  border-color: #E0F2FE;
+  color: #fff;
+  box-shadow: 0 0 24px rgba(56, 189, 248, 0.9);
+  animation: radar-ripple 2s infinite ease-out;
+}
+
+@keyframes radar-ripple {
+  0% {
+    box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.8), 0 0 18px rgba(56, 189, 248, 0.6);
+  }
+  70% {
+    box-shadow: 0 0 0 14px rgba(56, 189, 248, 0), 0 0 24px rgba(56, 189, 248, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(56, 189, 248, 0), 0 0 18px rgba(56, 189, 248, 0.6);
+  }
+}
+
+/* ด่านที่ยังล็อกอยู่ */
+.step.is-locked .step__dot {
+  background: rgba(15, 23, 42, 0.65);
+  border-color: rgba(99, 102, 241, 0.25);
+  color: var(--muted);
+  font-size: 13px;
+  backdrop-filter: blur(6px);
+}
+
+.step__card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 20px;
+  padding: 20px 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+[data-theme="dark"] .step__card {
+  background: rgba(17, 23, 43, 0.82);
+  border: 1px solid rgba(99, 102, 241, 0.24);
+  backdrop-filter: blur(10px);
+}
+
+.step__card:hover {
+  transform: translateY(-2px) translateX(2px);
+  border-color: rgba(56, 189, 248, 0.45);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.28);
+}
+
+/* การ์ดด่านปัจจุบัน */
+.step.is-current .step__card {
+  border: 1.5px solid #38BDF8;
+  box-shadow: 0 0 32px rgba(56, 189, 248, 0.22), 0 10px 32px rgba(0, 0, 0, 0.35);
+}
+[data-theme="dark"] .step.is-current .step__card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  bottom: 0;
+  background: linear-gradient(180deg, #38BDF8, #818CF8);
+  box-shadow: 0 0 14px #38BDF8;
+}
+
+/* Quest Badges */
+.quest-badge-current {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 99px;
+  background: rgba(56, 189, 248, 0.16);
+  color: #38BDF8;
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+}
+.quest-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #38BDF8;
+  box-shadow: 0 0 8px #38BDF8;
+  animation: pulse-dot 1.4s infinite ease-in-out;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.7); }
+}
+
+.quest-badge-done {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 99px;
+  background: rgba(52, 211, 153, 0.14);
+  color: #34D399;
+  border: 1px solid rgba(52, 211, 153, 0.35);
+}
+
+/* Gamification Player Status Header Card */
+.quest-status-card {
+  margin-top: 20px;
+  padding: 18px 24px;
+  border-radius: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+[data-theme="dark"] .quest-status-card {
+  background: linear-gradient(135deg, rgba(18, 24, 48, 0.9) 0%, rgba(13, 17, 34, 0.95) 100%);
+  border: 1.5px solid rgba(139, 92, 246, 0.35);
+  box-shadow: 0 0 36px rgba(124, 58, 237, 0.18), 0 12px 36px rgba(0, 0, 0, 0.4);
+}
+.quest-rank-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 13.5px;
+  background: rgba(124, 58, 237, 0.18);
+  border: 1px solid rgba(192, 132, 252, 0.4);
+}
+
+/* =========================================================
+   CELEBRATION MODAL (CONFIDENTIAL / STAGE COMPLETE POPUP)
+   ========================================================= */
+.celebration-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(5, 7, 18, 0.82);
+  backdrop-filter: blur(16px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  animation: modal-fade-in 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes modal-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.celebration-card {
+  position: relative;
+  max-width: 500px;
+  width: 100%;
+  background: var(--surface);
+  border-radius: 22px;
+  border: 1.5px solid var(--border);
+  padding: 36px 32px 30px;
+  text-align: center;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45);
+  animation: card-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+[data-theme="dark"] .celebration-card {
+  background: linear-gradient(180deg, #12182E 0%, #0B0E1E 100%);
+  border: 1.5px solid rgba(56, 189, 248, 0.55);
+  box-shadow:
+    0 0 60px rgba(56, 189, 248, 0.25),
+    0 0 100px rgba(124, 58, 237, 0.22),
+    0 24px 64px rgba(0, 0, 0, 0.7);
+}
+@keyframes card-pop {
+  from { opacity: 0; transform: scale(0.85) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.celebration-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--muted);
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  transition: all 0.15s;
+}
+.celebration-close:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.celebration-trophy-wrap {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  margin: 0 auto 16px;
+}
+.celebration-trophy-aura {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.6) 0%, rgba(245, 158, 11, 0) 70%);
+  animation: aura-pulse 2s infinite ease-in-out;
+}
+@keyframes aura-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.3); opacity: 0.9; }
+}
+.celebration-trophy-icon {
+  position: relative;
+  font-size: 64px;
+  line-height: 1;
+  filter: drop-shadow(0 0 16px rgba(251, 191, 36, 0.6));
+  animation: trophy-bounce 2.4s infinite ease-in-out;
+}
+@keyframes trophy-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.celebration-badge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  padding: 4px 14px;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #38BDF8, #818CF8);
+  color: #fff;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.45);
+  margin-bottom: 12px;
+}
+
+.celebration-title {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--text);
+  margin: 0 0 8px;
+}
+.celebration-sub {
+  font-size: 15px;
+  color: var(--text2);
+  margin: 0 0 18px;
+  line-height: 1.6;
+}
+
+.celebration-score-pill {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 10px 22px;
+  border-radius: 14px;
+  background: rgba(52, 211, 153, 0.12);
+  border: 1px solid rgba(52, 211, 153, 0.4);
+  margin-bottom: 18px;
+}
+.celebration-score-num {
+  font-size: 24px;
+  font-weight: 800;
+  color: #34D399;
+  font-family: var(--mono);
+}
+.celebration-score-pct {
+  font-size: 15px;
+  font-weight: 700;
+  color: #34D399;
+}
+
+.celebration-msg {
+  font-size: 14.5px;
+  color: var(--text2);
+  line-height: 1.7;
+  margin: 0 0 24px;
+}
+
+.celebration-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.celebration-next-btn {
+  justify-content: center;
+  padding: 13px 24px;
+  font-size: 16px;
+  border-radius: 12px;
+}
+
 .step__meta { display: flex; gap: 10px; align-items: center; font-size: 13px; color: var(--muted); flex-wrap: wrap; }
 .step__title { font-size: 18px; font-weight: 600; margin-top: 4px; }
 .step__title a:hover { color: var(--brand); text-decoration: underline; text-underline-offset: 3px; }
