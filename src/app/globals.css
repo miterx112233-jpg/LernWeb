@@ -2852,6 +2852,60 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   }
 }
 
+/* =========================================================
+   ACTIVE LESSON HERO CARD (หน้าแรก แสดงบทเรียนปัจจุบันตามตัวอย่าง)
+   ========================================================= */
+.active-lesson-hero {
+  position: relative;
+  max-width: 860px;
+  margin: 0 auto;
+  border-radius: 26px;
+  border: 1.5px solid rgba(56, 189, 248, 0.45);
+  background: linear-gradient(145deg, #121936 0%, #0B0E20 100%);
+  box-shadow: 0 0 50px rgba(56, 189, 248, 0.16), 0 24px 54px rgba(0, 0, 0, 0.6);
+  padding: 44px 48px 40px;
+  overflow: hidden;
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+:root:not([data-theme="dark"]) .active-lesson-hero {
+  background: linear-gradient(145deg, #FFFFFF 0%, #F1F5F9 100%);
+  border: 1.5px solid rgba(59, 130, 246, 0.35);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08), 0 0 32px rgba(59, 130, 246, 0.12);
+}
+.active-lesson-hero:hover {
+  border-color: rgba(56, 189, 248, 0.65);
+  box-shadow: 0 0 60px rgba(56, 189, 248, 0.24), 0 28px 60px rgba(0, 0, 0, 0.65);
+}
+
+.active-lesson-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 34px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #2563EB 0%, #9333EA 100%);
+  color: #FFFFFF !important;
+  font-size: 16px;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.45), 0 0 32px rgba(147, 51, 234, 0.35);
+  border: none;
+  text-decoration: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+.active-lesson-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(37, 99, 235, 0.6), 0 0 42px rgba(147, 51, 234, 0.5) !important;
+}
+
+@media (max-width: 640px) {
+  .active-lesson-hero {
+    padding: 28px 20px 26px;
+    border-radius: 20px;
+  }
+}
+
+
 
 
 
