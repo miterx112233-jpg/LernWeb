@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { LESSONS, LEVELS } from '@/data/lessons';
-import { getCourseLessons } from '@/data/courses';
 import { useProgress } from '@/context/ProgressContext';
 import { signInUser, signUpUser } from '@/lib/supabase';
 
@@ -45,7 +44,7 @@ export default function LoginPage() {
         if (res.user) {
           await loginWithUser(res.user);
           showToast(`ยินดีต้อนรับคุณ ${res.user.displayName}! ปลดล็อกแผนผังการเรียนเรียบร้อยแล้ว`);
-          router.push('/roadmap');
+          router.push('/');
         }
       } else {
         const res = await signInUser(email, password);
@@ -56,7 +55,7 @@ export default function LoginPage() {
         if (res.user) {
           await loginWithUser(res.user);
           showToast(`เข้าสู่ระบบในชื่อ ${res.user.displayName} เรียบร้อยแล้ว`);
-          router.push('/roadmap');
+          router.push('/');
         }
       }
     } finally {
@@ -65,10 +64,7 @@ export default function LoginPage() {
   };
 
   const stats = getStats();
-  const aiStats = getCourseStats('ai-future');
-  const aiLessons = getCourseLessons('ai-future');
   const nextLesson = LESSONS.find(l => !isDone(l.id)) || LESSONS[0];
-  const nextAiLesson = aiLessons.find(l => !isDone(l.id)) || aiLessons[0];
 
   return (
     <section className="auth-stage">
@@ -90,7 +86,7 @@ export default function LoginPage() {
               {/* หลักสูตรที่ 1 */}
               <div className="auth-summary-box">
                 <div className="auth-summary-row">
-                  <span className="stat__label">หลักสูตรที่ 1: พื้นฐานวิศวกรรมซอฟต์แวร์ยุค AI</span>
+                  <span className="stat__label">หลักสูตร: พื้นฐานวิศวกรรมซอฟต์แวร์ยุค AI</span>
                   <strong className="auth-summary-pct">
                     {stats.done}/{stats.total} บท ({stats.pct}%)
                   </strong>
@@ -124,8 +120,8 @@ export default function LoginPage() {
                   <div>
                     <div className="auth-next-lesson__label">
                       {stats.done === stats.total
-                        ? 'หลักสูตรที่ 1 · ทบทวนบทเรียน'
-                        : 'หลักสูตรที่ 1 · เรียนต่อบทถัดไป'}
+                        ? 'ทบทวนบทเรียน'
+                        : 'เรียนต่อบทถัดไป'}
                     </div>
                     <div className="auth-next-lesson__title">
                       บทที่ {String(nextLesson.no).padStart(2, '0')}: {nextLesson.tagline}
@@ -135,47 +131,18 @@ export default function LoginPage() {
                 </Link>
               )}
 
-              {/* หลักสูตรที่ 2 */}
-              <div className="auth-summary-box" style={{ marginTop: 14 }}>
-                <div className="auth-summary-row">
-                  <span className="stat__label">หลักสูตรที่ 2: Vibe Coding &amp; การปรับตัวในโลก AI Coding</span>
-                  <strong className="auth-summary-pct">
-                    {aiStats.done}/{aiStats.total} บท ({aiStats.pct}%)
-                  </strong>
-                </div>
-                <div className="progress" style={{ marginTop: 8 }}>
-                  <div className="progress__bar" style={{ width: `${aiStats.pct}%` }} />
-                </div>
-              </div>
-
-              {nextAiLesson && (
-                <Link
-                  href={`/lesson/${nextAiLesson.id}`}
-                  className="auth-next-lesson"
-                >
-                  <div>
-                    <div className="auth-next-lesson__label">
-                      {aiStats.done === aiStats.total
-                        ? 'หลักสูตรที่ 2 · ทบทวนบทเรียน'
-                        : 'หลักสูตรที่ 2 · เรียนต่อบทถัดไป'}
-                    </div>
-                    <div className="auth-next-lesson__title">
-                      บทที่ {String(nextAiLesson.no).padStart(2, '0')}: {nextAiLesson.tagline}
-                    </div>
-                  </div>
-                  <span aria-hidden="true">→</span>
-                </Link>
-              )}
-
               <div className="auth-profile-actions">
                 <Link className="btn btn--primary" style={{ width: '100%', justifyContent: 'center' }} href="/roadmap">
-                  เปิดแผนผังการเรียนทั้ง 2 หลักสูตร →
+                  เปิดแผนผังการเรียน (Roadmap) →
                 </Link>
                 <button
                   type="button"
                   className="btn btn--outline"
                   style={{ width: '100%', justifyContent: 'center' }}
-                  onClick={() => logout()}
+                  onClick={async () => {
+                    await logout();
+                    router.push('/');
+                  }}
                 >
                   ออกจากระบบ
                 </button>
@@ -203,7 +170,7 @@ export default function LoginPage() {
                 <p className="auth-card__sub">
                   {tab === 'signin'
                     ? 'กรอกอีเมลและรหัสผ่านเพื่อดูความก้าวหน้าการเรียนของคุณ'
-                    : 'สมัครสมาชิกฟรีเพื่อเริ่มบันทึกความคืบหน้าครบทั้ง 2 หลักสูตร (16 บทเรียน)'}
+                    : 'สมัครสมาชิกฟรีเพื่อเริ่มบันทึกความคืบหน้าหลักสูตร Software Engineer (12 บทเรียน)'}
                 </p>
               </div>
 

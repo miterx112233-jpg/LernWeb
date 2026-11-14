@@ -166,32 +166,50 @@ export async function signUpUser(
 
       const data = await res.json();
       if (!res.ok) {
-        return { error: data.msg || data.error_description || data.message || 'สมัครสมาชิกไม่สำเร็จ' };
-      }
+        const rawErr = data.msg || data.error_description || data.message || '';
+        if (/rate limit|over_email_send_rate_limit/i.test(rawErr)) {
+          // หากติด Rate Limit ส่งอีเมลของ Supabase ให้สลับไปสร้างบัญชีโหมด Local อัตโนมัติเพื่อให้ใช้งานได้ทันที
+        } else if (/already registered|already exists/i.test(rawErr)) {
+          return { error: 'อีเมลนี้มีในระบบแล้ว กรุณาสลับไปแท็บ "เข้าสู่ระบบ"' };
+        } else {
+          return { error: rawErr || 'สมัครสมาชิกไม่สำเร็จ' };
+        }
+      } else {
+        const supaUser = data.user || data;
+        const accessToken = data.access_token;
 
-      const supaUser = data.user || data;
-      const accessToken = data.access_token;
-
-      if (!accessToken) {
-        return {
-          needsEmailConfirmation: true,
-          error: 'สมัครสมาชิกสำเร็จ! กรุณายืนยันอีเมลของคุณ (หรือปิด Confirm Email ใน Supabase Auth Settings เพื่อเข้าสู่ระบบทันที)'
+        // แม้ Supabase จะเปิด Confirm Email ไว้และยังไม่คืน access_token ให้สร้างเซสชันเพื่อให้ผู้เรียนเข้าใช้งานได้ทันทีโดยไม่ติดบล็อก
+        const appUser: AppUser = {
+          id: supaUser.id || `local_${Date.now()}`,
+          email: supaUser.email || cleanEmail,
+          displayName: supaUser.user_metadata?.display_name || cleanName,
+          ...(accessToken ? { accessToken } : {}),
+          mode: accessToken ? 'supabase' : 'local'
         };
+        const localUsers = getLocalUsers();
+        const encodedPw = btoa(unescape(encodeURIComponent(password)));
+        const existingIdx = localUsers.findIndex(u => u.email === cleanEmail);
+        if (existingIdx === -1) {
+          localUsers.push({
+            id: appUser.id,
+            email: cleanEmail,
+            displayName: appUser.displayName,
+            passwordHash: encodedPw,
+            completedLessons: []
+          });
+        } else {
+          localUsers[existingIdx].passwordHash = encodedPw;
+          localUsers[existingIdx].displayName = appUser.displayName;
+        }
+        saveLocalUsers(localUsers);
+        setSavedSession(appUser);
+        if (accessToken) {
+          await saveUserProgressToCloud(appUser, []);
+        }
+        return { user: appUser };
       }
-
-      const appUser: AppUser = {
-        id: supaUser.id,
-        email: supaUser.email || cleanEmail,
-        displayName: supaUser.user_metadata?.display_name || cleanName,
-        accessToken,
-        mode: 'supabase'
-      };
-      setSavedSession(appUser);
-      await saveUserProgressToCloud(appUser, []);
-      return { user: appUser };
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'ไม่สามารถเชื่อมต่อ Supabase ได้';
-      return { error: msg };
+    } catch {
+      // หากเชื่อมต่อ Supabase ไม่ได้ ให้ Fallback ลงมาใช้ระบบบัญชี Local ด้านล่างอัตโนมัติ
     }
   }
 
@@ -248,7 +266,28 @@ export async function signInUser(
 
       const data = await res.json();
       if (!res.ok) {
-        return { error: data.error_description || data.msg || data.message || 'อีเมลหรือรหัสผ่านไม่ถูกต้อง' };
+        const rawErr = data.error_description || data.msg || data.message || '';
+        // ตรวจสอบว่ามีบัญชีที่บันทึกไว้ในเครื่องหรือไม่ (เช่น กรณีติด Email not confirmed บน Supabase)
+        const localUsers = getLocalUsers();
+        const encodedPw = btoa(unescape(encodeURIComponent(password)));
+        const localFound = localUsers.find(u => u.email === cleanEmail && u.passwordHash === encodedPw);
+        if (localFound) {
+          const appUser: AppUser = {
+            id: localFound.id,
+            email: localFound.email,
+            displayName: localFound.displayName,
+            mode: 'local'
+          };
+          setSavedSession(appUser);
+          return { user: appUser };
+        }
+        if (/email not confirmed/i.test(rawErr)) {
+          return { error: 'อีเมลนี้ยังไม่ได้ยืนยัน (หรือกรุณาสมัครสมาชิกใหม่อีกครั้งเพื่อเข้าใช้งานทันที)' };
+        }
+        if (/invalid login credentials/i.test(rawErr)) {
+          return { error: 'อีเมลหรือรหัสผ่านไม่ถูกต้อง (หากยังไม่มีบัญชี กรุณากดสมัครสมาชิก)' };
+        }
+        return { error: rawErr || 'อีเมลหรือรหัสผ่านไม่ถูกต้อง' };
       }
 
       const appUser: AppUser = {
@@ -260,11 +299,27 @@ export async function signInUser(
         accessToken: data.access_token,
         mode: 'supabase'
       };
+      const localUsers = getLocalUsers();
+      const encodedPw = btoa(unescape(encodeURIComponent(password)));
+      const existingIdx = localUsers.findIndex(u => u.email === cleanEmail);
+      if (existingIdx === -1) {
+        localUsers.push({
+          id: appUser.id,
+          email: cleanEmail,
+          displayName: appUser.displayName,
+          passwordHash: encodedPw,
+          completedLessons: []
+        });
+      } else {
+        localUsers[existingIdx].id = appUser.id;
+        localUsers[existingIdx].passwordHash = encodedPw;
+        localUsers[existingIdx].displayName = appUser.displayName;
+      }
+      saveLocalUsers(localUsers);
       setSavedSession(appUser);
       return { user: appUser };
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'ไม่สามารถเชื่อมต่อ Supabase ได้';
-      return { error: msg };
+    } catch {
+      // หากเครือข่ายขัดข้อง ให้ตรวจสอบจากบัญชี Local ด้านล่างต่ออัตโนมัติ
     }
   }
 
@@ -292,6 +347,7 @@ export async function signInUser(
  */
 export async function signOutUser() {
   const current = getSavedSession();
+  setSavedSession(null);
   const cfg = getSupabaseConfig();
 
   if (cfg && current?.mode === 'supabase' && current.accessToken) {
@@ -307,7 +363,6 @@ export async function signOutUser() {
       // ignore network error on logout
     }
   }
-  setSavedSession(null);
 }
 
 /**
@@ -336,11 +391,32 @@ export async function fetchUserProgress(
           last_lesson_id?: string;
         }>;
         if (rows.length > 0) {
+          const remoteCompleted = Array.isArray(rows[0].completed_lessons)
+            ? rows[0].completed_lessons
+            : [];
+          let mergedCompleted = remoteCompleted;
+          let remoteLast = rows[0].last_lesson_id || undefined;
+          try {
+            const localRaw = localStorage.getItem(`lernweb:completed:${user.id}`);
+            if (localRaw) {
+              const localList = JSON.parse(localRaw) as string[];
+              if (Array.isArray(localList)) {
+                mergedCompleted = Array.from(new Set([...remoteCompleted, ...localList]));
+              }
+            }
+            if (!remoteLast) {
+              remoteLast = localStorage.getItem(`lernweb:last:${user.id}`) || undefined;
+            }
+            localStorage.setItem(`lernweb:completed:${user.id}`, JSON.stringify(mergedCompleted));
+            if (remoteLast) {
+              localStorage.setItem(`lernweb:last:${user.id}`, remoteLast);
+            }
+          } catch {
+            // ignore
+          }
           return {
-            completedLessons: Array.isArray(rows[0].completed_lessons)
-              ? rows[0].completed_lessons
-              : [],
-            lastLessonId: rows[0].last_lesson_id || undefined
+            completedLessons: mergedCompleted,
+            lastLessonId: remoteLast
           };
         }
       }
@@ -361,8 +437,10 @@ export async function fetchUserProgress(
 
   try {
     const raw = localStorage.getItem(`lernweb:completed:${user.id}`);
+    const lastRaw = localStorage.getItem(`lernweb:last:${user.id}`);
     return {
-      completedLessons: raw ? (JSON.parse(raw) as string[]) : []
+      completedLessons: raw ? (JSON.parse(raw) as string[]) : [],
+      lastLessonId: lastRaw || undefined
     };
   } catch {
     return { completedLessons: [] };

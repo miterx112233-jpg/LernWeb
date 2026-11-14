@@ -61,6 +61,14 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
       if (sessionUser) {
         setUser(sessionUser);
         setIsSyncing(true);
+        const cachedDone = localStorage.getItem(`lernweb:completed:${sessionUser.id}`);
+        if (cachedDone) {
+          try {
+            setCompleted(JSON.parse(cachedDone));
+          } catch {
+            // ignore
+          }
+        }
         const cachedLast = localStorage.getItem(`lernweb:last:${sessionUser.id}`);
         if (cachedLast) setLastLessonId(cachedLast);
         fetchUserProgress(sessionUser)
@@ -93,16 +101,26 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
     setUser(loggedInUser);
     setIsSyncing(true);
     try {
+      const cachedDone = localStorage.getItem(`lernweb:completed:${loggedInUser.id}`);
+      if (cachedDone) {
+        try {
+          setCompleted(JSON.parse(cachedDone));
+        } catch {
+          // ignore
+        }
+      }
+      const cachedLast = localStorage.getItem(`lernweb:last:${loggedInUser.id}`);
+      if (cachedLast) setLastLessonId(cachedLast);
+
       const remote = await fetchUserProgress(loggedInUser);
       setCompleted(remote.completedLessons);
-      setLastLessonId(remote.lastLessonId || null);
+      setLastLessonId(remote.lastLessonId || cachedLast || null);
     } finally {
       setIsSyncing(false);
     }
   };
 
   const logout = async () => {
-    await signOutUser();
     setUser(null);
     try {
       const guestDone = localStorage.getItem(KEY_GUEST_DONE);
@@ -114,6 +132,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
       setLastLessonId(null);
     }
     showToast('ออกจากระบบเรียบร้อยแล้ว');
+    await signOutUser();
   };
 
   const isDone = (id: string) => completed.includes(id);
