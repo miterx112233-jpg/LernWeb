@@ -165,3 +165,4 @@ export function fireNeonConfetti(options?: { count?: number; originY?: number })
 
   animId = requestAnimationFrame(render);
 }
+

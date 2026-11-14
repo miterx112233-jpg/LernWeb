@@ -45,7 +45,7 @@ export default function LessonViewer({ lesson }: LessonViewerProps) {
   const courseId = getLessonCourseId(lesson);
   const courseInfo = getCourseInfo(courseId);
   const courseLessons = getCourseLessons(courseId);
-  const roadmapHref = courseId === 'ai-future' ? '/roadmap#ai-future' : '/roadmap';
+  const roadmapHref = '/roadmap';
 
   const lv = LEVELS.find(item => item.id === lesson.level);
   const done = isDone(lesson.id);

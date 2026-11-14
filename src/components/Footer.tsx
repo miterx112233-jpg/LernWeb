@@ -46,16 +46,21 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <h4>หลักสูตรการเรียน</h4>
+            <h4>ระดับการเรียนรู้</h4>
             <ul>
               <li>
-                <Link href="/roadmap#core">
-                  หลักสูตรที่ 1: พื้นฐานวิศวกรรมซอฟต์แวร์ยุค AI (12 บท)
+                <Link href="/roadmap#basic">
+                  ระดับที่ 1: พื้นฐานรากฐาน (Basic · 4 บท)
                 </Link>
               </li>
               <li>
-                <Link href="/roadmap#ai-future">
-                  หลักสูตรที่ 2: Vibe Coding &amp; การปรับตัวในโลก AI Coding (4 บท)
+                <Link href="/roadmap#intermediate">
+                  ระดับที่ 2: ปานกลาง (Intermediate · 4 บท)
+                </Link>
+              </li>
+              <li>
+                <Link href="/roadmap#advanced">
+                  ระดับที่ 3: ขั้นสูง (Advanced · 4 บท)
                 </Link>
               </li>
             </ul>

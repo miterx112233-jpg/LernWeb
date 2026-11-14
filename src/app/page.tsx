@@ -3,17 +3,15 @@
 import React from 'react';
 import Link from 'next/link';
 import { LESSONS, LEVELS } from '@/data/lessons';
-import { ALL_LESSONS, getCourseLessons } from '@/data/courses';
+import { ALL_LESSONS } from '@/data/courses';
 import { ARTICLES } from '@/data/articles';
 import { useProgress } from '@/context/ProgressContext';
 import { ArticleBanner } from '@/components/ArticleViewer';
 
 export default function HomePage() {
-  const { user, lastLessonId, isDone, isLessonUnlocked, getStats, getCourseStats, showToast } = useProgress();
+  const { user, lastLessonId, isDone, isLessonUnlocked, getStats, showToast } = useProgress();
 
   const totalStats = getStats();
-  const aiCourseStats = getCourseStats('ai-future');
-  const aiFutureLessons = getCourseLessons('ai-future');
   const lastVisitedLesson =
     lastLessonId && isLessonUnlocked(lastLessonId)
       ? ALL_LESSONS.find(l => l.id === lastLessonId)
@@ -382,85 +380,6 @@ export default function HomePage() {
                 </div>
               );
             })}
-          </div>
-
-          {/* กล่องแสดงหลักสูตรที่ 2: AI Coding & Future Tech */}
-          <div
-            className="level-box"
-            style={{
-              marginTop: 22,
-              border: '1.5px solid var(--brand)'
-            }}
-          >
-            <div className="level-box__head">
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
-                <p className="level-box__label c-advanced">🚀 หลักสูตรที่ 2 · AI CODING &amp; FUTURE TECH (ใหม่!)</p>
-                <span className="muted" style={{ fontSize: 12.5, fontWeight: 600 }}>
-                  {user
-                    ? `${aiCourseStats.done}/${aiCourseStats.total} บท (${aiCourseStats.pct}%) · เรียนได้ทันทีไม่ต้องรอจบหลักสูตรแรก`
-                    : '🔒 เฉพาะสมาชิก (สมัครฟรี)'}
-                </span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10 }}>
-                <h3 className="level-box__title" style={{ margin: 0 }}>
-                  หลักสูตรที่ 2: Vibe Coding &amp; การปรับตัวในโลก AI Coding (4 บท)
-                </h3>
-                <Link className="link" href={user ? '/roadmap#ai-future' : '/login'} style={{ fontSize: 13.5 }}>
-                  เปิดดูหลักสูตรที่ 2 →
-                </Link>
-              </div>
-              {user && (
-                <div className="progress" style={{ marginTop: 10, height: 6 }}>
-                  <div className="progress__bar" style={{ width: `${aiCourseStats.pct}%` }} />
-                </div>
-              )}
-            </div>
-            <ul>
-              {aiFutureLessons.map(l => {
-                const unlocked = user ? isLessonUnlocked(l.id) : false;
-                const done = user ? isDone(l.id) : false;
-                return (
-                  <li key={l.id}>
-                    <Link
-                      href={user ? `/lesson/${l.id}` : '/login'}
-                      style={user && !unlocked ? { opacity: 0.65 } : undefined}
-                      onClick={e => {
-                        if (user && !unlocked) {
-                          e.preventDefault();
-                          showToast(
-                            `🔒 ต้องสอบผ่านบทที่ ${l.no - 1} ของหลักสูตรที่ 2 ให้ได้คะแนน ≥ 80% ก่อนจึงจะเข้าบทที่ ${l.no} ได้`
-                          );
-                        }
-                      }}
-                    >
-                      <span>
-                        <span className="num">{String(l.no).padStart(2, '0')}</span>
-                        {l.title}
-                      </span>
-                      {user ? (
-                        done ? (
-                          <span className="check" title="เรียนจบแล้ว (≥ 80%)">
-                            ✓
-                          </span>
-                        ) : unlocked ? (
-                          <span style={{ color: 'var(--brand)', fontSize: 12, fontWeight: 700 }} title="บทเรียนปัจจุบัน">
-                            ●
-                          </span>
-                        ) : (
-                          <span className="muted" style={{ fontSize: 12 }} title="ต้องผ่านบทก่อนหน้าก่อน">
-                            🔒
-                          </span>
-                        )
-                      ) : (
-                        <span className="muted" style={{ fontSize: 12 }} title="ต้องเข้าสู่ระบบก่อนเรียน">
-                          🔒
-                        </span>
-                      )}
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
           </div>
         </div>
       </section>

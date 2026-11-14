@@ -22,12 +22,6 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: siteTitle,
   description: siteDesc,
-  manifest: `${basePath}/manifest.json`,
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: 'default',
-    title: 'LernDev'
-  },
   icons: {
     icon: [
       { url: `${basePath}/icons/icon-192.png`, sizes: '192x192', type: 'image/png' },

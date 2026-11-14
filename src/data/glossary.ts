@@ -431,8 +431,8 @@ export const GLOSSARY_ITEMS: GlossaryItem[] = [
     fullDef:
       'คำที่เผยแพร่โดย Andrej Karpathy ในปี 2025 หมายถึงการสร้างซอฟต์แวร์ผ่านการสนทนากับ AI โดยบอกสิ่งที่ต้องการ ทดลองรัน แจ้งปัญหา และให้ AI แก้ไข เหมาะอย่างยิ่งกับการทำ Prototype และทดลองไอเดีย แต่สำหรับระบบ Production ที่มีความเสี่ยงสูงยังต้องมีวิศวกรรมซอฟต์แวร์และการตรวจสอบความปลอดภัยกำกับเสมอ',
     analogy: 'เหมือนการบอกผู้ช่วยสถาปนิกให้ร่างแบบบ้านสามมิติตามที่เราบรรยาย แล้วคอยสั่งปรับแก้จุดที่ยังไม่ถูกใจทีละรอบ',
-    lessonId: 'vibe-coding-shift',
-    lessonNo: 1
+    lessonId: 'ai-coding',
+    lessonNo: 6
   },
   {
     slug: 'computational-thinking',
@@ -443,7 +443,7 @@ export const GLOSSARY_ITEMS: GlossaryItem[] = [
     fullDef:
       'ทักษะการคิดเชิงคำนวณที่ช่วยให้มนุษย์วิเคราะห์ปัญหาซับซ้อนออกเป็นส่วนย่อย (Decomposition), หารูปแบบที่ซ้ำกัน (Pattern Recognition), คัดกรองเฉพาะแก่นสำคัญ (Abstraction) และวางลำดับขั้นตอนการแก้ปัญหา (Algorithm Design) ซึ่งเป็นทักษะที่ไม่ล้าสมัยแม้เครื่องมือ AI จะเปลี่ยนไป',
     analogy: 'เหมือนการวางแผนจัดงานใหญ่ด้วยการแบ่งเป็นงานย่อยๆ (สถานที่ อาหาร ลงทะเบียน) แทนที่จะพยายามทำทุกอย่างพร้อมกันแบบไร้ลำดับ',
-    lessonId: 'ai-era-core-skills',
+    lessonId: 'logic-data-structures',
     lessonNo: 2
   },
   {
@@ -455,8 +455,8 @@ export const GLOSSARY_ITEMS: GlossaryItem[] = [
     fullDef:
       'ส่วนสำคัญของ Requirements Engineering ที่ระบุชัดเจนว่าระบบต้องแสดงพฤติกรรมอย่างไรในแต่ละสถานการณ์ (รวมถึงกรณีผิดพลาด) เพื่อใช้เป็นข้อตกลงร่วมกันระหว่างผู้สั่งงาน นักพัฒนา และ AI รวมถึงใช้เป็นเกณฑ์เขียน Test ตรวจรับงาน',
     analogy: 'เหมือนรายการตรวจรับคอนโดก่อนโอน ที่ระบุชัดว่าก๊อกน้ำต้องไม่รั่ว แอร์ต้องเย็นภายในกี่นาที และประตูต้องล็อกสนิท',
-    lessonId: 'ai-era-core-skills',
-    lessonNo: 2
+    lessonId: 'testing-debugging',
+    lessonNo: 8
   },
   {
     slug: 'least-privilege',
@@ -467,8 +467,8 @@ export const GLOSSARY_ITEMS: GlossaryItem[] = [
     fullDef:
       'แนวทางป้องกันความเสียหายในระบบคอมพิวเตอร์และ Agentic AI โดยไม่เปิดสิทธิ์ระดับ Admin หรือสิทธิ์ลบข้อมูลสำคัญทิ้งไว้เกินความจำเป็น หากเกิดข้อผิดพลาดหรือถูกโจมตีด้วย Prompt Injection ขอบเขตความเสียหายก็จะถูกจำกัดไว้เฉพาะส่วนเล็กๆ',
     analogy: 'เหมือนการให้คีย์การ์ดแม่บ้านเข้าได้เฉพาะห้องที่ต้องทำความสะอาดในเวลางาน แทนที่จะให้กุญแจมาสเตอร์ที่เปิดเซฟของโรงแรมได้ด้วย',
-    lessonId: 'ai-tools-data-security',
-    lessonNo: 3
+    lessonId: 'system-design-security',
+    lessonNo: 12
   },
   {
     slug: 'sdlc',
@@ -479,7 +479,7 @@ export const GLOSSARY_ITEMS: GlossaryItem[] = [
     fullDef:
       'กระบวนการครบวงจรในการสร้างและดูแลระบบซอฟต์แวร์ ในยุค AI แม้ว่าขั้นตอนการเขียนโค้ด (Coding) จะเร็วขึ้นมากด้วย AI แต่ขั้นตอนอื่นๆ ใน SDLC เช่น การเก็บ Requirement, การออกแบบ Architecture, การตรวจความปลอดภัย, การ Deploy และการรับผิดชอบเมื่อระบบล่ม ยังคงต้องอาศัยวิศวกรซอฟต์แวร์เป็นผู้ตัดสินใจและรับผิดชอบ',
     analogy: 'เหมือนการสร้างตึกที่ไม่ได้มีแค่ขั้นตอน "ก่ออิฐ" แต่มีตั้งแต่สำรวจที่ดิน ออกแบบโครงสร้าง ตรวจรับความปลอดภัย ไปจนถึงการดูแลซ่อมบำรุงหลังเปิดใช้งาน',
-    lessonId: 'vibe-coding-shift',
+    lessonId: 'how-computers-web-work',
     lessonNo: 1
   },
   {
@@ -491,8 +491,8 @@ export const GLOSSARY_ITEMS: GlossaryItem[] = [
     fullDef:
       'ทักษะสำคัญในการนิยามว่าใครคือผู้ใช้ แก้ปัญหาอะไร ระบบต้องทำอะไรและห้ามทำอะไร ข้อมูลมาจากไหน และมีเกณฑ์ตรวจรับงาน (Acceptance Criteria) อย่างไร ในยุค AI Coding ทักษะนี้คือหัวใจสำคัญที่สุดในการสั่งงานทั้งทีมพัฒนาและ AI ให้สร้างระบบได้ตรงโจทย์',
     analogy: 'เหมือนการซักประวัติและเขียนใบสั่งตัดสูทที่วัดสัดส่วนละเอียดทุกจุด แทนที่จะบอกช่างสั้นๆ แค่ว่า "ขอชุดดูดีๆ ตัวนึง"',
-    lessonId: 'ai-era-core-skills',
-    lessonNo: 2
+    lessonId: 'how-computers-web-work',
+    lessonNo: 1
   },
   {
     slug: 'data-literacy',
@@ -503,8 +503,8 @@ export const GLOSSARY_ITEMS: GlossaryItem[] = [
     fullDef:
       'ทักษะความเข้าใจเรื่องข้อมูลตั้งแต่โครงสร้างการจัดเก็บ ความถูกต้องครบถ้วนของข้อมูล สถิติพื้นฐาน การมองเห็นอคติของข้อมูล (Data Bias) ไปจนถึงการรักษาความเป็นส่วนตัว เพราะระบบ AI และธุรกิจยุคใหม่ไม่สามารถทำงานได้อย่างแม่นยำหากข้อมูลต้นทางไม่มีคุณภาพ',
     analogy: 'เหมือนทักษะการคัดเลือกและตรวจสอบคุณภาพวัตถุดิบของเชฟ เพราะต่อให้เตาอบทันสมัยแค่ไหน ถ้าวัตถุดิบเสีย อาหารที่ออกมาก็ทานไม่ได้',
-    lessonId: 'ai-tools-data-security',
-    lessonNo: 3
+    lessonId: 'database-sql',
+    lessonNo: 5
   },
   {
     slug: 'data-governance',
@@ -515,8 +515,8 @@ export const GLOSSARY_ITEMS: GlossaryItem[] = [
     fullDef:
       'การบริหารจัดการข้อมูลระดับองค์กรให้มีความถูกต้อง ปลอดภัย และเป็นไปตามกฎหมายคุ้มครองข้อมูลส่วนบุคคล (เช่น PDPA/GDPR) โดยเฉพาะเมื่อนำข้อมูลภายในองค์กรไปเชื่อมต่อกับระบบ AI หรือ RAG ต้องกำหนดชัดเจนว่าข้อมูลชั้นความลับใดที่อนุญาตหรือห้ามส่งเข้าโมเดล',
     analogy: 'เหมือนระเบียบห้องสมุดและห้องเก็บเอกสารลับขององค์กร ที่กำหนดชัดว่าเอกสารชั้นไหนเปิดอ่านทั่วไปได้ และชั้นไหนต้องมีรหัสผ่านเฉพาะผู้บริหาร',
-    lessonId: 'ai-tools-data-security',
-    lessonNo: 3
+    lessonId: 'database-sql',
+    lessonNo: 5
   },
   {
     slug: 'supply-chain-attack',
@@ -527,8 +527,8 @@ export const GLOSSARY_ITEMS: GlossaryItem[] = [
     fullDef:
       'ความเสี่ยงสำคัญในยุค AI Coding เมื่อผู้ไม่หวังดีสร้างแพ็กเกจปลอมที่มีชื่อคล้ายแพ็กเกจยอดนิยม หรือตั้งชื่อตามที่ AI ชอบหลอนแนะนำ (Slopsquatting) หากนักพัฒนาสั่ง npm install หรือ pip install ตามที่ AI บอกโดยไม่ตรวจสอบแหล่งที่มา ก็อาจติดมัลแวร์ขโมย API Key ทันที',
     analogy: 'เหมือนการสั่งซื้ออะไหล่รถยนต์จากร้านปลอมที่ใช้ชื่อคล้ายศูนย์บริการแท้ พอเอามาประกอบใส่รถก็ทำให้ระบบเบรกพัง',
-    lessonId: 'ai-tools-data-security',
-    lessonNo: 3
+    lessonId: 'system-design-security',
+    lessonNo: 12
   },
   {
     slug: 'data-exfiltration',
@@ -539,8 +539,8 @@ export const GLOSSARY_ITEMS: GlossaryItem[] = [
     fullDef:
       'ในระบบที่มี AI Agent หรือโค้ดที่ไม่ได้ตรวจสอบความปลอดภัย Data Exfiltration อาจเกิดจากการที่ผู้โจมตีใช้ Prompt Injection หลอกให้ Agent อ่านข้อมูลลูกค้าหรือไฟล์ .env แล้วแนบส่งออกไปผ่านการเรียก URL หรือ API ภายนอก',
     analogy: 'เหมือนพนักงานหรือหุ่นยนต์ผู้ช่วยที่ถูกหลอกให้ถ่ายสำเนาเอกสารลับของบริษัทแล้วแอบส่งแฟกซ์ออกไปหาบุคคลภายนอก',
-    lessonId: 'ai-tools-data-security',
-    lessonNo: 3
+    lessonId: 'system-design-security',
+    lessonNo: 12
   },
   {
     slug: 'deterministic-system',
@@ -551,8 +551,8 @@ export const GLOSSARY_ITEMS: GlossaryItem[] = [
     fullDef:
       'ตรงข้ามกับโมเดล AI/LLM ที่ทำงานบนความน่าจะเป็น (Probabilistic) ซึ่งอาจตอบต่างกันเล็กน้อยในแต่ละครั้ง ในงานสถาปัตยกรรมระบบ (AI System Architecture) งานที่ต้องการความแม่นยำสูงสุดและห้ามเพี้ยนเด็ดขาด เช่น การตัดยอดเงินในบัญชี การคำนวณภาษี หรือการเช็กสิทธิ์เข้าถึง ต้องใช้โค้ดแบบ Deterministic เสมอ',
     analogy: 'เหมือนเครื่องคิดเลขที่กด 2 + 2 กี่พันครั้งก็ได้ 4 เสมอ ต่างจากการถามความเห็นคนหรือ AI ที่แต่ละครั้งอาจเรียบเรียงคำตอบไม่เหมือนกัน',
-    lessonId: 'future-tech-careers',
-    lessonNo: 4
+    lessonId: 'ai-coding',
+    lessonNo: 6
   },
   {
     slug: 'observability',
@@ -563,8 +563,8 @@ export const GLOSSARY_ITEMS: GlossaryItem[] = [
     fullDef:
       'ในระบบยุคใหม่ที่มีทั้ง API, Database และ AI Agent ทำงานร่วมกันหลายขั้นตอน การมี Observability ช่วยให้นักพัฒนาติดตามได้ว่าคำขอหนึ่งรายการวิ่งผ่านส่วนใดบ้าง ใช้เวลาเท่าไหร่ กิน Token ไปเท่าใด และหากเกิดข้อผิดพลาดหรือ AI ตอบเพี้ยน จะสามารถย้อนดูสาเหตุต้นตอได้ทันที',
     analogy: 'เหมือนหน้าปัดรถยนต์และกล้องบันทึกเหตุการณ์ที่บอกทั้งความเร็ว อุณหภูมิเครื่องยนต์ และอัตราสิ้นเปลืองน้ำมันแบบเรียลไทม์',
-    lessonId: 'future-tech-careers',
-    lessonNo: 4
+    lessonId: 'system-design-security',
+    lessonNo: 12
   },
   {
     slug: 'operating-system',
@@ -611,8 +611,8 @@ export const GLOSSARY_ITEMS: GlossaryItem[] = [
     fullDef:
       'เอกสารมาตรฐานในงานวิศวกรรมซอฟต์แวร์และการทำ Custom Software ที่รวบรวมทั้งความต้องการด้านฟังก์ชัน (Functional Requirements) เช่น หน้าจอและการคำนวณ และความต้องการด้านคุณภาพ (Non-Functional Requirements) เช่น ความเร็วและความปลอดภัย เพื่อใช้เป็นพิมพ์เขียวให้ทีมพัฒนาและ AI สร้างระบบได้ตรงตามเป้าหมาย',
     analogy: 'เหมือนแบบพิมพ์เขียวก่อสร้างบ้านที่ระบุทั้งจำนวนห้อง ขนาดพื้นที่ และสเปกวัสดุอย่างชัดเจนก่อนที่ผู้รับเหมาจะลงมือตอกเสาเข็ม',
-    lessonId: 'ai-era-core-skills',
-    lessonNo: 2
+    lessonId: 'how-computers-web-work',
+    lessonNo: 1
   }
 ];
 

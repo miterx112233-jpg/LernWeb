@@ -7,7 +7,6 @@ import {
   GLOSSARY_ITEMS,
   GlossaryCategoryId
 } from '@/data/glossary';
-import { AI_FUTURE_LESSONS } from '@/data/aiFutureCourse';
 
 export default function GlossaryPage() {
   const [selectedCat, setSelectedCat] = useState<GlossaryCategoryId | 'all'>('all');
@@ -170,8 +169,6 @@ export default function GlossaryPage() {
                       {items.map(item => {
                         const isHighlighted = activeHash === item.slug;
                         const isExpanded = Boolean(expandedSlugs[item.slug]) || Boolean(q);
-                        const isCourse2 = AI_FUTURE_LESSONS.some(l => l.id === item.lessonId);
-                        const coursePrefix = isCourse2 ? 'หลักสูตรที่ 2 · ' : 'หลักสูตรที่ 1 · ';
 
                         return (
                           <article
@@ -195,7 +192,7 @@ export default function GlossaryPage() {
                                 href={`/lesson/${item.lessonId}`}
                                 className="dict-lesson-link"
                               >
-                                {coursePrefix}บทที่ {String(item.lessonNo).padStart(2, '0')} →
+                                บทที่ {String(item.lessonNo).padStart(2, '0')} →
                               </Link>
                             </div>
 
@@ -232,7 +229,7 @@ export default function GlossaryPage() {
                                       style={{ fontSize: 13.5 }}
                                       href={`/lesson/${item.lessonId}`}
                                     >
-                                      ไปดูเนื้อหาและคลิปสอนเรื่องนี้ใน{coursePrefix}บทที่ {String(item.lessonNo).padStart(2, '0')} →
+                                      ไปดูเนื้อหาและคลิปสอนเรื่องนี้ในบทที่ {String(item.lessonNo).padStart(2, '0')} →
                                     </Link>
                                   </div>
                                 </div>

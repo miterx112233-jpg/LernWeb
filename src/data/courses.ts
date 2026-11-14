@@ -1,5 +1,4 @@
 import { CourseId, Lesson, LESSONS } from './lessons';
-import { AI_FUTURE_LESSONS } from './aiFutureCourse';
 
 export interface CourseInfo {
   id: CourseId;
@@ -12,7 +11,7 @@ export interface CourseInfo {
 }
 
 /* =====================================================================
-   รายการหลักสูตรทั้งหมดในเว็บไซต์ (แต่ละหลักสูตรปลดล็อกบทเรียนตามลำดับแยกกันอิสระ)
+   รายการหลักสูตรทั้งหมดในเว็บไซต์
    ===================================================================== */
 export const COURSES: CourseInfo[] = [
   {
@@ -22,30 +21,20 @@ export const COURSES: CourseInfo[] = [
     name: 'พื้นฐานวิศวกรรมซอฟต์แวร์ยุค AI (12 บท)',
     shortName: 'พื้นฐานวิศวกรรมซอฟต์แวร์ยุค AI (12 บท)',
     desc: 'เรียงจาก Basic → Intermediate → Advanced ครอบคลุมเว็บ, Git, Frontend, Backend, Database, Testing, LLM, RAG, Agent และ System Design',
-    href: '/roadmap#core'
-  },
-  {
-    id: 'ai-future',
-    no: 2,
-    icon: '🚀',
-    name: 'Vibe Coding & การปรับตัวในโลก AI Coding (4 บท)',
-    shortName: 'Vibe Coding & การปรับตัวในโลก AI Coding (4 บท)',
-    desc: 'Vibe Coding, ทักษะแก่นแท้ยุค AI, ความปลอดภัยของโค้ดที่ AI สร้าง และ 7 อาชีพสายเทคแห่งอนาคต — เรียนได้ทันทีโดยไม่ต้องจบหลักสูตรที่ 1',
-    href: '/roadmap#ai-future'
+    href: '/roadmap'
   }
 ];
 
-export const ALL_LESSONS: Lesson[] = [...LESSONS, ...AI_FUTURE_LESSONS];
+export const ALL_LESSONS: Lesson[] = [...LESSONS];
 
 export function getLessonCourseId(lesson: Lesson): CourseId {
-  return lesson.course ?? 'core';
+  return 'core';
 }
 
-export function getCourseLessons(courseId: CourseId): Lesson[] {
-  return courseId === 'ai-future' ? AI_FUTURE_LESSONS : LESSONS;
+export function getCourseLessons(courseId?: CourseId): Lesson[] {
+  return LESSONS;
 }
 
-export function getCourseInfo(courseId: CourseId): CourseInfo {
-  return COURSES.find(c => c.id === courseId) || COURSES[0];
+export function getCourseInfo(courseId?: CourseId): CourseInfo {
+  return COURSES[0];
 }
-

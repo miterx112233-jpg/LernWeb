@@ -174,8 +174,8 @@ export default function ArticleViewer({ article }: { article: Article }) {
             <p className="article-source-box__desc">
               {isInternalSource ? (
                 <>
-                  บทความเรื่อง <strong>“{article.title}”</strong> เป็นบทความแกนหลักของ{' '}
-                  <strong>หลักสูตรที่ 2: Vibe Coding &amp; การปรับตัวในโลก AI Coding (4 บท)</strong> ซึ่งมีวิดีโอประกอบและแบบทดสอบวัดความเข้าใจท้ายบทครบทุกหัวข้อ
+                  บทความเรื่อง <strong>“{article.title}”</strong> เรียบเรียงโดยทีมงาน LernDev โดยเชื่อมโยงกับ{' '}
+                  <strong>แผนผังการเรียนรู้ Software Engineer (12 บทเรียน)</strong> ซึ่งมีคลิปบรรยายสรุปและแบบทดสอบวัดความเข้าใจครบทุกหัวข้อ
                 </>
               ) : (
                 <>
@@ -186,7 +186,7 @@ export default function ArticleViewer({ article }: { article: Article }) {
             </p>
             {isInternalSource ? (
               <Link href={article.sourceUrl} className="article-source-box__link">
-                <span>เข้าสู่หลักสูตรที่ 2: Vibe Coding &amp; การปรับตัวในโลก AI Coding (4 บท)</span>
+                <span>เข้าสู่แผนผังการเรียน (Roadmap)</span>
                 <span className="article-source-box__url">เริ่มเรียนและทำแบบทดสอบ →</span>
               </Link>
             ) : (

@@ -2852,78 +2852,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   }
 }
 
-/* ปุ่มและหน้าต่างติดตั้งแอป (PWA Install UI) */
-.nav__install-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: var(--bg2);
-  color: var(--text);
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-.nav__install-btn:hover {
-  border-color: var(--brand);
-  color: var(--brand);
-  background: var(--brand-soft);
-}
-@media (max-width: 860px) {
-  .nav__install-btn {
-    display: none;
-  }
-}
 
-.install-modal {
-  padding: 0;
-  overflow: hidden;
-  max-width: 520px;
-}
-.install-modal__head {
-  padding: 18px 22px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-}
-.install-modal__body {
-  padding: 20px 22px;
-}
-.install-steps {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.install-step {
-  padding: 14px 16px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: var(--bg2);
-}
-.install-step__badge {
-  font-size: 13.5px;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 4px;
-}
-.install-step p {
-  margin: 0;
-  font-size: 13.5px;
-  color: var(--text2);
-  line-height: 1.65;
-}
-.install-modal__foot {
-  padding: 14px 22px;
-  border-top: 1px solid var(--border);
-  background: var(--bg2);
-  display: flex;
-  justify-content: flex-end;
-}
 
 
 

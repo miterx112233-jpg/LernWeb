@@ -40,8 +40,8 @@ export const ARTICLES: Article[] = [
       'เจาะลึกกระแส Vibe Coding บทบาทของภาษาธรรมชาติเหนือภาษาโปรแกรม 7 อาชีพสายเทคในอีก 10–20 ปีข้างหน้า 8 ทักษะแก่นแท้ที่คนยุคใหม่ต้องมี และแนวทางเตรียมตัวตั้งแต่วัยเรียนสู่มหาวิทยาลัย',
     publishedAt: '8 พ.ย. 2026',
     minutes: 15,
-    sourceName: 'LernDev Editorial (เชื่อมโยงหลักสูตรที่ 2)',
-    sourceUrl: '/roadmap#ai-future',
+    sourceName: 'LernDev Editorial Team',
+    sourceUrl: '/articles',
     coverImage: '/images/articles/when-human-language-becomes-programming-language.webp',
     hashtags: [
       '#vibe coding',
@@ -111,7 +111,7 @@ export const ARTICLES: Article[] = [
             </tr>
           </table>
           <p>งานวิจัยด้าน Software Engineering (Roychoudhury และ Zeller) ชี้ว่า การสร้างโค้ดเป็นเพียงส่วนหนึ่งของงานทั้งหมด การบำรุงรักษาระบบขนาดใหญ่และรักษาความน่าเชื่อถือยังเป็นความท้าทายที่ AI ไม่สามารถรับผิดชอบแทนมนุษย์ได้ทั้งหมด</p>
-          <div class="note"><strong>สรุปที่แม่นยำ:</strong> ในอนาคต AI อาจสร้างโค้ดส่วนใหญ่ แต่มนุษย์ยังต้องกำหนดว่าอะไรควรถูกสร้าง ตรวจสอบว่าระบบทำงานถูกต้อง และรับผิดชอบต่อผลลัพธ์ <em>(เรียนพร้อมทำแบบทดสอบเรื่องนี้ได้ที่ <a href="/lesson/vibe-coding-shift">หลักสูตรที่ 2 บทที่ 1: Vibe Coding และการเปลี่ยนผ่านของภาษาโปรแกรม</a>)</em></div>`
+          <div class="note"><strong>สรุปที่แม่นยำ:</strong> ในอนาคต AI อาจสร้างโค้ดส่วนใหญ่ แต่มนุษย์ยังต้องกำหนดว่าอะไรควรถูกสร้าง ตรวจสอบว่าระบบทำงานถูกต้อง และรับผิดชอบต่อผลลัพธ์ <em>(เรียนพร้อมทำแบบทดสอบเรื่องนี้ได้ใน <a href="/roadmap">แผนผังการเรียนหลักสูตร Software Engineer</a>)</em></div>`
       },
       {
         id: 'future-tech-jobs-10-20-years',
@@ -142,7 +142,7 @@ export const ARTICLES: Article[] = [
             html: `
               <p>AI อาจช่วยเขียน Linked List, Search Algorithm หรือ Database Query ได้ แต่หากผู้ใช้ไม่มีความเข้าใจพื้นฐาน ก็จะไม่สามารถตัดสินได้ว่าโค้ดนั้นเหมาะสมหรือไม่ ความรู้พื้นฐานช่วยให้มนุษย์สามารถแยกปัญหาเป็นส่วนย่อย วิเคราะห์ความซับซ้อน (Big-O) ตรวจพบ Logic Error ประเมิน Performance และแยกคำตอบที่ถูกต้องออกจากคำตอบที่แค่ดูน่าเชื่อถือ</p>
               <blockquote>เปรียบได้กับสถาปนิกที่ใช้โปรแกรมสร้างแบบสามมิติ แม้ไม่ต้องผสมปูนหรือก่ออิฐเอง แต่ยังต้องเข้าใจโครงสร้าง แรงลม การรับน้ำหนัก วัสดุ และมาตรฐานความปลอดภัย — AI ลดความจำเป็นในการพิมพ์โค้ดบางส่วน แต่เพิ่มความจำเป็นของคนที่เข้าใจว่าโค้ดนั้นควรทำงานอย่างไร</blockquote>
-              <p><em>(ฝึกทักษะนี้ได้ใน <a href="/lesson/ai-era-core-skills">หลักสูตรที่ 2 บทที่ 2: ทักษะแก่นแท้ยุค AI</a> และ <a href="/lesson/logic-data-structures">หลักสูตรที่ 1 บทที่ 02: Logic และ Data Structures</a>)</em></p>`
+              <p><em>(ฝึกทักษะนี้ได้ในบทเรียน <a href="/lesson/logic-data-structures">บทที่ 02: Logic และ Data Structures</a>)</em></p>`
           }
         ]
       },
@@ -158,7 +158,7 @@ export const ARTICLES: Article[] = [
             <li><strong>AI Coding &amp; Tool Fluency:</strong> ทดลองใช้ GitHub Copilot, Cursor, Replit, Claude Code, Codex ควบคู่กับการอ่านโค้ด ทดสอบ แก้ Bug ใช้ Git และตรวจความปลอดภัย</li>
             <li><strong>Communication &amp; Requirements Engineering:</strong> เปลี่ยนความต้องการที่คลุมเครือเป็นข้อกำหนดที่ชัดเจน (ใครใช้ แก้ปัญหาอะไร ต้องทำอะไร ห้ามทำอะไร ข้อมูลมาจากไหน Acceptance Criteria คืออะไร วัดผลอย่างไร)</li>
             <li><strong>Data Literacy:</strong> เข้าใจการจัดเก็บและโครงสร้างข้อมูล คุณภาพข้อมูล สถิติพื้นฐาน Bias, Privacy และ Data Governance</li>
-            <li><strong>Cybersecurity &amp; AI Safety:</strong> เข้าใจว่าโค้ดที่ทำงานได้ไม่ได้แปลว่าปลอดภัย เรียนรู้เรื่อง Authentication/Authorization, Secure Coding, Dependency Risk, Prompt Injection และ Least Privilege <em>(ดูเพิ่มเติมใน <a href="/lesson/ai-tools-data-security">หลักสูตรที่ 2 บทที่ 3</a>)</em></li>
+            <li><strong>Cybersecurity &amp; AI Safety:</strong> เข้าใจว่าโค้ดที่ทำงานได้ไม่ได้แปลว่าปลอดภัย เรียนรู้เรื่อง Authentication/Authorization, Secure Coding, Dependency Risk, Prompt Injection และ Least Privilege</li>
             <li><strong>Creativity, Ethics &amp; Human Judgment:</strong> ความคิดสร้างสรรค์ จริยธรรม ความรับผิดชอบ การทำงานเป็นทีม ความเข้าใจผู้ใช้ และการประเมินผลกระทบต่อสังคม</li>
           </ol>`
       },
@@ -198,7 +198,7 @@ export const ARTICLES: Article[] = [
           <p><strong>บทสรุป:</strong> AI Coding จะลดภาระการพิมพ์โค้ดและทำให้คนจำนวนมากสร้างซอฟต์แวร์ได้ง่ายขึ้น แต่ไม่ได้ทำให้ความรู้ด้าน Computer Science, Logic, Data Structure, Algorithm, Architecture และ Cybersecurity หมดความสำคัญ ตรงกันข้าม งานของมนุษย์กำลังเปลี่ยนจาก:</p>
           <div class="flow"><span>เขียนทุกบรรทัด</span><i>→</i><span>ออกแบบระบบ</span><i>→</i><span>กำกับ AI</span><i>→</i><span>ตรวจสอบผลลัพธ์</span><i>→</i><span>รับผิดชอบผลกระทบ</span></div>
           <p>คนที่พร้อมที่สุดในอีก 10–20 ปีข้างหน้าคือคนที่สามารถ <strong>เข้าใจปัญหา เข้าใจเทคโนโลยี เข้าใจมนุษย์ และใช้ AI สร้างสิ่งที่ถูกต้อง ปลอดภัย และมีคุณค่า</strong></p>
-          <div class="note"><strong>🚀 พร้อมฝึกและทำแบบทดสอบหรือยัง?</strong> เนื้อหาบทความนี้ถูกพัฒนาเป็นหลักสูตรเชิงโต้ตอบพร้อมวิดีโอคนไทยและข้อสอบวัดความเข้าใจครบทั้ง 4 บท สามารถเข้าเรียนได้ทันทีที่ <a href="/lesson/vibe-coding-shift"><strong>หลักสูตรที่ 2: Vibe Coding &amp; การปรับตัวในโลก AI Coding (4 บท) →</strong></a></div>`
+          <div class="note"><strong>🚀 เริ่มต้นเส้นทาง Software Engineer ในยุค AI</strong> เข้าเรียนหลักสูตรและทำแบบทดสอบเพื่อวัดระดับความเข้าใจได้ที่ <a href="/roadmap"><strong>แผนผังการเรียน (Roadmap) →</strong></a></div>`
       }
     ]
   },
@@ -844,7 +844,7 @@ export const ARTICLES: Article[] = [
         h: 'ซอฟต์แวร์ คืออะไร',
         html: `
           <p>เกม โปรแกรม หรือแอปพลิเคชันบนมือถือ ต่างก็เป็น <strong>ซอฟต์แวร์ (Software)</strong> ชนิดหนึ่งที่เข้ามามีบทบาทสำคัญอย่างมากกับผู้ใช้งาน (User) ทุกคนในชีวิตประจำวัน ด้วยการตอบสนองความต้องการไม่ว่าจะเป็นการสร้างความบันเทิงหรือแก้ไขปัญหาต่าง ๆ ในบทความนี้เราจะอธิบายเกี่ยวกับที่มาที่ไป ประเภท และยกตัวอย่างของซอฟต์แวร์สำหรับธุรกิจหรือองค์กร เพื่อให้คุณเข้าใจกับสิ่งที่จับต้องไม่ได้นี้กันครับ</p>
-          <p><strong>ซอฟต์แวร์ (Software)</strong> คือ โปรแกรมหรือชุดคำสั่งที่ใช้สั่งงานเครื่อง<a href="/articles/what-is-computer">คอมพิวเตอร์</a> หรืออุปกรณ์อิเล็กทรอนิกส์อื่น ๆ ให้ทำงาน เปรียบเสมือนตัวกลางที่นำพา User ให้เข้าไปถึงในระบบต่าง ๆ ที่หลากหลาย ซอฟต์แวร์จึงเป็นส่วนสำคัญที่ควบคุมคอมพิวเตอร์ให้สามารถดำเนินการไปตามคำสั่งที่กำหนดไว้ล่วงหน้าได้ (ศึกษาเพิ่มเติมเกี่ยวกับ <a href="/lesson/vibe-coding-shift">ขั้นตอนการพัฒนาซอฟต์แวร์ SDLC</a> และการสร้างซอฟต์แวร์ในยุค <a href="/articles/when-human-language-becomes-programming-language">AI Coding</a>)</p>`,
+          <p><strong>ซอฟต์แวร์ (Software)</strong> คือ โปรแกรมหรือชุดคำสั่งที่ใช้สั่งงานเครื่อง<a href="/articles/what-is-computer">คอมพิวเตอร์</a> หรืออุปกรณ์อิเล็กทรอนิกส์อื่น ๆ ให้ทำงาน เปรียบเสมือนตัวกลางที่นำพา User ให้เข้าไปถึงในระบบต่าง ๆ ที่หลากหลาย ซอฟต์แวร์จึงเป็นส่วนสำคัญที่ควบคุมคอมพิวเตอร์ให้สามารถดำเนินการไปตามคำสั่งที่กำหนดไว้ล่วงหน้าได้ (ศึกษาเพิ่มเติมเกี่ยวกับ <a href="/lesson/how-computers-web-work">พื้นฐานคอมพิวเตอร์และการทำงานของระบบ</a> และการสร้างซอฟต์แวร์ในยุค <a href="/articles/when-human-language-becomes-programming-language">AI Coding</a>)</p>`,
         sub: [
           {
             id: 'origin-of-software',
@@ -949,7 +949,7 @@ export const ARTICLES: Article[] = [
         h: 'บทสรุป',
         html: `
           <p>สรุปแล้ว <strong>ซอฟต์แวร์ (Software)</strong> ก็คือโปรแกรมหรือชุดคำสั่งที่จับต้องไม่ได้ ที่ใช้ควบคุมเครื่องคอมพิวเตอร์ หรืออุปกรณ์อิเล็กทรอนิกส์อื่น ๆ ให้สามารถทำงานได้ตามที่ต้องการ โดยซอฟต์แวร์สามารถแบ่งออกเป็น 2 ประเภทหลัก คือ <strong>ซอฟต์แวร์ระบบ (System Software)</strong> กับ <strong>ซอฟต์แวร์ประยุกต์ (Application Software)</strong> ที่จำแนกออกจากกันตามหน้าที่การทำงาน</p>
-          <p>หากองค์กรหรือทีมพัฒนากำลังจะสร้างซอฟต์แวร์ของตัวเอง (Custom Software) สิ่งที่ต้องทำก่อนเริ่มเขียนโค้ดคือการระบุความต้องการให้ชัดเจน ซึ่งเป็นงานของการเก็บ Requirement และเขียนข้อกำหนดของระบบ (SRS — ศึกษาวิธีเขียนได้ใน <a href="/lesson/ai-era-core-skills">หลักสูตรที่ 2 บทที่ 2: Requirements Engineering</a>) เพื่อให้ได้ซอฟต์แวร์ที่ตรงกับกระบวนการทำงานจริงและช่วยให้แข่งขันได้อย่างยั่งยืนครับ</p>`
+          <p>หากองค์กรหรือทีมพัฒนากำลังจะสร้างซอฟต์แวร์ของตัวเอง (Custom Software) สิ่งที่ต้องทำก่อนเริ่มเขียนโค้ดคือการระบุความต้องการให้ชัดเจน ซึ่งเป็นงานของการเก็บ Requirement และเขียนข้อกำหนดของระบบ (SRS — ศึกษาวิธีเชื่อมโยงระบบได้ใน <a href="/lesson/how-computers-web-work">บทเรียนพื้นฐานวิศวกรรมซอฟต์แวร์</a>) เพื่อให้ได้ซอฟต์แวร์ที่ตรงกับกระบวนการทำงานจริงและช่วยให้แข่งขันได้อย่างยั่งยืนครับ</p>`
       }
     ]
   }
