@@ -88,8 +88,8 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="header">
-        <div className="container header__inner">
+      <header className="nav">
+        <div className="container nav__inner">
           <Link className="logo" href="/">
             <svg className="logo__mark" viewBox="0 0 36 36" fill="none">
               <rect x="2" y="2" width="32" height="32" rx="8" fill="currentColor" />
